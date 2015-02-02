@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textColor="@color/black"
-        android:textSize="64dp" />
+        android:textSize="64sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/splash_tagline"
@@ -27,6 +28,6 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/splash_title"
         android:paddingTop="8dp"
-        android:textSize="16dp"/>
+        android:textSize="18sp"/>
 
 </RelativeLayout>
