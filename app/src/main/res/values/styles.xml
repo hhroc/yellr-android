@@ -2,10 +2,10 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme"
-        parent="Theme.AppCompat.Light">
+        parent="@android:style/Theme.Holo.Light">
     </style>
     <style name="YellrTheme"
-        parent="Theme.AppCompat.Light">
+        parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/YellrActionbar</item>
         <item name="android:actionMenuTextColor">@android:color/white</item>
     </style>
