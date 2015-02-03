@@ -1,7 +1,11 @@
 package yellr.net.yellr_android;
 
 import java.util.Locale;
+import java.util.UUID;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -10,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +43,31 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //
+        // Create Client ID
+        //
+        String clientId = UUID.randomUUID().toString();
+
+        //
+        // init new assignments receiver
+        //
+        Log.d("HomeActivity.onCreate()","Registering Service ...");
+        IntentFilter filter = new IntentFilter(AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        AssignmentsReceiver assignmentsReceiver = new AssignmentsReceiver();
+        registerReceiver(assignmentsReceiver, filter);
+        Log.d("HomeActivity.onCreate()","Service Registered.");
+
+        //
+        // init service
+        //
+        Log.d("HomeActivity.onCreate()","Starting Service ...");
+        Intent webIntent = new Intent(this, WebWorkerIntentService.class);
+        webIntent.putExtra(WebWorkerIntentService.PARAM_CLIENT_ID, clientId);
+        webIntent.setAction(WebWorkerIntentService.ACTION_GET_ASSIGNMENTS);
+        startService(webIntent);
+        Log.d("HomeActivity.onCreate()","Service Started.");
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -73,7 +103,6 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                             .setTabListener(this));
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

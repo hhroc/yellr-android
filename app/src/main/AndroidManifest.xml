@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="yellr.net.yellr_android" >
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -19,8 +22,19 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/YellrTheme">
+            android:theme="@style/YellrTheme" >
         </activity>
+
+        <service
+            android:name=".WebWorkerIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".AssignmentsReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>
