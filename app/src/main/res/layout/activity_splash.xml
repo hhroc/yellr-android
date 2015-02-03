@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/splash_title"
+        android:textColor="@color/black"
         android:paddingTop="8dp"
         android:textSize="18sp"/>
 
