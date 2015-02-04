@@ -1,4 +1,4 @@
-package yellr.net.yellr_android;
+package yellr.net.yellr_android.intent_services.stories;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -20,8 +20,8 @@ public class StoriesIntentService extends IntentService {
     public static final String ACTION_GET_STORIES =
             "yellr.net.yellr_android.action.GET_STORIES";
 
-    public static final String PARAM_CLIENT_ID = "client_id";
-    public static final String PARAM_STORIES_JSON = "Stories_json";
+    public static final String PARAM_CLIENT_ID = "clientId";
+    public static final String PARAM_STORIES_JSON = "StoriesJson";
 
     public StoriesIntentService() {
         super("StoriesIntentService");
@@ -98,12 +98,12 @@ public class StoriesIntentService extends IntentService {
                 builder.append(line);
             }
 
-            String stories_json = builder.toString();
+            String storiesJson = builder.toString();
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(StoriesReceiver.ACTION_NEW_STORIES);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            broadcastIntent.putExtra(PARAM_STORIES_JSON, stories_json);
+            broadcastIntent.putExtra(PARAM_STORIES_JSON, storiesJson);
             sendBroadcast(broadcastIntent);
 
         } catch( Exception e) {

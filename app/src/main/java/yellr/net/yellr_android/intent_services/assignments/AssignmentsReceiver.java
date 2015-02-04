@@ -1,4 +1,4 @@
-package yellr.net.yellr_android;
+package yellr.net.yellr_android.intent_services.assignments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,12 +19,12 @@ public class AssignmentsReceiver extends BroadcastReceiver {
 
         Log.d("AssignmentsReceiver.onReceive()", "onReceive called.");
 
-        String assignments_json = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
+        String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
 
-        Log.d("AssignmentsReceiver.onReceive()", "JSON: " + assignments_json);
+        Log.d("AssignmentsReceiver.onReceive()", "JSON: " + assignmentsJson);
 
         Gson gson = new Gson();
-        AssignmentsResponse response = gson.fromJson(assignments_json, AssignmentsResponse.class);
+        AssignmentsResponse response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
 
         if ( response.success ) {
 

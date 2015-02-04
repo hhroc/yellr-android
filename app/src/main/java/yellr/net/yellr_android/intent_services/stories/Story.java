@@ -1,4 +1,4 @@
-package yellr.net.yellr_android;
+package yellr.net.yellr_android.intent_services.stories;
 
 /**
  * Created by TDuffy on 2/3/2015.

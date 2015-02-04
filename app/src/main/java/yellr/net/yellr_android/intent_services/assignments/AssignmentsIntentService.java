@@ -1,4 +1,4 @@
-package yellr.net.yellr_android;
+package yellr.net.yellr_android.intent_services.assignments;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -19,8 +19,8 @@ public class AssignmentsIntentService extends IntentService {
     public static final String ACTION_GET_ASSIGNMENTS =
             "yellr.net.yellr_android.action.GET_ASSIGNMENTS";
 
-    public static final String PARAM_CLIENT_ID = "client_id";
-    public static final String PARAM_ASSIGNMENTS_JSON = "assignments_json";
+    public static final String PARAM_CLIENT_ID = "clientId";
+    public static final String PARAM_ASSIGNMENTS_JSON = "assignmentsJson";
 
     public AssignmentsIntentService() {
         super("AssignmentsIntentService");
@@ -95,14 +95,14 @@ public class AssignmentsIntentService extends IntentService {
                 builder.append(line);
             }
 
-            String assignments_json = builder.toString();
+            String assignmentsJson = builder.toString();
 
             Log.d("AssignmentsIntentService.UpdateData()","Broadcasting result ...");
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            broadcastIntent.putExtra(PARAM_ASSIGNMENTS_JSON, assignments_json);
+            broadcastIntent.putExtra(PARAM_ASSIGNMENTS_JSON, assignmentsJson);
             sendBroadcast(broadcastIntent);
 
         } catch( Exception e) {

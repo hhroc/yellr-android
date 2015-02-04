@@ -1,4 +1,4 @@
-package yellr.net.yellr_android;
+package yellr.net.yellr_android.intent_services.stories;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,12 +19,12 @@ public class StoriesReceiver extends BroadcastReceiver {
 
         Log.d("StoriesReceiver.onReceive()", "onReceive called.");
 
-        String Stories_json = intent.getStringExtra(StoriesIntentService.PARAM_STORIES_JSON);
+        String storiesJson = intent.getStringExtra(StoriesIntentService.PARAM_STORIES_JSON);
 
-        Log.d("StoriesReceiver.onReceive()", "JSON: " + Stories_json);
+        Log.d("StoriesReceiver.onReceive()", "JSON: " + storiesJson);
 
         Gson gson = new Gson();
-        StoriesResponse response = gson.fromJson(Stories_json, StoriesResponse.class);
+        StoriesResponse response = gson.fromJson(storiesJson, StoriesResponse.class);
 
         if ( response.success ) {
 

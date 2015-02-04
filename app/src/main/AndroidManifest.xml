@@ -13,9 +13,10 @@
         <activity
             android:name=".activities.SplashActivity"
             android:label="@string/title_activity_splash"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -26,31 +27,48 @@
         </activity>
 
         <service
-            android:name=".AssignmentsIntentService"
+            android:name=".intent_services.assignments.AssignmentsIntentService"
             android:exported="false" >
         </service>
 
         <receiver
-            android:name=".AssignmentsReceiver"
+            android:name=".intent_services.assignments.AssignmentsReceiver"
             android:enabled="true"
             android:exported="true" >
         </receiver>
 
         <service
-            android:name=".StoriesIntentService"
+            android:name=".intent_services.stories.StoriesIntentService"
             android:exported="false" >
         </service>
 
         <receiver
-            android:name=".StoriesReceiver"
+            android:name=".intent_services.stories.StoriesReceiver"
             android:enabled="true"
             android:exported="true" >
         </receiver>
 
         <service
-            android:name=".UploadMediaIntentService"
+            android:name=".intent_services.upload_media.UploadMediaIntentService"
             android:exported="false" >
         </service>
+
+        <receiver
+            android:name=".intent_services.upload_media.UploadMediaReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <service
+            android:name=".intent_services.publish_post.PublishPostIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".intent_services.publish_post.PublishPostReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>
