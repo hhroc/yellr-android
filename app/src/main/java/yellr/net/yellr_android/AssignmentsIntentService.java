@@ -2,7 +2,6 @@ package yellr.net.yellr_android;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.Context;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -10,22 +9,20 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
-import java.util.UUID;
 
-public class WebWorkerIntentService extends IntentService {
+public class AssignmentsIntentService extends IntentService {
     public static final String ACTION_GET_ASSIGNMENTS =
             "yellr.net.yellr_android.action.GET_ASSIGNMENTS";
 
     public static final String PARAM_CLIENT_ID = "client_id";
     public static final String PARAM_ASSIGNMENTS_JSON = "assignments_json";
 
-    public WebWorkerIntentService() {
+    public AssignmentsIntentService() {
         super("WebWorkerIntentService");
     }
 
@@ -74,6 +71,9 @@ public class WebWorkerIntentService extends IntentService {
 
         Log.d("WebWorkerIntentService.UpdateData()","URL: " + url);
 
+        //
+        // TODO: need to check for exceptions better, this bombs out sometimes
+        //
         try {
 
             Log.d("WebWorkerIntentService.UpdateData()","Attempting HTTP connection ...");
@@ -104,12 +104,6 @@ public class WebWorkerIntentService extends IntentService {
             Log.d("WebWorkerIntentService.UpdateData()","Done");
 
             String assignments_json = builder.toString();
-
-            //Log.d("WebWorkerIntentService.UpdateData()","Attempting JSON decode ...");
-
-            //JSONObject json = new JSONObject(builder.toString());
-
-            //Log.d("WebWorkerIntentService.UpdateData()", json.toString());
 
             Log.d("WebWorkerIntentService.UpdateData()","Done.");
 

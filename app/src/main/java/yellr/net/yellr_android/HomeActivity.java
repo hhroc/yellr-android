@@ -49,25 +49,42 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         //
         String clientId = UUID.randomUUID().toString();
 
+        ////////////////////////////////////////////
         //
-        // init new assignments receiver
-        //
-        Log.d("HomeActivity.onCreate()","Registering Service ...");
-        IntentFilter filter = new IntentFilter(AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        AssignmentsReceiver assignmentsReceiver = new AssignmentsReceiver();
-        registerReceiver(assignmentsReceiver, filter);
-        Log.d("HomeActivity.onCreate()","Service Registered.");
+        // ASSIGNMENTS
 
-        //
+        // init new assignments receiver
+        IntentFilter assignmentsFilter = new IntentFilter(AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
+        assignmentsFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        AssignmentsReceiver assignmentsReceiver = new AssignmentsReceiver();
+        registerReceiver(assignmentsReceiver, assignmentsFilter);
+
         // init service
+        Intent assignmentsWebIntent = new Intent(this, AssignmentsIntentService.class);
+        assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CLIENT_ID, clientId);
+        assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
+        startService(assignmentsWebIntent);
+
+
+        ////////////////////////////////////////////
         //
-        Log.d("HomeActivity.onCreate()","Starting Service ...");
-        Intent webIntent = new Intent(this, WebWorkerIntentService.class);
-        webIntent.putExtra(WebWorkerIntentService.PARAM_CLIENT_ID, clientId);
-        webIntent.setAction(WebWorkerIntentService.ACTION_GET_ASSIGNMENTS);
-        startService(webIntent);
-        Log.d("HomeActivity.onCreate()","Service Started.");
+        // STORIES
+
+        // init new stories reciever
+        IntentFilter storiesFilter = new IntentFilter(StoriesReceiver.ACTION_NEW_STORIES);
+        storiesFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        StoriesReceiver storiesReceiver = new StoriesReceiver();
+        registerReceiver(storiesReceiver, storiesFilter);
+
+        // init service
+        Intent storiesWebIntent = new Intent(this, AssignmentsIntentService.class);
+        storiesWebIntent.putExtra(StoriesIntentService.PARAM_CLIENT_ID, clientId);
+        storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
+        startService(storiesWebIntent);
+
+
+
+
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();

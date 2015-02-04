@@ -35,6 +35,17 @@
             android:enabled="true"
             android:exported="true" >
         </receiver>
+
+        <service
+            android:name=".StoriesIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".StoriesReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>

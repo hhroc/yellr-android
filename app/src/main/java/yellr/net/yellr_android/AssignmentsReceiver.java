@@ -22,7 +22,7 @@ public class AssignmentsReceiver extends BroadcastReceiver {
 
         Log.d("AssignmentsReceiver.onReceive()", "onReceive called.");
 
-        String assignments_json = intent.getStringExtra(WebWorkerIntentService.PARAM_ASSIGNMENTS_JSON);
+        String assignments_json = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
 
         Log.d("AssignmentsReceiver.onReceive()", "JSON: " + assignments_json);
 
