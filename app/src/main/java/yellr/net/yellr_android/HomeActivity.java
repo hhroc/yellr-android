@@ -49,9 +49,12 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         //
         String clientId = UUID.randomUUID().toString();
 
+
         ////////////////////////////////////////////
         //
         // ASSIGNMENTS
+
+        Log.d("HomeActivity.onCreate()","Setting up assignments intent service ...");
 
         // init new assignments receiver
         IntentFilter assignmentsFilter = new IntentFilter(AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
@@ -66,22 +69,24 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         startService(assignmentsWebIntent);
 
 
+
         ////////////////////////////////////////////
         //
         // STORIES
 
-        // init new stories reciever
+        Log.d("HomeActivity.onCreate()","Setting up stories intent service ...");
+
+        // init new stories receiver
         IntentFilter storiesFilter = new IntentFilter(StoriesReceiver.ACTION_NEW_STORIES);
         storiesFilter.addCategory(Intent.CATEGORY_DEFAULT);
         StoriesReceiver storiesReceiver = new StoriesReceiver();
         registerReceiver(storiesReceiver, storiesFilter);
 
         // init service
-        Intent storiesWebIntent = new Intent(this, AssignmentsIntentService.class);
+        Intent storiesWebIntent = new Intent(this, StoriesIntentService.class);
         storiesWebIntent.putExtra(StoriesIntentService.PARAM_CLIENT_ID, clientId);
         storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
         startService(storiesWebIntent);
-
 
 
 

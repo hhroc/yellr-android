@@ -7,5 +7,6 @@ public class StoriesResponse {
 
     public boolean success;
     public Story[] stories;
+    public int total_story_count;
 
 }

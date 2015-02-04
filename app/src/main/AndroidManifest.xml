@@ -26,7 +26,7 @@
         </activity>
 
         <service
-            android:name=".WebWorkerIntentService"
+            android:name=".AssignmentsIntentService"
             android:exported="false" >
         </service>
 
@@ -46,6 +46,11 @@
             android:enabled="true"
             android:exported="true" >
         </receiver>
+
+        <service
+            android:name=".UploadMediaIntentService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

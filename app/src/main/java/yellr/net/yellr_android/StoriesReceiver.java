@@ -7,9 +7,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class StoriesReceiver extends BroadcastReceiver {
     public static final String ACTION_NEW_STORIES =
             "yellr.net.yellr_android.action.NEW_STORIES";

@@ -7,9 +7,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class AssignmentsReceiver extends BroadcastReceiver {
     public static final String ACTION_NEW_ASSIGNMENTS =
             "yellr.net.yellr_android.action.NEW_ASSIGNMENTS";

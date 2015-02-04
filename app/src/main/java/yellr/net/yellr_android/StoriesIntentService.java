@@ -18,13 +18,14 @@ import java.util.Locale;
 
 public class StoriesIntentService extends IntentService {
     public static final String ACTION_GET_STORIES =
-            "yellr.net.yellr_android.action.GET_Stories";
+            "yellr.net.yellr_android.action.GET_STORIES";
 
     public static final String PARAM_CLIENT_ID = "client_id";
     public static final String PARAM_STORIES_JSON = "Stories_json";
 
     public StoriesIntentService() {
         super("StoriesIntentService");
+        Log.d("StoriesIntentService()","Constructor.");
     }
 
     @Override
@@ -58,14 +59,15 @@ public class StoriesIntentService extends IntentService {
         double latitude = 43.2;
         double longitude = -77.5;
 
-        String baseUrl = "http://yellr.mycodespace.net/get_Stories.json";
+        String baseUrl = "http://yellr.mycodespace.net/get_stories.json";
 
         String lat = String.valueOf(latitude);
         String lng = String.valueOf(longitude);
 
         String languageCode = Locale.getDefault().getLanguage();
 
-        String url =  baseUrl + "?client_id=" + clientId
+        String url =  baseUrl
+                + "?client_id=" + clientId
                 + "&language_code=" + languageCode
                 + "&lat=" + lat
                 + "&lng=" + lng;
@@ -85,10 +87,6 @@ public class StoriesIntentService extends IntentService {
             HttpResponse response = client.execute(httpGet);
             HttpEntity entity = response.getEntity();
 
-            Log.d("StoriesIntentService.UpdateData()","Done.");
-
-            Log.d("StoriesIntentService.UpdateData()","Building output ...");
-
             //
             InputStream content = entity.getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(content));
@@ -100,23 +98,13 @@ public class StoriesIntentService extends IntentService {
                 builder.append(line);
             }
 
-            Log.d("StoriesIntentService.UpdateData()","Response: " + builder.toString());
-
-            Log.d("StoriesIntentService.UpdateData()","Done");
-
-            String Stories_json = builder.toString();
-
-            Log.d("StoriesIntentService.UpdateData()","Done.");
-
-            Log.d("StoriesIntentService.UpdateData()","Broadcasting result ...");
+            String stories_json = builder.toString();
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(StoriesReceiver.ACTION_NEW_STORIES);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            broadcastIntent.putExtra(PARAM_STORIES_JSON, Stories_json);
+            broadcastIntent.putExtra(PARAM_STORIES_JSON, stories_json);
             sendBroadcast(broadcastIntent);
-
-            Log.d("StoriesIntentService.UpdateData()","Done.");
 
         } catch( Exception e) {
 

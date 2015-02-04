@@ -23,13 +23,14 @@ public class AssignmentsIntentService extends IntentService {
     public static final String PARAM_ASSIGNMENTS_JSON = "assignments_json";
 
     public AssignmentsIntentService() {
-        super("WebWorkerIntentService");
+        super("AssignmentsIntentService");
+        Log.d("AssignmentsIntentService()","Constructor.");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        Log.d("WebWorkerIntentService.onHandleIntent()","Decoding intent action ...");
+        Log.d("AssignmentsIntentService.onHandleIntent()","Decoding intent action ...");
 
         String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
         handleActionGetAssignments(clientId);
@@ -40,7 +41,7 @@ public class AssignmentsIntentService extends IntentService {
      */
     private void handleActionGetAssignments(String clientId) {
 
-        Log.d("WebWorkerIntentService.UpdateData()", "Starting UpdateData() ...");
+        Log.d("AssignmentsIntentService.UpdateData()", "Starting UpdateData() ...");
 
         // get location data
 
@@ -64,29 +65,24 @@ public class AssignmentsIntentService extends IntentService {
 
         String languageCode = Locale.getDefault().getLanguage();
 
-        String url =  baseUrl + "?client_id=" + clientId
+        String url =  baseUrl
+                + "?client_id=" + clientId
                 + "&language_code=" + languageCode
                 + "&lat=" + lat
                 + "&lng=" + lng;
 
-        Log.d("WebWorkerIntentService.UpdateData()","URL: " + url);
+        Log.d("AssignmentsIntentService.UpdateData()","URL: " + url);
 
         //
         // TODO: need to check for exceptions better, this bombs out sometimes
         //
         try {
 
-            Log.d("WebWorkerIntentService.UpdateData()","Attempting HTTP connection ...");
-
             //
             HttpClient client = new DefaultHttpClient();
             HttpGet httpGet = new HttpGet(url);
             HttpResponse response = client.execute(httpGet);
             HttpEntity entity = response.getEntity();
-
-            Log.d("WebWorkerIntentService.UpdateData()","Done.");
-
-            Log.d("WebWorkerIntentService.UpdateData()","Building output ...");
 
             //
             InputStream content = entity.getContent();
@@ -99,15 +95,9 @@ public class AssignmentsIntentService extends IntentService {
                 builder.append(line);
             }
 
-            Log.d("WebWorkerIntentService.UpdateData()","Response: " + builder.toString());
-
-            Log.d("WebWorkerIntentService.UpdateData()","Done");
-
             String assignments_json = builder.toString();
 
-            Log.d("WebWorkerIntentService.UpdateData()","Done.");
-
-            Log.d("WebWorkerIntentService.UpdateData()","Broadcasting result ...");
+            Log.d("AssignmentsIntentService.UpdateData()","Broadcasting result ...");
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
@@ -115,11 +105,9 @@ public class AssignmentsIntentService extends IntentService {
             broadcastIntent.putExtra(PARAM_ASSIGNMENTS_JSON, assignments_json);
             sendBroadcast(broadcastIntent);
 
-            Log.d("WebWorkerIntentService.UpdateData()","Done.");
-
         } catch( Exception e) {
 
-            Log.d("WebWorkerIntentService.UpdateData()","Error: " + e.toString());
+            Log.d("AssignmentsIntentService.UpdateData()","Error: " + e.toString());
 
             //e.printStackTrace();
         }
