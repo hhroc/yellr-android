@@ -32,6 +32,5 @@ public class PublishPostReceiver extends BroadcastReceiver {
 
         }
 
-        // TODO: update MainActivity with new PublishPost
     }
 }

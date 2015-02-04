@@ -13,11 +13,20 @@ import com.google.gson.Gson;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsReceiver;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 
+import yellr.net.yellr_android.intent_services.stories.StoriesReceiver;
+import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
+
+import yellr.net.yellr_android.intent_services.notifications.NotificationsReceiver;
+import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
+
+import yellr.net.yellr_android.intent_services.messages.MessagesReceiver;
+import yellr.net.yellr_android.intent_services.messages.MessagesIntentService;
+
 import yellr.net.yellr_android.intent_services.publish_post.MediaObjectDefinition;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostReceiver;
-import yellr.net.yellr_android.intent_services.stories.StoriesReceiver;
-import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
+
+
 
 public class HomeActivity extends Activity {
 
@@ -29,6 +38,8 @@ public class HomeActivity extends Activity {
         // Create Client ID
         //
         String clientId = UUID.randomUUID().toString();
+
+
 
         ////////////////////////////////////////////
         //
@@ -48,6 +59,8 @@ public class HomeActivity extends Activity {
         assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
         startService(assignmentsWebIntent);
 
+
+
         ////////////////////////////////////////////
         //
         // STORIES
@@ -65,6 +78,46 @@ public class HomeActivity extends Activity {
         storiesWebIntent.putExtra(StoriesIntentService.PARAM_CLIENT_ID, clientId);
         storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
         startService(storiesWebIntent);
+
+
+
+        ////////////////////////////////////////////
+        //
+        // NOTIFICATIONS
+
+        Log.d("HomeActivity.onCreate()","Setting up notifications intent service ...");
+
+        // init new notifications receiver
+        IntentFilter notificationsFilter = new IntentFilter(NotificationsReceiver.ACTION_NEW_NOTIFICATIONS);
+        notificationsFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        NotificationsReceiver notificationsReceiver = new NotificationsReceiver();
+        registerReceiver(notificationsReceiver, notificationsFilter);
+
+        // init service
+        Intent notificationsWebIntent = new Intent(this, NotificationsIntentService.class);
+        notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CLIENT_ID, clientId);
+        notificationsWebIntent.setAction(NotificationsIntentService.ACTION_GET_NOTIFICATIONS);
+        startService(notificationsWebIntent);
+
+
+        ////////////////////////////////////////////
+        //
+        // MESSAGES
+
+        Log.d("HomeActivity.onCreate()","Setting up messages intent service ...");
+
+        // init new messages receiver
+        IntentFilter messagesFilter = new IntentFilter(MessagesReceiver.ACTION_NEW_MESSAGES);
+        messagesFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        MessagesReceiver messagesReceiver = new MessagesReceiver();
+        registerReceiver(messagesReceiver, messagesFilter);
+
+        // init service
+        Intent messagesWebIntent = new Intent(this, MessagesIntentService.class);
+        messagesWebIntent.putExtra(MessagesIntentService.PARAM_CLIENT_ID, clientId);
+        messagesWebIntent.setAction(MessagesIntentService.ACTION_GET_MESSAGES);
+        startService(messagesWebIntent);
+
 
         ////////////////////////////////////////////
         //

@@ -40,6 +40,5 @@ public class StoriesReceiver extends BroadcastReceiver {
 
         }
 
-        // TODO: update MainActivity with new Stories
     }
 }

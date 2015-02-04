@@ -69,6 +69,28 @@
             android:enabled="true"
             android:exported="true" >
         </receiver>
+
+        <service
+            android:name=".intent_services.notifications.NotificationsIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".intent_services.notifications.NotificationsReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <service
+            android:name=".intent_services.messages.MessagesIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".intent_services.messages.MessagesReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>
