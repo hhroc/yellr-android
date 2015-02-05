@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import yellr.net.yellr_android.R;
-import yellr.net.yellr_android.activities.HomeActivity;
 
 public class SplashActivity extends Activity{
 
