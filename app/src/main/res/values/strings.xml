@@ -10,4 +10,8 @@
     <string name="title_fragment_stories">Stories</string>
     <string name="title_fragment_assignments">Assignments</string>
 
+    <!--Font Awesome Icons-->
+    <string name="icon_glass">&#xf000;</string>
+
+
 </resources>
