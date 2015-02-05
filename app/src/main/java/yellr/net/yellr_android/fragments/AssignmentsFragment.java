@@ -1,17 +1,34 @@
 package yellr.net.yellr_android.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.activities.HomeActivity;
 import yellr.net.yellr_android.intent_services.IntentServicesHelper;
+import yellr.net.yellr_android.intent_services.assignments.Assignment;
+import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
+import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +49,9 @@ public class AssignmentsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ArrayList<Assignment> assignments;
+    //private AssignmentsArrayAdapter assignmentsArrayAdapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -62,11 +82,20 @@ public class AssignmentsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        // init new assignments receiver
+        Context context = getActivity().getApplicationContext();
+        IntentFilter assignmentsFilter = new IntentFilter(AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
+        assignmentsFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        AssignmentsReceiver assignmentsReceiver = new AssignmentsReceiver();
+        context.registerReceiver(assignmentsReceiver, assignmentsFilter);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_assignments, container, false);
     }
@@ -102,8 +131,14 @@ public class AssignmentsFragment extends Fragment {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
         String clientId = sharedPref.getString("clientId", "");
 
-        // fire assignments intent service
-        IntentServicesHelper.getAssignments(getActivity(), clientId);
+        Log.d("AssignmentsFragment.onResume()", "Starting assignments intent service ...");
+
+        // init service
+        Context context = getActivity().getApplicationContext();
+        Intent assignmentsWebIntent = new Intent(context, AssignmentsIntentService.class);
+        assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CLIENT_ID, clientId);
+        assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
+        context.startService(assignmentsWebIntent);
 
         super.onResume();
     }
@@ -124,5 +159,89 @@ public class AssignmentsFragment extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+    public class AssignmentsReceiver extends BroadcastReceiver {
+        public static final String ACTION_NEW_ASSIGNMENTS =
+                "yellr.net.yellr_android.action.NEW_ASSIGNMENTS";
+
+        private ListView listView;
+
+        public AssignmentsReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            listView = (ListView)getView().findViewById(R.id.assignmentsList);
+
+            Log.d("AssignmentsReceiver.onReceive()", "onReceive called.");
+
+            String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
+
+            Log.d("AssignmentsReceiver.onReceive()", "JSON: " + assignmentsJson);
+
+            Gson gson = new Gson();
+            AssignmentsResponse response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
+
+            if (response.success) {
+
+                AssignmentsArrayAdapter assignmentsArrayAdapter = new AssignmentsArrayAdapter(getActivity(), new ArrayList<Assignment>());
+
+                for (int i = 0; i < response.assignments.length; i++) {
+                    Assignment assignment = response.assignments[i];
+                    assignmentsArrayAdapter.add(assignment);
+                }
+
+                Log.d("AssignmentsReceiver.onReceive()", "Setting listView adapter ...");
+
+                listView.setAdapter(assignmentsArrayAdapter);
+
+            }
+
+        }
+    }
+
+    class AssignmentListOnClickListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("neat");
+
+        }
+
+    }
+
+    class AssignmentsArrayAdapter extends ArrayAdapter<Assignment> {
+
+        private ArrayList<Assignment> assignments;
+
+        public AssignmentsArrayAdapter(Context context, ArrayList<Assignment> assignments) {
+            super(context, R.layout.fragment_assignment_row, R.id.frag_home_assignment_question_text, assignments);
+            this.assignments = assignments;
+
+            Log.d("AssignmentsArrayAdapter.AssignmentsArrayAdapter()","Constructor.");
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View row = super.getView(position, convertView, parent);
+
+            Log.d("AssignmentsArrayAdapter.getView()","Setting values for view.");
+
+            TextView textViewQuestionText = (TextView) row.findViewById(R.id.frag_home_assignment_question_text);
+            TextView textViewOrganization = (TextView) row.findViewById(R.id.frag_home_assignment_organization);
+            TextView textViewPostCount = (TextView) row.findViewById(R.id.frag_home_assignment_post_count);
+
+            textViewQuestionText.setText(this.assignments.get(position).question_text);
+            textViewOrganization.setText("Organization: " + this.assignments.get(position).organization);
+            textViewPostCount.setText("Responses: " + String.valueOf(this.assignments.get(position).post_count));
+
+            return row;
+        }
+
+    }
+
 
 }

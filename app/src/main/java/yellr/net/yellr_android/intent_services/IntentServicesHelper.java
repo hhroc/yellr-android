@@ -11,7 +11,8 @@ import android.app.Activity;
 
 import com.google.gson.Gson;
 
-import yellr.net.yellr_android.intent_services.assignments.AssignmentsReceiver;
+//import yellr.net.yellr_android.intent_services.assignments.AssignmentsReceiver;
+import yellr.net.yellr_android.activities.HomeActivity;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 
 import yellr.net.yellr_android.intent_services.stories.StoriesReceiver;
@@ -32,14 +33,15 @@ import yellr.net.yellr_android.intent_services.publish_post.PublishPostReceiver;
  */
 public class IntentServicesHelper {
 
+
     //
     // Create Client ID
     //
     String clientId = "2101b2d8-d3f9-421c-87b5-c6fd465c3394"; //UUID.randomUUID().toString();
 
-
-    public static void getAssignments(Context context,
-                                      String clientId) {
+/*
+    public void getAssignments(Context context,
+                               String clientId) {
 
         ////////////////////////////////////////////
         //
@@ -48,9 +50,9 @@ public class IntentServicesHelper {
         Log.d("HomeActivity.onCreate()", "Setting up assignments intent service ...");
 
         // init new assignments receiver
-        IntentFilter assignmentsFilter = new IntentFilter(AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
+        IntentFilter assignmentsFilter = new IntentFilter(HomeActivity.AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
         assignmentsFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        AssignmentsReceiver assignmentsReceiver = new AssignmentsReceiver();
+        HomeActivity.AssignmentsReceiver assignmentsReceiver = new HomeActivity.AssignmentsReceiver();
         context.registerReceiver(assignmentsReceiver, assignmentsFilter);
 
         // init service
@@ -60,7 +62,7 @@ public class IntentServicesHelper {
         context.startService(assignmentsWebIntent);
     }
 
-    public static void getStories(Context context,
+    public void getStories(Context context,
                                   String clientId) {
 
         ////////////////////////////////////////////
@@ -83,7 +85,7 @@ public class IntentServicesHelper {
 
     }
 
-    public static void getNotifications(Context context,
+    public void getNotifications(Context context,
                                         String clientId) {
 
         ////////////////////////////////////////////
@@ -106,7 +108,7 @@ public class IntentServicesHelper {
 
     }
 
-    public static void getMessages(Context context,
+    public void getMessages(Context context,
                                    String clientId) {
 
         ////////////////////////////////////////////
@@ -128,7 +130,7 @@ public class IntentServicesHelper {
         context.startService(messagesWebIntent);
     }
 
-    public static void publishPost(Context context,
+    public void publishPost(Context context,
                                    String clientId,
                                    String mediaType,
                                    String mediaText,
@@ -168,4 +170,6 @@ public class IntentServicesHelper {
         context.startService(publishPostWebIntent);
 
     }
+
+    */
 }

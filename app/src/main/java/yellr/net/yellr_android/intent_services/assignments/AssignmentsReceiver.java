@@ -1,11 +1,17 @@
 package yellr.net.yellr_android.intent_services.assignments;
 
+/*
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
+
+import yellr.net.yellr_android.R;
 
 public class AssignmentsReceiver extends BroadcastReceiver {
     public static final String ACTION_NEW_ASSIGNMENTS =
@@ -30,6 +36,9 @@ public class AssignmentsReceiver extends BroadcastReceiver {
 
             // TODO: populate GUI with array of assignments
 
+            //AssignmentsFragment assignmentsFragment = getFra
+            ListView listView = (ListView) findViewById(R.id.list);
+
             for(int i=0; i<response.assignments.length; i++) {
 
                 Assignment assignment = response.assignments[i];
@@ -53,3 +62,5 @@ public class AssignmentsReceiver extends BroadcastReceiver {
         // TODO: update MainActivity with new assignments
     }
 }
+
+*/
