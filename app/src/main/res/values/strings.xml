@@ -4,7 +4,6 @@
     <string name="app_name">Yellr-Android</string>
     <string name="title_activity_splash">Yellr</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_home">HomeActivity</string>
     <string name="splash_title">yellr</string>
     <string name="splash_tagline">report for your community</string>
     <string name="title_fragment_stories">Stories</string>
