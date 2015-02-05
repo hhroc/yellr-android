@@ -14,5 +14,9 @@ $ cd yellr-android
 $ gradle sync
 ```
 
+### Server
+
+Note: the current code points to a demo URL at mycodespace.net.  You may want to run your own server for development.  You can do that by heading over to [yellr-server](http://github.com/hhroc/yellr-server) and running it there.
+
 ## Contributing
 TODO: add contributing.md
