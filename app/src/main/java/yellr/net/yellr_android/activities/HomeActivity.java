@@ -83,7 +83,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         clientId = sharedPref.getString("clientId", "");
 
         // check to see if there is a clientId on the device, if not created one
-        if ( clientId == "" ) {
+        if (clientId.equals("")){
 
             clientId = UUID.randomUUID().toString();
             SharedPreferences.Editor editor = sharedPref.edit();
