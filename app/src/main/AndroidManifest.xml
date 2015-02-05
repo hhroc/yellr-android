@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="yellr.net.yellr_android" >
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -23,10 +26,64 @@
             android:theme="@style/YellrTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".intent_services.assignments.AssignmentsIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".intent_services.assignments.AssignmentsReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <service
+            android:name=".intent_services.stories.StoriesIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".intent_services.stories.StoriesReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <service
+            android:name=".intent_services.publish_post.PublishPostIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".intent_services.publish_post.PublishPostReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <service
+            android:name=".intent_services.notifications.NotificationsIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".intent_services.notifications.NotificationsReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <service
+            android:name=".intent_services.messages.MessagesIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".intent_services.messages.MessagesReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>
