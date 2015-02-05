@@ -37,7 +37,7 @@ public class HomeActivity extends Activity {
         //
         // Create Client ID
         //
-        String clientId = UUID.randomUUID().toString();
+        String clientId = "2101b2d8-d3f9-421c-87b5-c6fd465c3394"; //UUID.randomUUID().toString();
 
 
 
