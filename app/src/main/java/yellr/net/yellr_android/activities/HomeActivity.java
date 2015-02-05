@@ -1,9 +1,12 @@
 package yellr.net.yellr_android.activities;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
@@ -14,17 +17,25 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.google.gson.Gson;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
 import yellr.net.yellr_android.fragments.StoriesFragment;
 
 import yellr.net.yellr_android.intent_services.IntentServicesHelper;
-import yellr.net.yellr_android.intent_services.assignments.AssignmentsReceiver;
+import yellr.net.yellr_android.intent_services.assignments.Assignment;
+//import yellr.net.yellr_android.intent_services.assignments.AssignmentsReceiver;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 
+import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
 import yellr.net.yellr_android.intent_services.stories.StoriesReceiver;
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
 
@@ -212,4 +223,6 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             return null;
         }
     }
+
+
 }

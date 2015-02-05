@@ -34,4 +34,10 @@ public class Assignment {
     public int post_count;
 
     public String publish_datetime;
+
+    @Override
+    public String toString() {
+        return question_text;
+    }
+
 }
