@@ -24,6 +24,10 @@
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/YellrTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service
@@ -44,17 +48,6 @@
 
         <receiver
             android:name=".intent_services.stories.StoriesReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
-
-        <service
-            android:name=".intent_services.upload_media.UploadMediaIntentService"
-            android:exported="false" >
-        </service>
-
-        <receiver
-            android:name=".intent_services.upload_media.UploadMediaReceiver"
             android:enabled="true"
             android:exported="true" >
         </receiver>

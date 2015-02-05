@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme"
-        parent="@android:style/Theme.Holo">
+        parent="Theme.AppCompat.Light">
     </style>
 
     <!--Style for the Splash Screen, Removes ActionBar-->
@@ -14,29 +14,8 @@
 
     <!--Main Application Style-->
     <style name="YellrTheme"
-        parent="@android:style/Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/YellrActionbar</item>
+        parent="Theme.AppCompat.Light">
         <item name="android:actionMenuTextColor">@android:color/white</item>
-    </style>
-    <style name="YellrActionbar"
-        parent="android:Widget.ActionBar">
-        <item name="android:titleTextStyle">@style/YellrActionbar.title</item>
-        <item name="android:subtitleTextStyle">@style/YellrActionbar.subtitle</item>
-        <item name="android:background">@color/yellow</item>
-        <item name="android:height">56dp</item>
-        <item name="android:actionButtonStyle">@style/YellrActionbar.button</item>
-    </style>
-    <style name="YellrActionbar.title"
-        parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/black</item>
-    </style>
-    <style name="YellrActionbar.subtitle"
-        parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-    <style name="YellrActionbar.button"
-        parent="android:Widget.ActionButton">
-        <item name="android:padding">0dp</item>
     </style>
 
 </resources>
