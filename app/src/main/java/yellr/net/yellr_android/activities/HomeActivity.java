@@ -1,7 +1,10 @@
 package yellr.net.yellr_android.activities;
 
 import java.util.Locale;
+import java.util.UUID;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -17,6 +20,23 @@ import android.view.MenuItem;
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
 import yellr.net.yellr_android.fragments.StoriesFragment;
+
+import yellr.net.yellr_android.intent_services.IntentServicesHelper;
+import yellr.net.yellr_android.intent_services.assignments.AssignmentsReceiver;
+import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
+
+import yellr.net.yellr_android.intent_services.stories.StoriesReceiver;
+import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
+
+import yellr.net.yellr_android.intent_services.notifications.NotificationsReceiver;
+import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
+
+import yellr.net.yellr_android.intent_services.messages.MessagesReceiver;
+import yellr.net.yellr_android.intent_services.messages.MessagesIntentService;
+
+import yellr.net.yellr_android.intent_services.publish_post.MediaObjectDefinition;
+import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
+import yellr.net.yellr_android.intent_services.publish_post.PublishPostReceiver;
 
 public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, AssignmentsFragment.OnFragmentInteractionListener, StoriesFragment.OnFragmentInteractionListener {
 
@@ -39,6 +59,37 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //
+        // See if we have a clientId in shared preferences, and if we
+        // don't then create one
+        //
+
+        String clientId = "";
+
+        // read the clientId from the device.
+        SharedPreferences sharedPref = this.getSharedPreferences("clientId", Context.MODE_PRIVATE);
+        clientId = sharedPref.getString("clientId", "");
+
+        // check to see if there is a clientId on the device, if not created one
+        if ( clientId == "" ) {
+
+            clientId = UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("clientId", clientId);
+            editor.commit();
+
+        }
+
+
+        //
+        // fire all of the intent services so we can stay up-to-date
+        //
+
+        //IntentServicesHelper.getAssignments(this,clientId);
+        //IntentServicesHelper.getStories(this,clientId);
+        //IntentServicesHelper.getNotifications(this,clientId);
+        //IntentServicesHelper.getMessages(this,clientId);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -73,6 +124,8 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+
     }
 
 

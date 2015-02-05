@@ -1,6 +1,8 @@
 package yellr.net.yellr_android.fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.intent_services.IntentServicesHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,6 +95,20 @@ public class AssignmentsFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onResume() {
+
+        // get clientId
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
+        String clientId = sharedPref.getString("clientId", "");
+
+        // fire assignments intent service
+        IntentServicesHelper.getAssignments(getActivity(), clientId);
+
+        super.onResume();
+    }
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -102,6 +119,7 @@ public class AssignmentsFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);

@@ -1,6 +1,8 @@
 package yellr.net.yellr_android.fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.intent_services.IntentServicesHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -90,6 +93,19 @@ public class StoriesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+
+        // get clientId
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
+        String clientId = sharedPref.getString("clientId", "");
+
+        // fire assignments intent service
+        IntentServicesHelper.getStories(getActivity(), clientId);
+
+        super.onResume();
     }
 
     /**
