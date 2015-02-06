@@ -19,12 +19,15 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
@@ -139,27 +142,40 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.home_activity_actions, menu);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        /*New Story*/
+        menu.findItem(R.id.action_new_story).setIcon(
+                new IconDrawable(this, Iconify.IconValue.fa_pencil_square_o)
+                        .colorRes(R.color.black)
+                        .actionBarSize()
+        );
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        /*Notification Icon*/
+        menu.findItem(R.id.action_notification).setIcon(
+                new IconDrawable(this, Iconify.IconValue.fa_bell_o)
+                    .colorRes(R.color.black)
+                    .actionBarSize()
+        );
 
-        return super.onOptionsItemSelected(item);
+        /*Messages Icon*/
+        menu.findItem(R.id.action_messages).setIcon(
+                new IconDrawable(this, Iconify.IconValue.fa_envelope_o)
+                    .colorRes(R.color.black)
+                    .actionBarSize()
+        );
+
+        /*Profile Icon*/
+        menu.findItem(R.id.action_profile).setIcon(
+                new IconDrawable(this, Iconify.IconValue.fa_user)
+                        .colorRes(R.color.black)
+                        .actionBarSize()
+        );
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
