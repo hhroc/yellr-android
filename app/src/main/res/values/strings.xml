@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Yellr-Android</string>
-    <string name="title_activity_splash">Yellr</string>
+    <string name="app_name">Yellr</string>
     <string name="action_settings">Settings</string>
     <string name="splash_title">yellr</string>
     <string name="splash_tagline">report for your community</string>
@@ -11,6 +10,5 @@
 
     <!--Font Awesome Icons-->
     <string name="icon_glass">&#xf000;</string>
-
 
 </resources>

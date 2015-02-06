@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- File created by the Android Action Bar Style Generator
+
+     Copyright (C) 2011 The Android Open Source Project
+     Copyright (C) 2012 readyState Software Ltd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <style name="Theme.Yellr" parent="@style/Theme.AppCompat.Light">
+        <item name="actionBarItemBackground">@drawable/selectable_background_yellr</item>
+        <item name="popupMenuStyle">@style/PopupMenu.Yellr</item>
+        <item name="dropDownListViewStyle">@style/DropDownListView.Yellr</item>
+        <item name="actionBarTabStyle">@style/ActionBarTabStyle.Yellr</item>
+        <item name="actionBarTabTextStyle">@style/ActionBarTabText.Yellr</item>
+        <item name="actionDropDownStyle">@style/DropDownNav.Yellr</item>
+        <item name="actionBarStyle">@style/ActionBar.Solid.Yellr</item>
+        <item name="actionModeBackground">@drawable/cab_background_top_yellr</item>
+        <item name="actionModeSplitBackground">@drawable/cab_background_bottom_yellr</item>
+        <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Yellr</item>
+    </style>
+
+    <!--Style for the Splash Screen, Removes ActionBar-->
+    <style name="NoActionBar"
+        parent="@android:style/Theme.Holo">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="ActionBar.Solid.Yellr" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="background">@drawable/ab_solid_yellr</item>
+        <item name="backgroundStacked">@drawable/ab_stacked_solid_yellr</item>
+        <item name="backgroundSplit">@drawable/ab_bottom_solid_yellr</item>
+        <item name="progressBarStyle">@style/ProgressBar.Yellr</item>
+        <item name="titleTextStyle">@style/actionBarTitleText.Yellr</item>
+    </style>
+
+    <style name="actionBarTitleText.Yellr"
+        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ActionBarTabText.Yellr"
+        parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@color/black</item>
+        <!-- The textColor property is backward compatible with the Support Library -->
+    </style>
+
+    <style name="ActionBar.Transparent.Yellr" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="background">@drawable/ab_transparent_yellr</item>
+        <item name="progressBarStyle">@style/ProgressBar.Yellr</item>
+    </style>
+	
+    <style name="PopupMenu.Yellr" parent="@style/Widget.AppCompat.Light.PopupMenu">	
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_yellr</item>	
+    </style>
+	
+    <style name="DropDownListView.Yellr" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_yellr</item>
+    </style>
+
+    <style name="ActionBarTabStyle.Yellr" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_yellr</item>
+    </style>
+	
+    <style name="DropDownNav.Yellr" parent="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
+        <item name="android:background">@drawable/spinner_background_ab_yellr</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_yellr</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_yellr</item>
+    </style>
+    
+    <style name="ProgressBar.Yellr" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_yellr</item>
+    </style>
+    
+    <style name="ActionButton.CloseMode.Yellr" parent="@style/Widget.AppCompat.Light.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_yellr</item>
+    </style>
+    
+    <!-- this style is only referenced in a Light.DarkActionBar based theme -->
+    <style name="Theme.Yellr.Widget" parent="@style/Theme.AppCompat">
+        <item name="popupMenuStyle">@style/PopupMenu.Yellr</item>
+        <item name="dropDownListViewStyle">@style/DropDownListView.Yellr</item>
+    </style>
+
+</resources>
