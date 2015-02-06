@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_new_story"
+        android:title="@string/action_new_story"
+        app:showAsAction="always"/>
     <item android:id="@+id/action_notification"
         android:title="@string/action_notification"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item android:id="@+id/action_messages"
         android:title="@string/action_messages"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item android:id="@+id/action_profile"
         android:title="@string/action_profile"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         />
 
 </menu>

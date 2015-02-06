@@ -147,6 +147,13 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.home_activity_actions, menu);
 
+        /*New Story*/
+        menu.findItem(R.id.action_new_story).setIcon(
+                new IconDrawable(this, Iconify.IconValue.fa_pencil_square_o)
+                        .colorRes(R.color.black)
+                        .actionBarSize()
+        );
+
         /*Notification Icon*/
         menu.findItem(R.id.action_notification).setIcon(
                 new IconDrawable(this, Iconify.IconValue.fa_bell_o)
