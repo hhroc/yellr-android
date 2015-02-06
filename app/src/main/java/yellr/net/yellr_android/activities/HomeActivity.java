@@ -19,12 +19,15 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
@@ -139,6 +142,34 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.home_activity_actions, menu);
+
+        /*Notification Icon*/
+        menu.findItem(R.id.action_notification).setIcon(
+                new IconDrawable(this, Iconify.IconValue.fa_bell_o)
+                    .colorRes(R.color.black)
+                    .actionBarSize()
+        );
+
+        /*Messages Icon*/
+        menu.findItem(R.id.action_messages).setIcon(
+                new IconDrawable(this, Iconify.IconValue.fa_envelope_o)
+                    .colorRes(R.color.black)
+                    .actionBarSize()
+        );
+
+        /*Profile Icon*/
+        menu.findItem(R.id.action_profile).setIcon(
+                new IconDrawable(this, Iconify.IconValue.fa_user)
+                        .colorRes(R.color.black)
+                        .actionBarSize()
+        );
+
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {

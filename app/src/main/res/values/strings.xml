@@ -11,4 +11,9 @@
     <!--Font Awesome Icons-->
     <string name="icon_glass">&#xf000;</string>
 
+    <!--Actionbar Action Buttons-->
+    <string name="action_notification">Notifications</string>
+    <string name="action_messages">Messages</string>
+    <string name="action_profile">Profile</string>
+
 </resources>
