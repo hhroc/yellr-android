@@ -1,12 +1,9 @@
 package yellr.net.yellr_android.activities;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
@@ -17,15 +14,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.google.gson.Gson;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
@@ -33,24 +24,8 @@ import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
 import yellr.net.yellr_android.fragments.StoriesFragment;
 
-import yellr.net.yellr_android.intent_services.IntentServicesHelper;
-import yellr.net.yellr_android.intent_services.assignments.Assignment;
 //import yellr.net.yellr_android.intent_services.assignments.AssignmentsReceiver;
-import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 
-import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
-import yellr.net.yellr_android.intent_services.stories.StoriesReceiver;
-import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
-
-import yellr.net.yellr_android.intent_services.notifications.NotificationsReceiver;
-import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
-
-import yellr.net.yellr_android.intent_services.messages.MessagesReceiver;
-import yellr.net.yellr_android.intent_services.messages.MessagesIntentService;
-
-import yellr.net.yellr_android.intent_services.publish_post.MediaObjectDefinition;
-import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
-import yellr.net.yellr_android.intent_services.publish_post.PublishPostReceiver;
 
 public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, AssignmentsFragment.OnFragmentInteractionListener, StoriesFragment.OnFragmentInteractionListener {
 
@@ -148,7 +123,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         inflater.inflate(R.menu.home_activity_actions, menu);
 
         /*New Story*/
-        menu.findItem(R.id.action_new_story).setIcon(
+        menu.findItem(R.id.action_new_post).setIcon(
                 new IconDrawable(this, Iconify.IconValue.fa_pencil_square_o)
                         .colorRes(R.color.black)
                         .actionBarSize()
