@@ -15,6 +15,6 @@
     <string name="action_notification">Notifications</string>
     <string name="action_messages">Messages</string>
     <string name="action_profile">Profile</string>
-    <string name="action_new_story">New Story</string>
+    <string name="action_new_post">New Post</string>
 
 </resources>
