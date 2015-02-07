@@ -42,13 +42,13 @@ public class PublishPostIntentService extends IntentService {
 
     public PublishPostIntentService() {
         super("PublishPostIntentService");
-        Log.d("PublishPostIntentService()","Constructor.");
+        //Log.d("PublishPostIntentService()","Constructor.");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        Log.d("PublishPostIntentService.onHandleIntent()","Decoding intent action ...");
+        //Log.d("PublishPostIntentService.onHandleIntent()","Decoding intent action ...");
 
         String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
         int assignmentId = intent.getIntExtra(PARAM_ASSIGNMENT_ID,0);
@@ -70,7 +70,7 @@ public class PublishPostIntentService extends IntentService {
                                             String title,
                                             MediaObjectDefinition[] mediaObjectDefinitions) {
 
-        Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Starting handleActionGetPublishPost() ...");
+        //Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Starting handleActionGetPublishPost() ...");
 
         // get location data
 
@@ -91,7 +91,7 @@ public class PublishPostIntentService extends IntentService {
 
         String languageCode = Locale.getDefault().getLanguage();
 
-        Log.d("PublishPostIntentService.handleActionGetPublishPost()","Uploading media objects ...");
+        //Log.d("PublishPostIntentService.handleActionGetPublishPost()","Uploading media objects ...");
 
         Gson gson = new Gson();
 
@@ -110,7 +110,7 @@ public class PublishPostIntentService extends IntentService {
 
         }
 
-        Log.d("PublishPostIntentService.handleActionGetPublishPost()","Publishing post ...");
+        //Log.d("PublishPostIntentService.handleActionGetPublishPost()","Publishing post ...");
 
 
         String mediaObjectIdsJson = gson.toJson(mediaObjectIds);

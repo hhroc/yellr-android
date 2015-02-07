@@ -2,19 +2,35 @@
 <resources>
 
     <string name="app_name">Yellr</string>
-    <string name="action_settings">Settings</string>
     <string name="splash_title">yellr</string>
     <string name="splash_tagline">report for your community</string>
     <string name="title_fragment_stories">Stories</string>
     <string name="title_fragment_assignments">Assignments</string>
 
-    <!--Font Awesome Icons-->
-    <string name="icon_glass">&#xf000;</string>
+    <!-- Font Awesome Icons -->
+    <string name="fa_camera"></string>
+    <string name="fa_video_camera"></string>
+    <string name="fa_microphone"></string>
+    <string name="fa_upload"></string>
 
-    <!--Actionbar Action Buttons-->
+    <!-- Actionbar Action Buttons -->
     <string name="action_notification">Notifications</string>
     <string name="action_messages">Messages</string>
     <string name="action_profile">Profile</string>
     <string name="action_new_post">New Post</string>
+
+    <!-- PostFragment -->
+    <string name="title_activity_post">New Post</string>
+    <string name="frag_post_edittext">What\'s on your mind?</string>
+    <string name="frag_post_media_text">Add extra media:</string>
+    <string name="action_post">Send</string>
+
+    <!-- ViewStoryFragment -->
+    <string name="title_activity_view_story">Yellr</string>
+
+    <!-- <string name="hello_world">Hello world!</string> -->
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_view_assignment">ViewAssignmentActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

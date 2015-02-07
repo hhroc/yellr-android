@@ -17,11 +17,11 @@ public class StoriesReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d("StoriesReceiver.onReceive()", "onReceive called.");
+        //Log.d("StoriesReceiver.onReceive()", "onReceive called.");
 
         String storiesJson = intent.getStringExtra(StoriesIntentService.PARAM_STORIES_JSON);
 
-        Log.d("StoriesReceiver.onReceive()", "JSON: " + storiesJson);
+        //Log.d("StoriesReceiver.onReceive()", "JSON: " + storiesJson);
 
         Gson gson = new Gson();
         StoriesResponse response = gson.fromJson(storiesJson, StoriesResponse.class);
@@ -34,7 +34,7 @@ public class StoriesReceiver extends BroadcastReceiver {
 
                 Story story = response.stories[i];
 
-                Log.d("StoriesReceiver.onReceive()", "Assignment: " + story.title);
+                //Log.d("StoriesReceiver.onReceive()", "Assignment: " + story.title);
 
             }
 

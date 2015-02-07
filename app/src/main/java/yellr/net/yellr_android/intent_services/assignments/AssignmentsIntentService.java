@@ -27,13 +27,13 @@ public class AssignmentsIntentService extends IntentService {
 
     public AssignmentsIntentService() {
         super("AssignmentsIntentService");
-        Log.d("AssignmentsIntentService()","Constructor.");
+        //Log.d("AssignmentsIntentService()","Constructor.");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        Log.d("AssignmentsIntentService.onHandleIntent()","Decoding intent action ...");
+        //Log.d("AssignmentsIntentService.onHandleIntent()","Decoding intent action ...");
 
         String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
         handleActionGetAssignments(clientId);
@@ -44,7 +44,7 @@ public class AssignmentsIntentService extends IntentService {
      */
     private void handleActionGetAssignments(String clientId) {
 
-        Log.d("AssignmentsIntentService.UpdateData()", "Starting UpdateData() ...");
+        //Log.d("AssignmentsIntentService.UpdateData()", "Starting UpdateData() ...");
 
         // get location data
 
@@ -74,7 +74,7 @@ public class AssignmentsIntentService extends IntentService {
                 + "&lat=" + lat
                 + "&lng=" + lng;
 
-        Log.d("AssignmentsIntentService.UpdateData()","URL: " + url);
+        //Log.d("AssignmentsIntentService.UpdateData()","URL: " + url);
 
         //
         // TODO: need to check for exceptions better, this bombs out sometimes
@@ -100,7 +100,9 @@ public class AssignmentsIntentService extends IntentService {
 
             String assignmentsJson = builder.toString();
 
-            Log.d("AssignmentsIntentService.UpdateData()","Broadcasting result ...");
+            //Log.d("AssignmentsIntentService.UpdateData()","Broadcasting result ...");
+
+            Log.d("AssignmentsIntentService.UpdateData()","JSON: " + assignmentsJson);
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(AssignmentsFragment.AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);

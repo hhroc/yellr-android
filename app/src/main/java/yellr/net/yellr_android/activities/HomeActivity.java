@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
@@ -120,7 +122,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.home_activity_actions, menu);
+        inflater.inflate(R.menu.menu_home, menu);
 
         /*New Story*/
         menu.findItem(R.id.action_new_post).setIcon(
@@ -151,6 +153,19 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         );
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_new_post:
+                Intent intent = new Intent(this, PostActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override

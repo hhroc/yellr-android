@@ -16,6 +16,7 @@
             android:theme="@style/NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -79,6 +80,19 @@
             android:enabled="true"
             android:exported="true" >
         </receiver>
+
+        <activity
+            android:name=".activities.PostActivity"
+            android:label="@string/title_activity_post" >
+        </activity>
+        <activity
+            android:name=".activities.ViewStoryActivity"
+            android:label="@string/title_activity_view_story" >
+        </activity>
+        <activity
+            android:name=".activities.ViewAssignmentActivity"
+            android:label="@string/title_activity_view_assignment" >
+        </activity>
     </application>
 
 </manifest>

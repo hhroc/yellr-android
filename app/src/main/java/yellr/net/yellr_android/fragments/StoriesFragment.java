@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.activities.HomeActivity;
+import yellr.net.yellr_android.activities.ViewStoryActivity;
 import yellr.net.yellr_android.intent_services.IntentServicesHelper;
 import yellr.net.yellr_android.intent_services.stories.Story;
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
@@ -50,7 +51,7 @@ public class StoriesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private ArrayList<Story> stories;
+    private Story[] stories;
     //private StoriesArrayAdapter storiesArrayAdapter;
 
     /**
@@ -174,11 +175,11 @@ public class StoriesFragment extends Fragment {
 
             listView = (ListView)getView().findViewById(R.id.storiesList);
 
-            Log.d("StoriesReceiver.onReceive()", "onReceive called.");
+            //Log.d("StoriesReceiver.onReceive()", "onReceive called.");
 
             String storiesJson = intent.getStringExtra(StoriesIntentService.PARAM_STORIES_JSON);
 
-            Log.d("StoriesReceiver.onReceive()", "JSON: " + storiesJson);
+            //Log.d("StoriesReceiver.onReceive()", "JSON: " + storiesJson);
 
             Gson gson = new Gson();
             StoriesResponse response = gson.fromJson(storiesJson, StoriesResponse.class);
@@ -187,14 +188,18 @@ public class StoriesFragment extends Fragment {
 
                 StoriesArrayAdapter storiesArrayAdapter = new StoriesArrayAdapter(getActivity(), new ArrayList<Story>());
 
+                stories = new Story[response.stories.length];
+
                 for (int i = 0; i < response.stories.length; i++) {
                     Story story = response.stories[i];
                     storiesArrayAdapter.add(story);
+                    stories[i] = story;
                 }
 
-                Log.d("StoriesReceiver.onReceive()", "Setting listView adapter ...");
+                //Log.d("StoriesReceiver.onReceive()", "Setting listView adapter ...");
 
                 listView.setAdapter(storiesArrayAdapter);
+                listView.setOnItemClickListener(new StoryListOnClickListener());
 
             }
 
@@ -206,8 +211,20 @@ public class StoriesFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("neat");
+            //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            //builder.setMessage("neat");
+
+            Intent intent;
+            intent = new Intent(getActivity().getApplicationContext(), ViewStoryActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            intent.putExtra(ViewStoryFragment.ARG_STORY_TITLE,stories[position].title);
+            intent.putExtra(ViewStoryFragment.ARG_STORY_AUTHOR,stories[position].author_first_name + " " + stories[position].author_last_name);
+            intent.putExtra(ViewStoryFragment.ARG_STORY_PUBLISHED_DATETIME,stories[position].publish_datetime);
+            intent.putExtra(ViewStoryFragment.ARG_STORY_CONTENTS,stories[position].contents);
+
+
+            startActivity(intent);
 
         }
 
@@ -221,14 +238,14 @@ public class StoriesFragment extends Fragment {
             super(context, R.layout.fragment_story_row, R.id.frag_home_story_title, stories);
             this.stories = stories;
 
-            Log.d("StoriesArrayAdapter.StoriesArrayAdapter()","Constructor.");
+            //Log.d("StoriesArrayAdapter.StoriesArrayAdapter()","Constructor.");
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = super.getView(position, convertView, parent);
 
-            Log.d("StoriesArrayAdapter.getView()","Setting values for view.");
+            //Log.d("StoriesArrayAdapter.getView()","Setting values for view.");
 
             TextView textViewTitle = (TextView) row.findViewById(R.id.frag_home_story_title);
             TextView textViewPublishDateTime = (TextView) row.findViewById(R.id.frag_home_story_publish_datetime);
