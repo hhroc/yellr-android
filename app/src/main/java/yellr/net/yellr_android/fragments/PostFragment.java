@@ -1,12 +1,21 @@
 package yellr.net.yellr_android.fragments;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 
 import yellr.net.yellr_android.R;
 
@@ -53,6 +62,7 @@ public class PostFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -75,5 +85,35 @@ public class PostFragment extends Fragment {
         videoButton.setTypeface(font);
         audioButton.setTypeface(font);
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_post, menu);
+        if(this.isAdded()){
+                    /*New Story*/
+            menu.findItem(R.id.action_post_upload).setIcon(
+                    new IconDrawable(getActivity(), Iconify.IconValue.fa_upload)
+                            .colorRes(R.color.black)
+                            .actionBarSize()
+            );
+        } else {
+            Log.d("onCreateOptionsMenu()", "Fragment not added to Activity");
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_post_upload:
+                //TODO Validate Form Data
+                //TODO Upload to Server
+                //TODO Inform user
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }
