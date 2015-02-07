@@ -30,6 +30,7 @@
         <item name="actionModeBackground">@drawable/cab_background_top_yellr</item>
         <item name="actionModeSplitBackground">@drawable/cab_background_bottom_yellr</item>
         <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Yellr</item>
+        <item name="android:editTextBackground">@drawable/edit_text_yellr</item>
     </style>
 
     <!--Style for the Splash Screen, Removes ActionBar-->

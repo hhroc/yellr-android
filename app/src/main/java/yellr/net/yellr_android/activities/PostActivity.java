@@ -51,6 +51,9 @@ public class PostActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_post_upload) {
+            //TODO Validate Form Data
+            //TODO Perform POST to server
+            //TODO Alert User of success
             return true;
         }
 
