@@ -30,6 +30,7 @@
 
     <!-- ViewAssignmentFragment -->
     <string name="title_activity_view_assignment">Assignment</string>
+    <string name="view_assignment_contribute">Contribute</string>
 
     <!-- <string name="hello_world">Hello world!</string> -->
     <string name="action_settings">Settings</string>

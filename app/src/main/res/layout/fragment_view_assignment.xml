@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -26,6 +26,18 @@
         android:text=""
         android:textSize="14sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frag_view_assignment_question"/>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/frag_view_assignment_contribute_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_assignment_contribute"
+        android:textSize="18dp"
+        android:layout_weight="1"
+        android:textColor="@color/black"
+        android:onClick="launchContributeToAssignment"
+        android:layout_below="@id/frag_view_assignment_description"/>
+
+</RelativeLayout>
