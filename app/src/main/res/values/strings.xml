@@ -8,10 +8,10 @@
     <string name="title_fragment_assignments">Assignments</string>
 
     <!-- Font Awesome Icons -->
-    <string name="fa_camera">&#xf030;</string>
-    <string name="fa_video_camera">&#xf03d;</string>
-    <string name="fa_microphone">&#xf130;</string>
-    <string name="fa_upload">&#xf093;</string>
+    <string name="fa_camera"></string>
+    <string name="fa_video_camera"></string>
+    <string name="fa_microphone"></string>
+    <string name="fa_upload"></string>
 
     <!-- Actionbar Action Buttons -->
     <string name="action_notification">Notifications</string>
@@ -19,9 +19,13 @@
     <string name="action_profile">Profile</string>
     <string name="action_new_post">New Post</string>
 
-    <!--PostFragment-->
+    <!-- PostFragment -->
     <string name="title_activity_post">New Post</string>
     <string name="frag_post_edittext">What\'s on your mind?</string>
     <string name="frag_post_media_text">Add extra media:</string>
     <string name="action_post">Send</string>
+    <string name="title_activity_view_story">ViewStoryActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
 </resources>
