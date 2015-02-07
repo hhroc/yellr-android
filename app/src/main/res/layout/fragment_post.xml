@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:theme="@style/Theme.Yellr"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="yellr.net.yellr_android.activities.PostActivity$PlaceholderFragment">
+
+    <EditText
+        android:id="@+id/frag_post_edittext"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/frag_post_edittext"/>
+    <TextView
+        android:id="@+id/frag_post_media_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frag_post_edittext"
+        android:text="@string/frag_post_media_text"
+        android:paddingTop="16dp"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frag_post_media_text">
+
+        <Button
+            android:id="@+id/frag_post_photo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fa_camera"
+            android:textSize="24dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"/>
+        <Button
+            android:id="@+id/frag_post_video_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fa_video_camera"
+            android:textSize="24dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"/>
+        <Button
+            android:id="@+id/frag_post_audio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fa_microphone"
+            android:textSize="24dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
