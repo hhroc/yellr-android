@@ -25,13 +25,13 @@ public class StoriesIntentService extends IntentService {
 
     public StoriesIntentService() {
         super("StoriesIntentService");
-        Log.d("StoriesIntentService()","Constructor.");
+        //Log.d("StoriesIntentService()","Constructor.");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        Log.d("StoriesIntentService.onHandleIntent()","Decoding intent action ...");
+        //Log.d("StoriesIntentService.onHandleIntent()","Decoding intent action ...");
 
         String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
         handleActionGetStories(clientId);
@@ -42,7 +42,7 @@ public class StoriesIntentService extends IntentService {
      */
     private void handleActionGetStories(String clientId) {
 
-        Log.d("StoriesIntentService.UpdateData()", "Starting UpdateData() ...");
+        //Log.d("StoriesIntentService.UpdateData()", "Starting UpdateData() ...");
 
         // get location data
 
@@ -72,14 +72,14 @@ public class StoriesIntentService extends IntentService {
                 + "&lat=" + lat
                 + "&lng=" + lng;
 
-        Log.d("StoriesIntentService.UpdateData()","URL: " + url);
+        //Log.d("StoriesIntentService.UpdateData()","URL: " + url);
 
         //
         // TODO: need to check for exceptions better, this bombs out sometimes
         //
         try {
 
-            Log.d("StoriesIntentService.UpdateData()","Attempting HTTP connection ...");
+            //Log.d("StoriesIntentService.UpdateData()","Attempting HTTP connection ...");
 
             //
             HttpClient client = new DefaultHttpClient();
@@ -99,6 +99,8 @@ public class StoriesIntentService extends IntentService {
             }
 
             String storiesJson = builder.toString();
+
+            Log.d("StoriesIntentService.publishPost()","JSON: " + storiesJson);
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(StoriesReceiver.ACTION_NEW_STORIES);

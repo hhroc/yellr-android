@@ -17,11 +17,11 @@ public class MessagesReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d("MessagesReceiver.onReceive()", "onReceive called.");
+        //Log.d("MessagesReceiver.onReceive()", "onReceive called.");
 
         String messagesJson = intent.getStringExtra(MessagesIntentService.PARAM_MESSAGES_JSON);
 
-        Log.d("MessagesReceiver.onReceive()", "JSON: " + messagesJson);
+        //Log.d("MessagesReceiver.onReceive()", "JSON: " + messagesJson);
 
         Gson gson = new Gson();
         MessagesResponse response = gson.fromJson(messagesJson, MessagesResponse.class);
@@ -34,7 +34,7 @@ public class MessagesReceiver extends BroadcastReceiver {
 
                 Message message = response.messages[i];
 
-                Log.d("MessagesReceiver.onReceive()", "Message Subject: " + message.message_subject);
+                //Log.d("MessagesReceiver.onReceive()", "Message Subject: " + message.message_subject);
 
             }
 

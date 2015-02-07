@@ -24,13 +24,13 @@ public class MessagesIntentService extends IntentService {
 
     public MessagesIntentService() {
         super("MessagesIntentService");
-        Log.d("MessagesIntentService()","Constructor.");
+        //Log.d("MessagesIntentService()","Constructor.");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        Log.d("MessagesIntentService.onHandleIntent()","Decoding intent action ...");
+        //Log.d("MessagesIntentService.onHandleIntent()","Decoding intent action ...");
 
         String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
         handleActionGetMessages(clientId);
@@ -41,14 +41,14 @@ public class MessagesIntentService extends IntentService {
      */
     private void handleActionGetMessages(String clientId) {
 
-        Log.d("MessagesIntentService.UpdateData()", "Starting UpdateData() ...");
+        //Log.d("MessagesIntentService.UpdateData()", "Starting UpdateData() ...");
 
         String baseUrl = "http://yellr.mycodespace.net/get_messages.json";
 
         String url =  baseUrl
                 + "?client_id=" + clientId;
 
-        Log.d("MessagesIntentService.UpdateData()","URL: " + url);
+        //Log.d("MessagesIntentService.UpdateData()","URL: " + url);
 
         try {
 
@@ -71,7 +71,9 @@ public class MessagesIntentService extends IntentService {
 
             String messagesJson = builder.toString();
 
-            Log.d("MessagesIntentService.UpdateData()","Broadcasting result ...");
+            //Log.d("MessagesIntentService.UpdateData()","Broadcasting result ...");
+
+            Log.d("MessagesIntentService.UpdateData()","JSON: " + messagesJson);
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(MessagesReceiver.ACTION_NEW_MESSAGES);

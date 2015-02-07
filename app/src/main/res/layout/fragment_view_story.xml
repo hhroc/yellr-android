@@ -22,6 +22,20 @@
         android:textSize="24sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/frag_view_story_author"
+        android:text=""
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/frag_view_story_published_datetime"
+        android:text=""
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
         
     <TextView
         android:id="@+id/frag_view_story_contents"

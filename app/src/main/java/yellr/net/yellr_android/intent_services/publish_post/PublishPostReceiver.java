@@ -17,18 +17,18 @@ public class PublishPostReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d("PublishPostReceiver.onReceive()", "onReceive called.");
+        //Log.d("PublishPostReceiver.onReceive()", "onReceive called.");
 
         String publishPostJson = intent.getStringExtra(PublishPostIntentService.PARAM_PUBLISH_POST_JSON);
 
-        Log.d("PublishPostReceiver.onReceive()", "JSON: " + publishPostJson);
+        //Log.d("PublishPostReceiver.onReceive()", "JSON: " + publishPostJson);
 
         Gson gson = new Gson();
         PublishPostResponse response = gson.fromJson(publishPostJson, PublishPostResponse.class);
 
         if ( response.success ) {
 
-            Log.d("PublishPostReceiver.onReceive()", "Post ID: " + response.post_id);
+            //Log.d("PublishPostReceiver.onReceive()", "Post ID: " + response.post_id);
 
         }
 

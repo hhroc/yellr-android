@@ -24,13 +24,13 @@ public class NotificationsIntentService extends IntentService {
 
     public NotificationsIntentService() {
         super("NotificationsIntentService");
-        Log.d("NotificationsIntentService()","Constructor.");
+        //Log.d("NotificationsIntentService()","Constructor.");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        Log.d("NotificationsIntentService.onHandleIntent()","Decoding intent action ...");
+        //Log.d("NotificationsIntentService.onHandleIntent()","Decoding intent action ...");
 
         String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
         handleActionGetNotifications(clientId);
@@ -41,14 +41,14 @@ public class NotificationsIntentService extends IntentService {
      */
     private void handleActionGetNotifications(String clientId) {
 
-        Log.d("NotificationsIntentService.UpdateData()", "Starting UpdateData() ...");
+        //Log.d("NotificationsIntentService.UpdateData()", "Starting UpdateData() ...");
 
         String baseUrl = "http://yellr.mycodespace.net/get_notifications.json";
 
         String url =  baseUrl
                 + "?client_id=" + clientId;
 
-        Log.d("NotificationsIntentService.UpdateData()","URL: " + url);
+        //Log.d("NotificationsIntentService.UpdateData()","URL: " + url);
 
         try {
 
@@ -71,7 +71,9 @@ public class NotificationsIntentService extends IntentService {
 
             String notificationsJson = builder.toString();
 
-            Log.d("NotificationsIntentService.UpdateData()","Broadcasting result ...");
+            //Log.d("NotificationsIntentService.UpdateData()","Broadcasting result ...");
+
+            Log.d("NotificationsIntentService.UpdateData()","JSON: " + notificationsJson);
 
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(NotificationsReceiver.ACTION_NEW_NOTIFICATIONS);

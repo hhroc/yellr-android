@@ -24,8 +24,13 @@
     <string name="frag_post_edittext">What\'s on your mind?</string>
     <string name="frag_post_media_text">Add extra media:</string>
     <string name="action_post">Send</string>
-    <string name="title_activity_view_story">ViewStoryActivity</string>
-    <string name="hello_world">Hello world!</string>
+
+    <!-- ViewStoryFragment -->
+    <string name="title_activity_view_story">Yellr</string>
+
+    <!-- <string name="hello_world">Hello world!</string> -->
     <string name="action_settings">Settings</string>
+    <string name="title_activity_view_assignment">ViewAssignmentActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

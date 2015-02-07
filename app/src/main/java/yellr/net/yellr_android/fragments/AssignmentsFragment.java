@@ -174,11 +174,11 @@ public class AssignmentsFragment extends Fragment {
 
             listView = (ListView)getView().findViewById(R.id.assignmentsList);
 
-            Log.d("AssignmentsReceiver.onReceive()", "onReceive called.");
+            //Log.d("AssignmentsReceiver.onReceive()", "onReceive called.");
 
             String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
 
-            Log.d("AssignmentsReceiver.onReceive()", "JSON: " + assignmentsJson);
+            //Log.d("AssignmentsReceiver.onReceive()", "JSON: " + assignmentsJson);
 
             Gson gson = new Gson();
             AssignmentsResponse response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
@@ -192,7 +192,7 @@ public class AssignmentsFragment extends Fragment {
                     assignmentsArrayAdapter.add(assignment);
                 }
 
-                Log.d("AssignmentsReceiver.onReceive()", "Setting listView adapter ...");
+                //Log.d("AssignmentsReceiver.onReceive()", "Setting listView adapter ...");
 
                 listView.setAdapter(assignmentsArrayAdapter);
 
@@ -221,14 +221,14 @@ public class AssignmentsFragment extends Fragment {
             super(context, R.layout.fragment_assignment_row, R.id.frag_home_assignment_question_text, assignments);
             this.assignments = assignments;
 
-            Log.d("AssignmentsArrayAdapter.AssignmentsArrayAdapter()","Constructor.");
+            //Log.d("AssignmentsArrayAdapter.AssignmentsArrayAdapter()","Constructor.");
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = super.getView(position, convertView, parent);
 
-            Log.d("AssignmentsArrayAdapter.getView()","Setting values for view.");
+            //Log.d("AssignmentsArrayAdapter.getView()","Setting values for view.");
 
             TextView textViewQuestionText = (TextView) row.findViewById(R.id.frag_home_assignment_question_text);
             TextView textViewOrganization = (TextView) row.findViewById(R.id.frag_home_assignment_organization);

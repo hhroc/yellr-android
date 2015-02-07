@@ -12,17 +12,16 @@ import android.view.ViewGroup;
 import android.os.Build;
 
 import yellr.net.yellr_android.R;
-import yellr.net.yellr_android.fragments.ViewStoryFragment;
 
-public class ViewStoryActivity extends ActionBarActivity {
+public class ViewAssignmentActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_story);
+        setContentView(R.layout.activity_view_assignment);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ViewStoryFragment())
+                    .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
     }
@@ -31,7 +30,7 @@ public class ViewStoryActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_view_story, menu);
+        getMenuInflater().inflate(R.menu.menu_view_assignment, menu);
         return true;
     }
 
@@ -50,5 +49,19 @@ public class ViewStoryActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
 
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_view_assignment, container, false);
+            return rootView;
+        }
+    }
 }

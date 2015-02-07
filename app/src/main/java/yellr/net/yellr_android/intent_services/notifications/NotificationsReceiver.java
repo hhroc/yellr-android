@@ -17,11 +17,11 @@ public class NotificationsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d("NotificationsReceiver.onReceive()", "onReceive called.");
+        //Log.d("NotificationsReceiver.onReceive()", "onReceive called.");
 
         String notificationsJson = intent.getStringExtra(NotificationsIntentService.PARAM_NOTIFICATIONS_JSON);
 
-        Log.d("NotificationsReceiver.onReceive()", "JSON: " + notificationsJson);
+        //Log.d("NotificationsReceiver.onReceive()", "JSON: " + notificationsJson);
 
         Gson gson = new Gson();
         NotificationsResponse response = gson.fromJson(notificationsJson, NotificationsResponse.class);
@@ -34,7 +34,7 @@ public class NotificationsReceiver extends BroadcastReceiver {
 
                 Notification notification = response.notifications[i];
 
-                Log.d("NotificationsReceiver.onReceive()", "Notification: " + notification.notification_type);
+                //Log.d("NotificationsReceiver.onReceive()", "Notification: " + notification.notification_type);
 
                 int postId = notification.payload.post_id;
                 String postTitle = notification.payload.post_title;
