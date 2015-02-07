@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.os.Build;
 
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.fragments.ViewAssignmentFragment;
 
 public class ViewAssignmentActivity extends ActionBarActivity {
 
@@ -21,7 +22,7 @@ public class ViewAssignmentActivity extends ActionBarActivity {
         setContentView(R.layout.activity_view_assignment);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new ViewAssignmentFragment())
                     .commit();
         }
     }
