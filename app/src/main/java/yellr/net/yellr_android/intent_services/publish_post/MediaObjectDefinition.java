@@ -6,8 +6,10 @@ package yellr.net.yellr_android.intent_services.publish_post;
 public class MediaObjectDefinition {
 
     public String mediaType;
-    public String mediaFilename;
-    public String mediaText;
-    public String mediaCaption;
+
+    // we defaults these since they are optional based on mediaType
+    public String mediaFilename = "";
+    public String mediaText = "";
+    public String mediaCaption = "";
 
 }
