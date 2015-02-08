@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.activities.HomeActivity;
+import yellr.net.yellr_android.activities.ViewAssignmentActivity;
 import yellr.net.yellr_android.intent_services.IntentServicesHelper;
 import yellr.net.yellr_android.intent_services.assignments.Assignment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
@@ -50,7 +51,7 @@ public class AssignmentsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private ArrayList<Assignment> assignments;
+    private Assignment[] assignments;
     //private AssignmentsArrayAdapter assignmentsArrayAdapter;
 
     /**
@@ -187,14 +188,17 @@ public class AssignmentsFragment extends Fragment {
 
                 AssignmentsArrayAdapter assignmentsArrayAdapter = new AssignmentsArrayAdapter(getActivity(), new ArrayList<Assignment>());
 
+                assignments = new Assignment[response.assignments.length];
                 for (int i = 0; i < response.assignments.length; i++) {
                     Assignment assignment = response.assignments[i];
                     assignmentsArrayAdapter.add(assignment);
+                    assignments[i] = assignment;
                 }
 
                 //Log.d("AssignmentsReceiver.onReceive()", "Setting listView adapter ...");
 
                 listView.setAdapter(assignmentsArrayAdapter);
+                listView.setOnItemClickListener(new AssignmentListOnClickListener());
 
             }
 
@@ -206,9 +210,15 @@ public class AssignmentsFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("neat");
+            Intent intent;
+            intent = new Intent(getActivity().getApplicationContext(), ViewAssignmentActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+            intent.putExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_QUESTION, assignments[position].question_text);
+            intent.putExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_DESCRIPTION, assignments[position].description);
+            intent.putExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_ID, assignments[position].assignment_id);
+
+            startActivity(intent);
         }
 
     }

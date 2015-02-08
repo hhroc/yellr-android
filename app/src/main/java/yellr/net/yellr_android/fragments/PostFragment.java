@@ -20,8 +20,6 @@ import com.google.gson.Gson;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
-import org.json.JSONObject;
-
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.intent_services.publish_post.MediaObjectDefinition;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
@@ -33,6 +31,8 @@ public class PostFragment extends Fragment {
 
     // Edit Text
     EditText caption;
+
+    public static final String ARG_ASSIGNMENT_ID = "assignmentId";
 
     // Buttons
     Button imageButton;
