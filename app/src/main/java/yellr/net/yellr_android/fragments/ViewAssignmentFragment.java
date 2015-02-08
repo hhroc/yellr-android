@@ -42,7 +42,8 @@ public class ViewAssignmentFragment extends Fragment {
 
         String question = intent.getStringExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_QUESTION);
         String description = intent.getStringExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_DESCRIPTION);
-        final String assignmentId = intent.getStringExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_ID);
+        int rawAssignmentId = (int)intent.getIntExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_ID,0);
+        final String assignmentId = String.valueOf(rawAssignmentId);
 
         assignmentQuestion.setText(question);
         assignmentDescription.setText(description);
