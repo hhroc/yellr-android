@@ -211,9 +211,18 @@ public class PublishPostIntentService extends IntentService {
 
         params.add(new BasicNameValuePair("client_id", clientId));
         params.add(new BasicNameValuePair("media_type", mediaType));
-        params.add(new BasicNameValuePair("media_file", mediaFilename));
-        params.add(new BasicNameValuePair("media_text", mediaText));
-        params.add(new BasicNameValuePair("media_caption", mediaCaption));
+
+        if ( !mediaFilename.equals("") ) {
+            params.add(new BasicNameValuePair("media_file", mediaFilename));
+        }
+
+        if ( !mediaText.equals("") ) {
+            params.add(new BasicNameValuePair("media_text", mediaText));
+        }
+
+        if ( !mediaCaption.equals("") ) {
+            params.add(new BasicNameValuePair("media_caption", mediaCaption));
+        }
 
         //
         // derived from
