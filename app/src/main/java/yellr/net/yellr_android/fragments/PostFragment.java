@@ -20,8 +20,6 @@ import com.google.gson.Gson;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
-import org.json.JSONObject;
-
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.intent_services.publish_post.MediaObjectDefinition;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
@@ -31,13 +29,10 @@ import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentSer
  */
 public class PostFragment extends Fragment {
 
-    public static final String ARG_ASSIGNMENT_ID = "assignmentId";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    // Edit Text
     EditText caption;
+
+    public static final String ARG_ASSIGNMENT_ID = "assignmentId";
 
     // Buttons
     Button imageButton;
@@ -55,9 +50,10 @@ public class PostFragment extends Fragment {
      * @return A new instance of fragment AssignmentsFragment.
      */
     // TODO: Need AssigmentID Param
-    public static PostFragment newInstance() {
+    public static PostFragment newInstance(int assignmentID) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
+        args.putInt(ARG_ASSIGNMENT_ID, assignmentID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,15 +66,13 @@ public class PostFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (getArguments() != null) {
-        }
 
         // read the clientId from the device.
         // TODO: null pointer check
         SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
         clientId = sharedPref.getString("clientId", "");
-        // TODO grab from PARAM
-        assignmentId = 1;
+        assignmentId = getArguments().getInt(ARG_ASSIGNMENT_ID);
+        Log.v("PostFragment", String.format("New assignmentID = %d", assignmentId));
     }
 
     @Override
