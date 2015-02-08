@@ -42,8 +42,7 @@ public class ViewAssignmentFragment extends Fragment {
 
         String question = intent.getStringExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_QUESTION);
         String description = intent.getStringExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_DESCRIPTION);
-        int rawAssignmentId = (int)intent.getIntExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_ID,0);
-        final String assignmentId = String.valueOf(rawAssignmentId);
+        final int assignmentId = intent.getIntExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_ID,0);
 
         assignmentQuestion.setText(question);
         assignmentDescription.setText(description);
@@ -57,9 +56,7 @@ public class ViewAssignmentFragment extends Fragment {
 
                 // TODO: puExtra for assignment ID
                 intent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, assignmentId); // save assignmentId from getStringExtra in onCreateView()
-
                 startActivity(intent);
-
             }
         });
 

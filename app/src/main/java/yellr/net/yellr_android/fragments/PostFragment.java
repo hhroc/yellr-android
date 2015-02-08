@@ -50,9 +50,10 @@ public class PostFragment extends Fragment {
      * @return A new instance of fragment AssignmentsFragment.
      */
     // TODO: Need AssigmentID Param
-    public static PostFragment newInstance() {
+    public static PostFragment newInstance(int assignmentID) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
+        args.putInt(ARG_ASSIGNMENT_ID, assignmentID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,15 +66,13 @@ public class PostFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (getArguments() != null) {
-        }
 
         // read the clientId from the device.
         // TODO: null pointer check
         SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
         clientId = sharedPref.getString("clientId", "");
-        // TODO grab from PARAM
-        assignmentId = 1;
+        assignmentId = getArguments().getInt(ARG_ASSIGNMENT_ID);
+        Log.v("PostFragment", String.format("New assignmentID = %d", assignmentId));
     }
 
     @Override
