@@ -1,9 +1,10 @@
 package yellr.net.yellr_android.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,44 +14,45 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
+import com.google.gson.Gson;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
+import org.json.JSONObject;
+
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.intent_services.publish_post.MediaObjectDefinition;
+import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
 
 /**
  * Created by Andy on 2/6/2015.
  */
 public class PostFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // Edit Text
+    EditText caption;
 
     // Buttons
     Button imageButton;
     Button videoButton;
     Button audioButton;
 
+    // Post Details
+    String clientId;
+    int assignmentId;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment AssignmentsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static PostFragment newInstance(String param1, String param2) {
+    // TODO: Need AssigmentID Param
+    public static PostFragment newInstance() {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,9 +66,14 @@ public class PostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        // read the clientId from the device.
+        // TODO: null pointer check
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
+        clientId = sharedPref.getString("clientId", "");
+        // TODO grab from PARAM
+        assignmentId = 1;
     }
 
     @Override
@@ -75,6 +82,8 @@ public class PostFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post, container, false);
+
+        caption = (EditText)view.findViewById(R.id.frag_post_edittext);
 
         imageButton = (Button)view.findViewById(R.id.frag_post_photo_button);
         videoButton = (Button)view.findViewById(R.id.frag_post_video_button);
@@ -107,9 +116,21 @@ public class PostFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_post_upload:
-                //TODO Validate Form Data
-                //TODO Upload to Server
-                //TODO Inform user
+                Gson gson = new Gson();
+                MediaObjectDefinition mod = new MediaObjectDefinition();
+                mod.mediaType = "text";
+                mod.mediaText = caption.getText().toString();
+                String mediaObject = "[" + gson.toJson(mod) + "]"; //Hack to make it an array
+
+
+                Intent postIntent = new Intent(getActivity(), PublishPostIntentService.class);
+                postIntent.putExtra("clientId", clientId);
+                //TODO grab this from fragment PARAM
+                postIntent.putExtra("assignmentId", assignmentId);
+                postIntent.putExtra("title", "test");
+                postIntent.putExtra("mediaObjectDefinitionsJson", mediaObject);
+                getActivity().startService(postIntent);
+
                 break;
             default:
                 break;
