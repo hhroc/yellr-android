@@ -1,4 +1,6 @@
 # yellr
+
+[![Join the chat at https://gitter.im/hhroc/yellr-android](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hhroc/yellr-android?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Community Engagement Journalism Mobile App, Website, and Eco-System
 
 ## Getting started
