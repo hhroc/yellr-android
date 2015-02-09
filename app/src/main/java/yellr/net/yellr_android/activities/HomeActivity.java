@@ -160,7 +160,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             case R.id.action_new_post:
                 Intent intent = new Intent(this, PostActivity.class);
                 intent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, 0);
-                startActivityForResult(intent, Activity.RESULT_OK);
+                startActivity(intent);
                 break;
             default:
                 break;

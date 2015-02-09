@@ -23,6 +23,7 @@ import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.activities.HomeActivity;
 import yellr.net.yellr_android.intent_services.publish_post.MediaObjectDefinition;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
 
@@ -172,6 +173,8 @@ public class PostFragment extends Fragment {
         assignmentQuestion.setText(R.string.fragment_post_assignment_title);
         assignmentDescription.setText(R.string.fragment_post_assignment_description);
 
-        getActivity().finishActivity(Activity.RESULT_OK);
+        Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
     }
 }
