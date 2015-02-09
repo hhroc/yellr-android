@@ -1,4 +1,7 @@
 # yellr
+
+Chat about yellr-android on Gitter! [Chat Now](https://gitter.im/hhroc/yellr-android)
+
 Community Engagement Journalism Mobile App, Website, and Eco-System
 
 ## Getting started
