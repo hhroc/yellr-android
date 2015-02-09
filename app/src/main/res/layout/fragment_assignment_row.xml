@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/frag_home_assignment_question_text"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp "
         android:textSize="24sp"
-        android:text=""/>
+        android:text="What are you doing for Fun?"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"/>
+
     <TextView
         android:id="@+id/frag_home_assignment_organization"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="14sp"/>
+        android:layout_below="@id/frag_home_assignment_question_text"
+        android:text="Org: yellr"
+        android:textSize="16sp"
+        android:textColor="@color/grey"
+        android:paddingLeft="16dp"
+        android:paddingBottom="8dp"/>
+
     <TextView
         android:id="@+id/frag_home_assignment_post_count"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="14sp"/>
-
-</LinearLayout>
+        android:layout_below="@id/frag_home_assignment_question_text"
+        android:layout_alignParentRight="true"
+        android:text="@string/fa_comment_o"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/grey"
+        android:textSize="16sp"/>
+</RelativeLayout>
