@@ -18,6 +18,8 @@
     <string name="fa_comments_o">&#xf0e6;</string>
     <string name="fa_question">&#xf128;</string>
     <string name="fa_question_circle">&#xf059;</string>
+    <string name="fa_user">&#xf007;</string>
+    <string name="fa_pencil">&#xf040;</string>
 
     <!-- Actionbar Action Buttons -->
     <string name="action_notification">Notifications</string>

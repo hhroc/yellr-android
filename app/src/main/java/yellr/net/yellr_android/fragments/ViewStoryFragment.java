@@ -46,7 +46,9 @@ public class ViewStoryFragment extends Fragment {
         String publishedDateTime = intent.getStringExtra(ViewStoryFragment.ARG_STORY_PUBLISHED_DATETIME);
         String contents = intent.getStringExtra(ViewStoryFragment.ARG_STORY_CONTENTS);
 
-        String cleanPublishedDateTime = YellrUtils.PrettifyDateTime(publishedDateTime);
+        //TODO Use new datetime prettifier
+        /*String cleanPublishedDateTime = YellrUtils.PrettifyDateTime(publishedDateTime);*/
+        String cleanPublishedDateTime = ":-)";
 
         storyTitle.setText(title);
         storyAuthor.setText("Story by " + author);

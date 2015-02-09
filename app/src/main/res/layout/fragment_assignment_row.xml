@@ -3,15 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<TextView-->
-        <!--android:id="@+id/frag_home_assignment_question_logo"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:padding="16dp"-->
-        <!--android:text="@string/fa_question_circle"-->
-        <!--android:textSize="48sp"-->
-        <!--android:textColor="@color/black"/>-->
-
     <TextView
         android:id="@+id/frag_home_assignment_question_text"
         android:layout_width="fill_parent"
