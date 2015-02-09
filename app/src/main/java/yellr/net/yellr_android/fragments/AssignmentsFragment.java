@@ -215,7 +215,7 @@ public class AssignmentsFragment extends Fragment {
             intent.putExtra(PostFragment.ARG_ASSIGNMENT_DESCRIPTION, assignments[position].description);
             intent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, assignments[position].assignment_id);
 
-            startActivityForResult(intent, Activity.RESULT_OK);
+            startActivity(intent);
         }
 
     }
