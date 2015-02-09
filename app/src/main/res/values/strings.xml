@@ -12,6 +12,12 @@
     <string name="fa_video_camera"></string>
     <string name="fa_microphone"></string>
     <string name="fa_upload"></string>
+    <string name="fa_comment">&#xf075;</string>
+    <string name="fa_comment_o">&#xf0e5;</string>
+    <string name="fa_comments">&#xf086;</string>
+    <string name="fa_comments_o">&#xf0e6;</string>
+    <string name="fa_question">&#xf128;</string>
+    <string name="fa_question_circle">&#xf059;</string>
 
     <!-- Actionbar Action Buttons -->
     <string name="action_notification">Notifications</string>

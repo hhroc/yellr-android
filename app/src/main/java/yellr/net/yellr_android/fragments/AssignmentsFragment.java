@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,14 +38,6 @@ import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
  * create an instance of this fragment.
  */
 public class AssignmentsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -55,16 +48,11 @@ public class AssignmentsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment AssignmentsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static AssignmentsFragment newInstance(String param1, String param2) {
+    public static AssignmentsFragment newInstance() {
         AssignmentsFragment fragment = new AssignmentsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -77,8 +65,6 @@ public class AssignmentsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
         // init new assignments receiver
@@ -96,13 +82,6 @@ public class AssignmentsFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_assignments, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -241,9 +220,12 @@ public class AssignmentsFragment extends Fragment {
             TextView textViewOrganization = (TextView) row.findViewById(R.id.frag_home_assignment_organization);
             TextView textViewPostCount = (TextView) row.findViewById(R.id.frag_home_assignment_post_count);
 
+            Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
+            textViewPostCount.setTypeface(font);
+
             textViewQuestionText.setText(this.assignments.get(position).question_text);
             textViewOrganization.setText("Organization: " + this.assignments.get(position).organization);
-            textViewPostCount.setText("Responses: " + String.valueOf(this.assignments.get(position).post_count));
+            textViewPostCount.setText(getString(R.string.fa_comments) + " " + String.valueOf(this.assignments.get(position).post_count));
 
             return row;
         }
