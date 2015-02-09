@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.joanzapata.android.iconify.IconDrawable;
@@ -48,6 +49,8 @@ public class PostFragment extends Fragment {
     String questionText;
     String questionDescription;
 
+    TextView assignmentQuestion;
+    TextView assignmentDescription;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -82,6 +85,7 @@ public class PostFragment extends Fragment {
             questionText = (String)getArguments().getSerializable(ARG_ASSIGNMENT_QUESTION);
             questionDescription = (String)getArguments().getSerializable(ARG_ASSIGNMENT_DESCRIPTION);
         }
+
         setHasOptionsMenu(true);
 
         // read the clientId from the device.
@@ -102,6 +106,18 @@ public class PostFragment extends Fragment {
         imageButton = (Button)view.findViewById(R.id.frag_post_photo_button);
         videoButton = (Button)view.findViewById(R.id.frag_post_video_button);
         audioButton = (Button)view.findViewById(R.id.frag_post_audio_button);
+
+        assignmentQuestion = (TextView)view.findViewById(R.id.frag_post_assignment_question);
+        assignmentDescription = (TextView)view.findViewById(R.id.frag_post_assignment_description);
+
+        if(questionText == null){
+            assignmentQuestion.setText(R.string.fragment_post_assignment_title);
+            assignmentDescription.setText(R.string.fragment_post_assignment_description);
+        } else {
+            assignmentQuestion.setText(questionText);
+            assignmentDescription.setText(questionDescription);
+        }
+
 
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
         imageButton.setTypeface(font);
@@ -153,6 +169,8 @@ public class PostFragment extends Fragment {
         getActivity().startService(postIntent);
 
         caption.setText("");
+        assignmentQuestion.setText(R.string.fragment_post_assignment_title);
+        assignmentDescription.setText(R.string.fragment_post_assignment_description);
 
         getActivity().finishActivity(Activity.RESULT_OK);
     }
