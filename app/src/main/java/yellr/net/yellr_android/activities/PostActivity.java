@@ -13,9 +13,11 @@ public class PostActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         if (savedInstanceState == null) {
-            int assID = getIntent().getExtras().getInt(PostFragment.ARG_ASSIGNMENT_ID);
+            int assignmentId = getIntent().getExtras().getInt(PostFragment.ARG_ASSIGNMENT_ID);
+            String questionText = getIntent().getExtras().getString(PostFragment.ARG_ASSIGNMENT_QUESTION);
+            String questionDescription = getIntent().getExtras().getString(PostFragment.ARG_ASSIGNMENT_DESCRIPTION);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PostFragment().newInstance(assID))
+                    .add(R.id.container, new PostFragment().newInstance(assignmentId, questionText, questionDescription))
                     .commit();
         }
     }
