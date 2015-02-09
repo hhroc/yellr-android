@@ -1,5 +1,6 @@
 package yellr.net.yellr_android.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,12 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.activities.HomeActivity;
 import yellr.net.yellr_android.intent_services.publish_post.MediaObjectDefinition;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
 
@@ -33,6 +36,8 @@ public class PostFragment extends Fragment {
     EditText caption;
 
     public static final String ARG_ASSIGNMENT_ID = "assignmentId";
+    public static final String ARG_ASSIGNMENT_QUESTION = "assignmentQuestion";
+    public static final String ARG_ASSIGNMENT_DESCRIPTION = "assignmentDescription";
 
     // Buttons
     Button imageButton;
@@ -42,18 +47,24 @@ public class PostFragment extends Fragment {
     // Post Details
     String clientId;
     int assignmentId;
+    String questionText;
+    String questionDescription;
 
+    TextView assignmentQuestion;
+    TextView assignmentDescription;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @return A new instance of fragment AssignmentsFragment.
      */
-    // TODO: Need AssigmentID Param
-    public static PostFragment newInstance(int assignmentID) {
-        PostFragment fragment = new PostFragment();
+    public static PostFragment newInstance(int assignmentID, String questionText, String questionDescription) {
         Bundle args = new Bundle();
-        args.putInt(ARG_ASSIGNMENT_ID, assignmentID);
+        args.putSerializable(ARG_ASSIGNMENT_ID, assignmentID);
+        args.putSerializable(ARG_ASSIGNMENT_QUESTION, questionText);
+        args.putSerializable(ARG_ASSIGNMENT_DESCRIPTION, questionDescription);
+
+        PostFragment fragment = new PostFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,14 +76,23 @@ public class PostFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null){
+            assignmentId = (int)savedInstanceState.getSerializable(ARG_ASSIGNMENT_ID);
+            questionText = (String)savedInstanceState.getSerializable(ARG_ASSIGNMENT_QUESTION);
+            questionDescription = (String)savedInstanceState.getSerializable(ARG_ASSIGNMENT_DESCRIPTION);
+        } else {
+            assignmentId = (int)getArguments().getSerializable(ARG_ASSIGNMENT_ID);
+            questionText = (String)getArguments().getSerializable(ARG_ASSIGNMENT_QUESTION);
+            questionDescription = (String)getArguments().getSerializable(ARG_ASSIGNMENT_DESCRIPTION);
+        }
+
         setHasOptionsMenu(true);
 
         // read the clientId from the device.
         // TODO: null pointer check
         SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
         clientId = sharedPref.getString("clientId", "");
-        assignmentId = getArguments().getInt(ARG_ASSIGNMENT_ID);
-        Log.v("PostFragment", String.format("New assignmentID = %d", assignmentId));
     }
 
     @Override
@@ -87,6 +107,18 @@ public class PostFragment extends Fragment {
         imageButton = (Button)view.findViewById(R.id.frag_post_photo_button);
         videoButton = (Button)view.findViewById(R.id.frag_post_video_button);
         audioButton = (Button)view.findViewById(R.id.frag_post_audio_button);
+
+        assignmentQuestion = (TextView)view.findViewById(R.id.frag_post_assignment_question);
+        assignmentDescription = (TextView)view.findViewById(R.id.frag_post_assignment_description);
+
+        if(questionText == null){
+            assignmentQuestion.setText(R.string.fragment_post_assignment_title);
+            assignmentDescription.setText(R.string.fragment_post_assignment_description);
+        } else {
+            assignmentQuestion.setText(questionText);
+            assignmentDescription.setText(questionDescription);
+        }
+
 
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
         imageButton.setTypeface(font);
@@ -115,25 +147,34 @@ public class PostFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_post_upload:
-                Gson gson = new Gson();
-                MediaObjectDefinition mod = new MediaObjectDefinition();
-                mod.mediaType = "text";
-                mod.mediaText = caption.getText().toString();
-                String mediaObject = "[" + gson.toJson(mod) + "]"; //Hack to make it an array
-
-
-                Intent postIntent = new Intent(getActivity(), PublishPostIntentService.class);
-                postIntent.putExtra("clientId", clientId);
-                //TODO grab this from fragment PARAM
-                postIntent.putExtra("assignmentId", assignmentId);
-                postIntent.putExtra("title", "test");
-                postIntent.putExtra("mediaObjectDefinitionsJson", mediaObject);
-                getActivity().startService(postIntent);
-
+                SubmitPostToYellr();
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    private void SubmitPostToYellr() {
+        Gson gson = new Gson();
+        MediaObjectDefinition mod = new MediaObjectDefinition();
+        mod.mediaType = "text";
+        mod.mediaText = caption.getText().toString();
+        String mediaObject = "[" + gson.toJson(mod) + "]"; //Hack to make it an array
+
+        Intent postIntent = new Intent(getActivity(), PublishPostIntentService.class);
+        postIntent.putExtra("clientId", clientId);
+        postIntent.putExtra("assignmentId", assignmentId);
+        postIntent.putExtra("title", "_");
+        postIntent.putExtra("mediaObjectDefinitionsJson", mediaObject);
+        getActivity().startService(postIntent);
+
+        caption.setText("");
+        assignmentQuestion.setText(R.string.fragment_post_assignment_title);
+        assignmentDescription.setText(R.string.fragment_post_assignment_description);
+
+        Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
     }
 }

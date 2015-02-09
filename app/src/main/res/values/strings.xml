@@ -36,5 +36,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="fragment_post_assignment_title">Free Post</string>
+    <string name="fragment_post_assignment_description">You can tell us what you think on any topic!</string>
 
 </resources>

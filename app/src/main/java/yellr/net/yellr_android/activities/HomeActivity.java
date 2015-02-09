@@ -3,6 +3,7 @@ package yellr.net.yellr_android.activities;
 import java.util.Locale;
 import java.util.UUID;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,11 +25,8 @@ import com.joanzapata.android.iconify.Iconify;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
+import yellr.net.yellr_android.fragments.PostFragment;
 import yellr.net.yellr_android.fragments.StoriesFragment;
-import yellr.net.yellr_android.fragments.ViewAssignmentFragment;
-
-//import yellr.net.yellr_android.intent_services.assignments.AssignmentsReceiver;
-
 
 public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, AssignmentsFragment.OnFragmentInteractionListener, StoriesFragment.OnFragmentInteractionListener {
 
@@ -161,7 +159,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         switch (item.getItemId()){
             case R.id.action_new_post:
                 Intent intent = new Intent(this, PostActivity.class);
-                intent.putExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_ID,0);
+                intent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, 0);
                 startActivity(intent);
                 break;
             default:

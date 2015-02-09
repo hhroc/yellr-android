@@ -1,7 +1,6 @@
 package yellr.net.yellr_android.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,9 +23,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import yellr.net.yellr_android.R;
-import yellr.net.yellr_android.activities.HomeActivity;
-import yellr.net.yellr_android.activities.ViewAssignmentActivity;
-import yellr.net.yellr_android.intent_services.IntentServicesHelper;
+import yellr.net.yellr_android.activities.PostActivity;
 import yellr.net.yellr_android.intent_services.assignments.Assignment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
@@ -211,12 +208,12 @@ public class AssignmentsFragment extends Fragment {
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
             Intent intent;
-            intent = new Intent(getActivity().getApplicationContext(), ViewAssignmentActivity.class);
+            intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            intent.putExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_QUESTION, assignments[position].question_text);
-            intent.putExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_DESCRIPTION, assignments[position].description);
-            intent.putExtra(ViewAssignmentFragment.ARG_ASSIGNMENT_ID, assignments[position].assignment_id);
+            intent.putExtra(PostFragment.ARG_ASSIGNMENT_QUESTION, assignments[position].question_text);
+            intent.putExtra(PostFragment.ARG_ASSIGNMENT_DESCRIPTION, assignments[position].description);
+            intent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, assignments[position].assignment_id);
 
             startActivity(intent);
         }

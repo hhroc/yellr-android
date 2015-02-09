@@ -7,10 +7,26 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="yellr.net.yellr_android.activities.PostActivity$PlaceholderFragment">
 
+    <TextView
+        android:id="@+id/frag_post_assignment_question"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_post_assignment_title"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/frag_post_assignment_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/frag_post_assignment_question"
+        android:text="@string/fragment_post_assignment_description"/>
+
     <EditText
         android:id="@+id/frag_post_edittext"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/frag_post_assignment_description"
+        android:paddingTop="32dp"
         android:hint="@string/frag_post_edittext"/>
     <TextView
         android:id="@+id/frag_post_media_text"
