@@ -1,12 +1,15 @@
 package yellr.net.yellr_android.fragments;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.Date;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.utils.YellrUtils;
@@ -46,11 +49,17 @@ public class ViewStoryFragment extends Fragment {
         String publishedDateTime = intent.getStringExtra(ViewStoryFragment.ARG_STORY_PUBLISHED_DATETIME);
         String contents = intent.getStringExtra(ViewStoryFragment.ARG_STORY_CONTENTS);
 
-        String cleanPublishedDateTime = YellrUtils.PrettifyDateTime(publishedDateTime);
+        //TODO Use new datetime prettifier
+        Date pubDT = YellrUtils.PrettifyDateTime(publishedDateTime);
+        String pubAgo = YellrUtils.calcTimeBetween(pubDT, new Date());
+
+        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
+        storyAuthor.setTypeface(font);
+        storyPublishedDatetTime.setTypeface(font);
 
         storyTitle.setText(title);
-        storyAuthor.setText("Story by " + author);
-        storyPublishedDatetTime.setText("published " + cleanPublishedDateTime);
+        storyAuthor.setText(getString(R.string.fa_user) + " " + author);
+        storyPublishedDatetTime.setText(getString(R.string.fa_pencil) + " " + pubAgo + " ago.");
         storyContents.setText(contents);
 
         return view;

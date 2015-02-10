@@ -12,17 +12,35 @@ import java.util.Map;
  */
 public class YellrUtils {
 
-    public static String PrettifyDateTime(String rawDateTime){
+    public static Date PrettifyDateTime(String rawDateTime){
 
-        String cleanDateTime = "";
+        Date date = new Date();
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss.S");
-            Date date = dateFormat.parse(rawDateTime);
-            cleanDateTime = date.toString();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+            date = dateFormat.parse(rawDateTime);
         } catch( Exception e) {
             // todo: report
         }
-        return cleanDateTime;
+        return date;
+    }
+
+    public static String calcTimeBetween(Date start, Date end){
+        int SECOND = 1000;
+        int MINUTE = SECOND * 60;
+        int HOUR = MINUTE * 60;
+        int DAY = HOUR * 24;
+        int milliSeconds = Math.round(end.getTime() - start.getTime());
+        if(milliSeconds > DAY){
+            return String.format("%d days", Math.round(milliSeconds / DAY));
+        }
+        if(milliSeconds < DAY && milliSeconds > HOUR){
+            return String.format("%d hours", Math.round(milliSeconds / HOUR));
+        }
+        if(milliSeconds < HOUR){
+            return String.format("%d minutes", Math.round(milliSeconds / MINUTE));
+        }
+        //Throw an exception instead?
+        return null;
     }
 
 
