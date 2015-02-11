@@ -245,7 +245,7 @@ public class StoriesFragment extends Fragment {
             textViewPublishAuthor.setTypeface(font);
             textViewPublishDateTime.setTypeface(font);
 
-            textViewPublishAuthor.setText(getString(R.string.fa_user) + " Tim Duffy/HHROC");
+            textViewPublishAuthor.setText(getString(R.string.fa_user) + " " + stories.get(position).author_first_name + " " + stories.get(position).author_last_name);
             textViewTitle.setText(this.stories.get(position).title);
 
             Date pubDateStr = YellrUtils.PrettifyDateTime(this.stories.get(position).publish_datetime);

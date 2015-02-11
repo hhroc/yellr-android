@@ -15,7 +15,8 @@
         <activity
             android:name=".activities.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/NoActionBar" >
+            android:theme="@style/NoActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +26,19 @@
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Yellr" >
+            android:theme="@style/Theme.Yellr"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+        </activity>
+
+        <activity
+            android:name=".activities.PostActivity"
+            android:label="@string/title_activity_post"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+        </activity>
+        <activity
+            android:name=".activities.ViewStoryActivity"
+            android:label="@string/title_activity_view_story"
+            android:configChanges="orientation|keyboardHidden|screenSize">
         </activity>
 
         <service
@@ -83,18 +96,7 @@
             android:exported="true" >
         </receiver>
 
-        <activity
-            android:name=".activities.PostActivity"
-            android:label="@string/title_activity_post" >
-        </activity>
-        <activity
-            android:name=".activities.ViewStoryActivity"
-            android:label="@string/title_activity_view_story" >
-        </activity>
-        <activity
-            android:name=".activities.ViewAssignmentActivity"
-            android:label="@string/title_activity_view_assignment" >
-        </activity>
+
     </application>
 
 </manifest>
