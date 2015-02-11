@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -23,11 +25,13 @@ public class ViewStoryFragment extends Fragment {
     public static final String ARG_STORY_AUTHOR = "storyAuthor";
     public static final String ARG_STORY_PUBLISHED_DATETIME = "storyPublishedDateTime";
     public static final String ARG_STORY_CONTENTS = "storyContents";
+    public static final String ARG_STORY_CONTENTS_RENDERED = "storyContentsRendered";
 
     private TextView storyTitle;
     private TextView storyAuthor;
     private TextView storyPublishedDatetTime;
-    private TextView storyContents;
+    private TextView storyContentsRendered;
+    //private WebView storyContentsRendered;
 
     public ViewStoryFragment() {
     }
@@ -40,14 +44,15 @@ public class ViewStoryFragment extends Fragment {
         storyTitle = (TextView)view.findViewById(R.id.frag_view_story_title);
         storyAuthor = (TextView)view.findViewById(R.id.frag_view_story_author);
         storyPublishedDatetTime = (TextView)view.findViewById(R.id.frag_view_story_published_datetime);
-        storyContents = (TextView)view.findViewById(R.id.frag_view_story_contents);
+        storyContentsRendered = (TextView)view.findViewById(R.id.frag_view_story_contents_rendered);
+        //storyContentsRendered = (WebView)view.findViewById(R.id.frag_view_story_contents_rendered);
 
         Intent intent = getActivity().getIntent();
 
         String title = intent.getStringExtra(ViewStoryFragment.ARG_STORY_TITLE);
         String author = intent.getStringExtra(ViewStoryFragment.ARG_STORY_AUTHOR);
         String publishedDateTime = intent.getStringExtra(ViewStoryFragment.ARG_STORY_PUBLISHED_DATETIME);
-        String contents = intent.getStringExtra(ViewStoryFragment.ARG_STORY_CONTENTS);
+        String contentsRendered = intent.getStringExtra(ViewStoryFragment.ARG_STORY_CONTENTS_RENDERED);
 
         //TODO Use new datetime prettifier
         Date pubDT = YellrUtils.PrettifyDateTime(publishedDateTime);
@@ -60,7 +65,8 @@ public class ViewStoryFragment extends Fragment {
         storyTitle.setText(title);
         storyAuthor.setText(getString(R.string.fa_user) + " " + author);
         storyPublishedDatetTime.setText(getString(R.string.fa_pencil) + " " + pubAgo + " ago.");
-        storyContents.setText(contents);
+        storyContentsRendered.setText(Html.fromHtml(contentsRendered));
+        //storyContentsRendered.loadData(contentsRendered, "text/html", null);
 
         return view;
     }

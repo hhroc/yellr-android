@@ -2,6 +2,7 @@ package yellr.net.yellr_android.intent_services.publish_post;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -37,9 +38,13 @@ public class PublishPostIntentService extends IntentService {
 
     public static final String PARAM_CLIENT_ID = "clientId";
     public static final String PARAM_ASSIGNMENT_ID = "assignmentId";
-    public static final String PARAM_TITLE = "title";
-    public static final String PARAM_MEDIA_OBJECT_DEFINITIONS_JSON = "mediaObjectDefinitionsJson";
-    public static final String PARAM_PUBLISH_POST_JSON = "PublishPostJson";
+    public static final String PARAM_TEXT = "text";
+    public static final String PARAM_MEDIA_TYPE = "mediaType";
+    public static final String PARAM_IMAGE_FILENAME = "imageFilename";
+    public static final String PARAM_AUDIO_FILENAME = "audioFilename";
+    public static final String PARAM_VIDEO_FILENAME = "videoFilename";
+    //public static final String PARAM_MEDIA_OBJECT_DEFINITIONS_JSON = "mediaObjectDefinitionsJson";
+    //public static final String PARAM_PUBLISH_POST_JSON = "PublishPostJson";
 
     public PublishPostIntentService() {
         super("PublishPostIntentService");
@@ -53,14 +58,25 @@ public class PublishPostIntentService extends IntentService {
 
         String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
         int assignmentId = intent.getIntExtra(PARAM_ASSIGNMENT_ID,0);
-        String title = intent.getStringExtra(PARAM_TITLE);
-        String mediaObjectDefinitionsJson = intent.getStringExtra(PARAM_MEDIA_OBJECT_DEFINITIONS_JSON);
+        //String title = intent.getStringExtra(PARAM_TITLE);
+        String text = intent.getStringExtra(PARAM_TEXT);
+        String mediaType = intent.getStringExtra(PARAM_MEDIA_TYPE);
+        String imageFilename = intent.getStringExtra(PARAM_IMAGE_FILENAME);
+        String audioFilename = intent.getStringExtra(PARAM_VIDEO_FILENAME);
+        String videoFilename = intent.getStringExtra(PARAM_AUDIO_FILENAME);
 
-        Gson gson = new Gson();
-        MediaObjectDefinition[] mediaObjectDefinitions =
-                gson.fromJson(mediaObjectDefinitionsJson, MediaObjectDefinition[].class);
+        //String mediaObjectDefinitionsJson = intent.getStringExtra(PARAM_MEDIA_OBJECT_DEFINITIONS_JSON);
 
-        handleActionGetPublishPost(clientId, assignmentId, title, mediaObjectDefinitions);
+        //Gson gson = new Gson();
+        //MediaObjectDefinition[] mediaObjectDefinitions =
+        //        gson.fromJson(mediaObjectDefinitionsJson, MediaObjectDefinition[].class);
+
+        //handleActionGetPublishPost(clientId, assignmentId, title, mediaObjectDefinitions);
+
+        //String[] imageFilenames
+
+        handleActionGetPublishPost(clientId, assignmentId, mediaType, text, imageFilename, audioFilename, videoFilename);
+
     }
 
     /**
@@ -68,8 +84,13 @@ public class PublishPostIntentService extends IntentService {
      */
     private void handleActionGetPublishPost(String clientId,
                                             int assignmentId,
-                                            String title,
-                                            MediaObjectDefinition[] mediaObjectDefinitions) {
+                                            String mediaType,
+                                            String text,
+                                            String imageFilename,
+                                            String audioFilename,
+                                            String videoFilename) {
+                                            //String title,
+                                            //MediaObjectDefinition[] mediaObjectDefinitions) {
 
         //Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Starting handleActionGetPublishPost() ...");
 
@@ -92,8 +113,8 @@ public class PublishPostIntentService extends IntentService {
 
         String languageCode = Locale.getDefault().getLanguage();
 
-        //Log.d("PublishPostIntentService.handleActionGetPublishPost()","Uploading media objects ...");
-
+        Log.d("PublishPostIntentService.handleActionGetPublishPost()","Uploading media objects ...");
+        /*
         Gson gson = new Gson();
 
         String[] mediaObjectIds = new String[mediaObjectDefinitions.length];
@@ -111,19 +132,54 @@ public class PublishPostIntentService extends IntentService {
                     gson.fromJson(mediaObjectResponseJson,MediaObjectResponse.class).media_id;
 
         }
-
+        */
         //Log.d("PublishPostIntentService.handleActionGetPublishPost()","Publishing post ...");
 
+        //String mediaType = "text";
+        String mediaFilename = "";
+        String mediaText = text;
+        String mediaCaption = "";
 
-        String mediaObjectIdsJson = gson.toJson(mediaObjectIds);
+        switch(mediaType) {
+            case "text":
+                //mediaType = "text";
+                mediaFilename = "";
+                mediaText = text;
+                mediaCaption = "";
+                break;
+            case "image":
+                //mediaType = "image";
+                mediaFilename = imageFilename;
+                mediaText = "";
+                mediaCaption = text;
+                break;
+            default:
+                // uh ..
+                break;
+        }
+
+        // TODO: switch on media type
+
+        String mediaObjectResponseJson = uploadMedia(
+                clientId,
+                mediaType,
+                mediaFilename,
+                mediaText,
+                mediaCaption
+        );
+        Gson gson = new Gson();
+        String mediaId = gson.fromJson(mediaObjectResponseJson,MediaObjectResponse.class).media_id;
+
+        //String mediaObjectIdsJson = gson.toJson(mediaObjectIds);
         String publishPostJson = publishPost(
                 clientId,
                 assignmentId,
                 languageCode,
-                title,
+                //title,
                 latitude,
                 longitude,
-                mediaObjectIdsJson);
+                mediaId);
+                //mediaObjectIdsJson);
 
 
     }
@@ -131,10 +187,11 @@ public class PublishPostIntentService extends IntentService {
     private String publishPost(String clientId,
                                int assignmentId,
                                String languageCode,
-                               String title,
+                               //String title,
                                double lat,
                                double lng,
-                               String mediaObjects){
+                               String mediaId) {
+                               //String mediaObjects){
 
         String uploadMediaUrl = "http://yellr.mycodespace.net/publish_post.json";
 
@@ -143,10 +200,10 @@ public class PublishPostIntentService extends IntentService {
         params.add(new BasicNameValuePair("client_id", clientId));
         params.add(new BasicNameValuePair("assignment_id", String.valueOf(assignmentId)));
         params.add(new BasicNameValuePair("language_code", languageCode));
-        params.add(new BasicNameValuePair("title", title));
+        //params.add(new BasicNameValuePair("title", title));
         params.add(new BasicNameValuePair("lat", String.valueOf(lat)));
         params.add(new BasicNameValuePair("lng", String.valueOf(lng)));
-        params.add(new BasicNameValuePair("media_objects", mediaObjects));
+        params.add(new BasicNameValuePair("media_objects", "[\"" + mediaId + "\"]"));
 
         //
         // derived from

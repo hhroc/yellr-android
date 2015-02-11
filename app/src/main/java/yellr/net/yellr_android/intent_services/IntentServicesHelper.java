@@ -15,18 +15,18 @@ import com.google.gson.Gson;
 import yellr.net.yellr_android.activities.HomeActivity;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 
-import yellr.net.yellr_android.intent_services.stories.StoriesReceiver;
+//import yellr.net.yellr_android.intent_services.stories.StoriesReceiver;
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
 
-import yellr.net.yellr_android.intent_services.notifications.NotificationsReceiver;
+//import yellr.net.yellr_android.intent_services.notifications.NotificationsReceiver;
 import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
 
-import yellr.net.yellr_android.intent_services.messages.MessagesReceiver;
+//import yellr.net.yellr_android.intent_services.messages.MessagesReceiver;
 import yellr.net.yellr_android.intent_services.messages.MessagesIntentService;
 
 import yellr.net.yellr_android.intent_services.publish_post.MediaObjectDefinition;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
-import yellr.net.yellr_android.intent_services.publish_post.PublishPostReceiver;
+//import yellr.net.yellr_android.intent_services.publish_post.PublishPostReceiver;
 
 /**
  * Created by TDuffy on 2/5/2015.
