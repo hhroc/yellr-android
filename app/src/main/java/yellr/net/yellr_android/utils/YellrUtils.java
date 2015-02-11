@@ -36,8 +36,11 @@ public class YellrUtils {
         if(milliSeconds < DAY && milliSeconds > HOUR){
             return String.format("%d hours", Math.round(milliSeconds / HOUR));
         }
-        if(milliSeconds < HOUR){
+        if(milliSeconds < HOUR  && milliSeconds > 15 * MINUTE){
             return String.format("%d minutes", Math.round(milliSeconds / MINUTE));
+        }
+        if(milliSeconds < 15 * MINUTE){
+            return "Moments";
         }
         //Throw an exception instead?
         return null;
