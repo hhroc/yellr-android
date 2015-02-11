@@ -1,15 +1,10 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frag_home_assignment_swipe_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="yellr.net.yellr_android.fragments.AssignmentsFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <!--
-    <TextView android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/title_fragment_assignments" />
-    -->
 
     <ListView
         android:id="@+id/assignmentsList"
@@ -17,4 +12,4 @@
         android:layout_width="match_parent">
     </ListView>
 
-</FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

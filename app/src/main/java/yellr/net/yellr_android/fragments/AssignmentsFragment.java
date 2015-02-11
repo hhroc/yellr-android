@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,10 @@ import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
 public class AssignmentsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ListView listView;
+    private String clientId;
+    private AssignmentsArrayAdapter assignmentsArrayAdapter;
 
     private Assignment[] assignments;
     //private AssignmentsArrayAdapter assignmentsArrayAdapter;
@@ -67,6 +72,10 @@ public class AssignmentsFragment extends Fragment {
         if (getArguments() != null) {
         }
 
+        // get clientId
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
+        clientId = sharedPref.getString("clientId", "");
+
         // init new assignments receiver
         Context context = getActivity().getApplicationContext();
         IntentFilter assignmentsFilter = new IntentFilter(AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
@@ -74,14 +83,32 @@ public class AssignmentsFragment extends Fragment {
         AssignmentsReceiver assignmentsReceiver = new AssignmentsReceiver();
         context.registerReceiver(assignmentsReceiver, assignmentsFilter);
 
+        assignmentsArrayAdapter = new AssignmentsArrayAdapter(getActivity(), new ArrayList<Assignment>());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_assignments, container, false);
+        View view = inflater.inflate(R.layout.fragment_assignments, container, false);
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.frag_home_assignment_swipe_refresh_layout);
+        listView = (ListView)view.findViewById(R.id.assignmentsList);
+
+        listView.setAdapter(assignmentsArrayAdapter);
+        listView.setOnItemClickListener(new AssignmentListOnClickListener());
+
+        // This appear to be a linting error the Android Docs call for a Color Resource to be used here...
+        // https://developer.android.com/reference/android/support/v4/widget/SwipeRefreshLayout.html#setProgressBackgroundColor(int)
+        swipeRefreshLayout.setProgressBackgroundColor(R.color.yellow);
+        swipeRefreshLayout.setColorSchemeResources(R.color.black);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshAssignmentData();
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -103,21 +130,18 @@ public class AssignmentsFragment extends Fragment {
 
     @Override
     public void onResume() {
-
-        // get clientId
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
-        String clientId = sharedPref.getString("clientId", "");
-
         Log.d("AssignmentsFragment.onResume()", "Starting assignments intent service ...");
+        refreshAssignmentData();
+        super.onResume();
+    }
 
+    private void refreshAssignmentData() {
         // init service
         Context context = getActivity().getApplicationContext();
         Intent assignmentsWebIntent = new Intent(context, AssignmentsIntentService.class);
         assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CLIENT_ID, clientId);
         assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
         context.startService(assignmentsWebIntent);
-
-        super.onResume();
     }
 
 
@@ -141,29 +165,19 @@ public class AssignmentsFragment extends Fragment {
         public static final String ACTION_NEW_ASSIGNMENTS =
                 "yellr.net.yellr_android.action.NEW_ASSIGNMENTS";
 
-        private ListView listView;
-
         public AssignmentsReceiver() {
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            listView = (ListView)getView().findViewById(R.id.assignmentsList);
-
-            //Log.d("AssignmentsReceiver.onReceive()", "onReceive called.");
-
             String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
-
-            //Log.d("AssignmentsReceiver.onReceive()", "JSON: " + assignmentsJson);
 
             Gson gson = new Gson();
             AssignmentsResponse response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
 
             if (response.success) {
-
-                AssignmentsArrayAdapter assignmentsArrayAdapter = new AssignmentsArrayAdapter(getActivity(), new ArrayList<Assignment>());
-
+                assignmentsArrayAdapter.clear();
                 assignments = new Assignment[response.assignments.length];
                 for (int i = 0; i < response.assignments.length; i++) {
                     Assignment assignment = response.assignments[i];
@@ -171,13 +185,8 @@ public class AssignmentsFragment extends Fragment {
                     assignments[i] = assignment;
                 }
 
-                //Log.d("AssignmentsReceiver.onReceive()", "Setting listView adapter ...");
-
-                listView.setAdapter(assignmentsArrayAdapter);
-                listView.setOnItemClickListener(new AssignmentListOnClickListener());
-
+                swipeRefreshLayout.setRefreshing(false);
             }
-
         }
     }
 
@@ -206,15 +215,11 @@ public class AssignmentsFragment extends Fragment {
         public AssignmentsArrayAdapter(Context context, ArrayList<Assignment> assignments) {
             super(context, R.layout.fragment_assignment_row, R.id.frag_home_assignment_question_text, assignments);
             this.assignments = assignments;
-
-            //Log.d("AssignmentsArrayAdapter.AssignmentsArrayAdapter()","Constructor.");
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = super.getView(position, convertView, parent);
-
-            //Log.d("AssignmentsArrayAdapter.getView()","Setting values for view.");
 
             TextView textViewQuestionText = (TextView) row.findViewById(R.id.frag_home_assignment_question_text);
             TextView textViewOrganization = (TextView) row.findViewById(R.id.frag_home_assignment_organization);
@@ -229,8 +234,5 @@ public class AssignmentsFragment extends Fragment {
 
             return row;
         }
-
     }
-
-
 }
