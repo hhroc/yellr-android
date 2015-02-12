@@ -15,6 +15,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
+import yellr.net.yellr_android.activities.HomeActivity;
+import yellr.net.yellr_android.fragments.StoriesFragment;
+
 
 public class StoriesIntentService extends IntentService {
     public static final String ACTION_GET_STORIES =
@@ -103,7 +106,7 @@ public class StoriesIntentService extends IntentService {
             Log.d("StoriesIntentService.publishPost()","JSON: " + storiesJson);
 
             Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(StoriesReceiver.ACTION_NEW_STORIES);
+            broadcastIntent.setAction(StoriesFragment.StoriesReceiver.ACTION_NEW_STORIES);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
             broadcastIntent.putExtra(PARAM_STORIES_JSON, storiesJson);
             sendBroadcast(broadcastIntent);

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
-
+/*
 public class PublishPostReceiver extends BroadcastReceiver {
     public static final String ACTION_NEW_PUBLISH_POST =
             "yellr.net.yellr_android.action.NEW_PUBLISH_POST";
@@ -34,3 +34,4 @@ public class PublishPostReceiver extends BroadcastReceiver {
 
     }
 }
+*/

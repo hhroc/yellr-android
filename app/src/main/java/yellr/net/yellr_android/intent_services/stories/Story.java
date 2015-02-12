@@ -12,6 +12,7 @@ public class Story {
     public String banner_media_file_name;
     public String top_text;
     public String contents;
+    public String contents_rendered;
 
     public String tags;
 

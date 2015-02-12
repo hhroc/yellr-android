@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,10 @@ import yellr.net.yellr_android.utils.YellrUtils;
 public class StoriesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ListView listView;
+    private String clientId;
+    private StoriesArrayAdapter storiesArrayAdapter;
 
     private Story[] stories;
     //private StoriesArrayAdapter storiesArrayAdapter;
@@ -74,6 +79,10 @@ public class StoriesFragment extends Fragment {
         if (getArguments() != null) {
         }
 
+        // get clientId
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
+        clientId = sharedPref.getString("clientId", "");
+
         // init new stories receiver
         Context context = getActivity().getApplicationContext();
         IntentFilter storiesFilter = new IntentFilter(StoriesReceiver.ACTION_NEW_STORIES);
@@ -81,21 +90,30 @@ public class StoriesFragment extends Fragment {
         StoriesReceiver storiesReceiver = new StoriesReceiver();
         context.registerReceiver(storiesReceiver, storiesFilter);
 
+        storiesArrayAdapter = new StoriesArrayAdapter(getActivity(), new ArrayList<Story>());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view =inflater.inflate(R.layout.fragment_stories, container, false);
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.frag_home_story_swipe_refresh_layout);
+        listView = (ListView)view.findViewById(R.id.storiesList);
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stories, container, false);
-    }
+        listView.setAdapter(storiesArrayAdapter);
+        listView.setOnItemClickListener(new StoryListOnClickListener());
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        // This appear to be a linting error the Android Docs call for a Color Resource to be used here...
+        // https://developer.android.com/reference/android/support/v4/widget/SwipeRefreshLayout.html#setProgressBackgroundColor(int)
+        swipeRefreshLayout.setProgressBackgroundColor(R.color.yellow);
+        swipeRefreshLayout.setColorSchemeResources(R.color.black);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshStoryData();
+            }
+        });
+        return view;
     }
 
     @Override
@@ -117,21 +135,18 @@ public class StoriesFragment extends Fragment {
 
     @Override
     public void onResume() {
-
-        // get clientId
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
-        String clientId = sharedPref.getString("clientId", "");
-
         Log.d("StoriesFragment.onResume()", "Starting stories intent service ...");
+        refreshStoryData();
+        super.onResume();
+    }
 
+    private void refreshStoryData() {
         // init service
         Context context = getActivity().getApplicationContext();
         Intent storiesWebIntent = new Intent(context, StoriesIntentService.class);
         storiesWebIntent.putExtra(StoriesIntentService.PARAM_CLIENT_ID, clientId);
         storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
         context.startService(storiesWebIntent);
-
-        super.onResume();
     }
 
 
@@ -155,42 +170,26 @@ public class StoriesFragment extends Fragment {
         public static final String ACTION_NEW_STORIES =
                 "yellr.net.yellr_android.action.NEW_STORIES";
 
-        private ListView listView;
-
         public StoriesReceiver() {
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            listView = (ListView)getView().findViewById(R.id.storiesList);
-
-            //Log.d("StoriesReceiver.onReceive()", "onReceive called.");
-
             String storiesJson = intent.getStringExtra(StoriesIntentService.PARAM_STORIES_JSON);
-
-            //Log.d("StoriesReceiver.onReceive()", "JSON: " + storiesJson);
 
             Gson gson = new Gson();
             StoriesResponse response = gson.fromJson(storiesJson, StoriesResponse.class);
 
             if (response.success) {
-
-                StoriesArrayAdapter storiesArrayAdapter = new StoriesArrayAdapter(getActivity(), new ArrayList<Story>());
-
+                storiesArrayAdapter.clear();
                 stories = new Story[response.stories.length];
-
                 for (int i = 0; i < response.stories.length; i++) {
                     Story story = response.stories[i];
                     storiesArrayAdapter.add(story);
                     stories[i] = story;
                 }
-
-                //Log.d("StoriesReceiver.onReceive()", "Setting listView adapter ...");
-
-                listView.setAdapter(storiesArrayAdapter);
-                listView.setOnItemClickListener(new StoryListOnClickListener());
-
+                swipeRefreshLayout.setRefreshing(false);
             }
 
         }
@@ -201,9 +200,6 @@ public class StoriesFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-            //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            //builder.setMessage("neat");
-
             Intent intent;
             intent = new Intent(getActivity().getApplicationContext(), ViewStoryActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -211,10 +207,10 @@ public class StoriesFragment extends Fragment {
             intent.putExtra(ViewStoryFragment.ARG_STORY_TITLE,stories[position].title);
             intent.putExtra(ViewStoryFragment.ARG_STORY_AUTHOR,stories[position].author_first_name + " " + stories[position].author_last_name);
             intent.putExtra(ViewStoryFragment.ARG_STORY_PUBLISHED_DATETIME,stories[position].publish_datetime);
-            intent.putExtra(ViewStoryFragment.ARG_STORY_CONTENTS,stories[position].contents);
+            //intent.putExtra(ViewStoryFragment.ARG_STORY_CONTENTS,stories[position].contents);
+            intent.putExtra(ViewStoryFragment.ARG_STORY_CONTENTS_RENDERED,stories[position].contents_rendered);
 
             startActivity(intent);
-
         }
 
     }
@@ -226,15 +222,11 @@ public class StoriesFragment extends Fragment {
         public StoriesArrayAdapter(Context context, ArrayList<Story> stories) {
             super(context, R.layout.fragment_story_row, R.id.frag_home_story_title, stories);
             this.stories = stories;
-
-            //Log.d("StoriesArrayAdapter.StoriesArrayAdapter()","Constructor.");
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = super.getView(position, convertView, parent);
-
-            //Log.d("StoriesArrayAdapter.getView()","Setting values for view.");
 
             TextView textViewTitle = (TextView) row.findViewById(R.id.frag_home_story_title);
             TextView textViewPublishDateTime = (TextView) row.findViewById(R.id.frag_home_story_publish_datetime);
