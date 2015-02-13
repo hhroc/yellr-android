@@ -107,6 +107,17 @@
             android:name=".activities.ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
+
+        <service
+            android:name=".intent_services.profile.ProfileIntentService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".intent_services.profile.ProfileReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>
