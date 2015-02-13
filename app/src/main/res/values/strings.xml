@@ -12,14 +12,14 @@
     <string name="fa_video_camera"></string>
     <string name="fa_microphone"></string>
     <string name="fa_upload"></string>
-    <string name="fa_comment">&#xf075;</string>
-    <string name="fa_comment_o">&#xf0e5;</string>
-    <string name="fa_comments">&#xf086;</string>
-    <string name="fa_comments_o">&#xf0e6;</string>
-    <string name="fa_question">&#xf128;</string>
-    <string name="fa_question_circle">&#xf059;</string>
-    <string name="fa_user">&#xf007;</string>
-    <string name="fa_pencil">&#xf040;</string>
+    <string name="fa_comment"></string>
+    <string name="fa_comment_o"></string>
+    <string name="fa_comments"></string>
+    <string name="fa_comments_o"></string>
+    <string name="fa_question"></string>
+    <string name="fa_question_circle"></string>
+    <string name="fa_user"></string>
+    <string name="fa_pencil"></string>
 
     <!-- Actionbar Action Buttons -->
     <string name="action_notification">Notifications</string>
@@ -42,9 +42,10 @@
 
     <!-- <string name="hello_world">Hello world!</string> -->
     <string name="action_settings">Settings</string>
-
     <string name="hello_world">Hello world!</string>
     <string name="fragment_post_assignment_title">Free Post</string>
     <string name="fragment_post_assignment_description">You can tell us what you think on any topic!</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

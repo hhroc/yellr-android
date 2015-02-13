@@ -158,10 +158,16 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_new_post:
-                Intent intent = new Intent(this, PostActivity.class);
-                intent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, 0);
-                startActivity(intent);
+                Intent postIntent = new Intent(this, PostActivity.class);
+                postIntent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, 0);
+                startActivity(postIntent);
                 break;
+
+            case R.id.action_profile:
+                Intent profileIntent = new Intent(this, ProfileActivity.class);
+                startActivity(profileIntent);
+                break;
+
             default:
                 break;
         }

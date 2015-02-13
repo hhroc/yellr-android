@@ -26,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
@@ -37,8 +36,6 @@ import java.util.Date;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.activities.HomeActivity;
-import yellr.net.yellr_android.activities.PostActivity;
-import yellr.net.yellr_android.intent_services.publish_post.MediaObjectDefinition;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
 
 /**
