@@ -2,15 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="yellr.net.yellr_android" >
 
-    <!--Permissions-->
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <!--Hardware Features-->
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <!-- Hardware Features -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -19,9 +22,9 @@
         android:theme="@style/Theme.Yellr" >
         <activity
             android:name=".activities.SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/NoActionBar"
-            android:configChanges="orientation|keyboardHidden|screenSize">
+            android:theme="@style/NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,20 +33,19 @@
         </activity>
         <activity
             android:name=".activities.HomeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Yellr"
-            android:configChanges="orientation|keyboardHidden|screenSize">
+            android:theme="@style/Theme.Yellr" >
         </activity>
-
         <activity
             android:name=".activities.PostActivity"
-            android:label="@string/title_activity_post"
-            android:configChanges="orientation|keyboardHidden|screenSize">
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_post" >
         </activity>
         <activity
             android:name=".activities.ViewStoryActivity"
-            android:label="@string/title_activity_view_story"
-            android:configChanges="orientation|keyboardHidden|screenSize">
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_view_story" >
         </activity>
 
         <service
@@ -101,6 +103,10 @@
             android:exported="true" >
         </receiver>
 
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
     </application>
 
 </manifest>
