@@ -32,6 +32,8 @@ public class ProfileFragment extends Fragment {
     private TextView userImage;
     private TextView userName;
     private TextView userUUID;
+    private TextView userVerifiedLogo;
+    private TextView userVerified;
 
     /**
      * Use this factory method to create a new instance of
@@ -98,10 +100,15 @@ public class ProfileFragment extends Fragment {
 
         userImage = (TextView) view.findViewById(R.id.frag_profile_user_image);
         userImage.setTypeface(font);
+        userImage.setText(R.string.fa_user_secret);
 
         userName = (TextView) view.findViewById(R.id.frag_profile_name);
         userUUID = (TextView) view.findViewById(R.id.frag_profile_id);
         userUUID.setText(String.format("UUID: %s", clientId));
+
+        userVerified = (TextView) view.findViewById(R.id.frag_profile_verified);
+        userVerifiedLogo = (TextView)view.findViewById(R.id.frag_profile_verified_logo);
+        userVerifiedLogo.setTypeface(font);
 
         return view;
     }
@@ -121,9 +128,10 @@ public class ProfileFragment extends Fragment {
             ProfileResponse response = gson.fromJson(profileJson, ProfileResponse.class);
 
             if ( response.success ) {
-
-
-
+                if(!response.first_name.isEmpty()){
+                    userName.setText(response.first_name + " " + response.last_name);
+                    userImage.setText(R.string.fa_user);
+                }
             /*
             {
                 "first_name": "",

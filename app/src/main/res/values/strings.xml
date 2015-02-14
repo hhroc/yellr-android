@@ -20,6 +20,10 @@
     <string name="fa_question_circle"></string>
     <string name="fa_user"></string>
     <string name="fa_pencil"></string>
+    <string name="fa_user_secret">&#xf21b;</string>
+    <string name="fa_user_plus">&#xf234;</string>
+    <string name="fa_check_square">&#xf14a;</string>
+    <string name="fa_times">&#xf00d;</string>
 
     <!-- Actionbar Action Buttons -->
     <string name="action_notification">Notifications</string>

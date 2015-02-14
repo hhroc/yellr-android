@@ -15,22 +15,43 @@
         android:textColor="@color/black"
         android:background="@color/dark_yellow"
         android:gravity="center"
-        android:padding="16dp" />
+        android:padding="16dp"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Anonymous"
         android:textColor="@color/black"
         android:textSize="36sp"
-        android:layout_alignBottom="@id/frag_profile_user_image"
         android:id="@+id/frag_profile_name"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf= "@id/frag_profile_user_image"
-        android:gravity="center"
-        android:padding="8dp" />
+        android:layout_toRightOf="@id/frag_profile_user_image"
+        android:gravity="center" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frag_profile_name"
+        android:layout_toRightOf="@id/frag_profile_user_image"
+        android:layout_alignBottom="@id/frag_profile_user_image"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/frag_profile_verified_logo"
+            android:gravity="right|center_vertical"
+            android:layout_weight="1"
+            android:text="@string/fa_times"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/frag_profile_verified"
+            android:gravity="left|center_vertical"
+            android:layout_weight="1"
+            android:paddingLeft="16dp"
+            android:text="Un-Verified"/>
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,13 +65,5 @@
         android:layout_alignParentRight="true"
         android:gravity="center"
         android:padding="16dp" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/frag_profile_lang_spinner"
-        android:layout_below="@+id/frag_profile_id"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="49dp" />
 
 </RelativeLayout>
