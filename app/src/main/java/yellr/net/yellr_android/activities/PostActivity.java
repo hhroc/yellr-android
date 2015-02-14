@@ -1,12 +1,7 @@
 package yellr.net.yellr_android.activities;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.fragments.PostFragment;

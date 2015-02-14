@@ -27,6 +27,7 @@ import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
 import yellr.net.yellr_android.fragments.PostFragment;
 import yellr.net.yellr_android.fragments.StoriesFragment;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, AssignmentsFragment.OnFragmentInteractionListener, StoriesFragment.OnFragmentInteractionListener {
 
@@ -54,27 +55,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         // See if we have a clientId in shared preferences, and if we
         // don't then create one
         //
-
-        String clientId = "";
-
-        // read the clientId from the device.
-        SharedPreferences sharedPref = this.getSharedPreferences("clientId", Context.MODE_PRIVATE);
-        clientId = sharedPref.getString("clientId", "");
-
-        // check to see if there is a clientId on the device, if not created one
-        if (clientId.equals("")){
-
-            clientId = UUID.randomUUID().toString();
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("clientId", clientId);
-            editor.commit();
-
-        }
-
-
-        //
-        // fire all of the intent services so we can stay up-to-date
-        //
+        String clientId = YellrUtils.getUUID(this);
 
         //IntentServicesHelper.getAssignments(this,clientId);
         //IntentServicesHelper.getStories(this,clientId);

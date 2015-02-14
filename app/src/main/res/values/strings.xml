@@ -20,6 +20,13 @@
     <string name="fa_question_circle"></string>
     <string name="fa_user"></string>
     <string name="fa_pencil"></string>
+    <string name="fa_user_secret">&#xf21b;</string>
+    <string name="fa_user_plus">&#xf234;</string>
+    <string name="fa_check_square">&#xf14a;</string>
+    <string name="fa_times">&#xf00d;</string>
+    <string name="fa_key">&#xf084;</string>
+    <string name="fa_random">&#xf074;</string>
+    <string name="fa_eye">&#xf06e;</string>
 
     <!-- Actionbar Action Buttons -->
     <string name="action_notification">Notifications</string>
@@ -50,5 +57,10 @@
     <string name="fragment_post_assignment_description">You can tell us what you think on any topic!</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="frag_profile_posts_description">Posts</string>
+    <string name="frag_profile_viewed_posts_description">Posts Viewed</string>
+    <string name="frag_profile_used_posts_description">Posts Used</string>
+    <string name="action_signup">SignUp</string>
+    <string name="action_new_uuid">New UUID</string>
 
 </resources>

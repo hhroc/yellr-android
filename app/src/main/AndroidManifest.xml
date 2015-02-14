@@ -41,7 +41,8 @@
         <activity
             android:name=".activities.PostActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_post" >
+            android:label="@string/title_activity_post"
+            android:theme="@style/Theme.Yellr">
         </activity>
         <activity
             android:name=".activities.ViewStoryActivity"
