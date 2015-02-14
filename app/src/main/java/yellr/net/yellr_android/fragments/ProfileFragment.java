@@ -32,8 +32,14 @@ public class ProfileFragment extends Fragment {
     private TextView userImage;
     private TextView userName;
     private TextView userUUID;
-    private TextView userVerifiedLogo;
+    private TextView userVerifiedIcon;
     private TextView userVerified;
+    private TextView postsIcon;
+    private TextView postsNumber;
+    private TextView postsViewedIcon;
+    private TextView postsViewedNumber;
+    private TextView postsUsedIcon;
+    private TextView postsUsedNumber;
 
     /**
      * Use this factory method to create a new instance of
@@ -107,8 +113,20 @@ public class ProfileFragment extends Fragment {
         userUUID.setText(String.format("UUID: %s", clientId));
 
         userVerified = (TextView) view.findViewById(R.id.frag_profile_verified);
-        userVerifiedLogo = (TextView)view.findViewById(R.id.frag_profile_verified_logo);
-        userVerifiedLogo.setTypeface(font);
+        userVerifiedIcon = (TextView)view.findViewById(R.id.frag_profile_verified_icon);
+        userVerifiedIcon.setTypeface(font);
+
+        postsIcon = (TextView)view.findViewById(R.id.frag_profile_posts_icon);
+        postsIcon.setTypeface(font);
+        postsNumber = (TextView)view.findViewById(R.id.frag_profile_posts_number);
+
+        postsViewedIcon = (TextView)view.findViewById(R.id.frag_profile_viewed_posts_icon);
+        postsViewedIcon.setTypeface(font);
+        postsViewedNumber = (TextView)view.findViewById(R.id.frag_profile_viewed_posts_number);
+
+        postsUsedIcon = (TextView)view.findViewById(R.id.frag_profile_used_posts_icon);
+        postsUsedIcon.setTypeface(font);
+        postsUsedNumber = (TextView)view.findViewById(R.id.frag_profile_used_posts_number);
 
         return view;
     }
@@ -131,7 +149,16 @@ public class ProfileFragment extends Fragment {
                 if(!response.first_name.isEmpty()){
                     userName.setText(response.first_name + " " + response.last_name);
                     userImage.setText(R.string.fa_user);
+
                 }
+
+                if(response.verified){
+                    userVerified.setText("Verified");
+                    userVerifiedIcon.setText(R.string.fa_check_square);
+                }
+                postsNumber.setText(String.valueOf(response.post_count));
+                postsViewedNumber.setText(String.valueOf(response.post_view_count));
+                postsUsedNumber.setText(String.valueOf(response.post_used_count));
             /*
             {
                 "first_name": "",
