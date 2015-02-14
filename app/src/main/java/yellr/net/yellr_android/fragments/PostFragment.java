@@ -145,6 +145,7 @@ public class PostFragment extends Fragment {
         }
 
         imageButton.setOnClickListener(new View.OnClickListener() {
+
             public void onClick(View v) {
 
                 if(getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) == false){
@@ -156,43 +157,47 @@ public class PostFragment extends Fragment {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
 
-                    Log.d("PostFragment.onActivityResult()","Launching Camera Intent ...");
+                    //Log.d("PostFragment.onActivityResult()","Launching Camera Intent ...");
 
                     File imageFile = null;
                     try {
 
-                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                        String imageFileName = "/yellr_" + timeStamp + "_";
-                        Log.d("PostFragment.onActivityResult()","Getting storage directory ...");
-                        File storageDir = Environment.getExternalStoragePublicDirectory(
-                                Environment.DIRECTORY_PICTURES);
-                        Log.d("PostFragment.onActivityResult()","Creating temp file '" + storageDir + imageFileName + ".jpg' ...");
-                        File image = File.createTempFile(
-                                imageFileName,
-                                ".jpg",
-                                storageDir
-                        );
-                        Log.d("PostFragment.onActivityResult()","Setting proposedImageFilename ...");
-                        proposedImageFilename = image.getAbsolutePath();
+                        final File path = new File( Environment.getExternalStorageDirectory(), getActivity().getApplicationContext().getPackageName() );
+                        if(!path.exists()){
+                            path.mkdir();
+                        }
+                        imageFile =  new File(path, "yellr.jpg");
 
-                        //if ( imageFile != null ) {
+                        //Toast toast2 = Toast.makeText(getActivity(), "Temp file created.", Toast.LENGTH_SHORT);
+                        //toast2.show();
+
+                        Log.d("PostFragment.onActivityResult()","Setting proposedImageFilename ...");
+
+                        if ( imageFile != null ) {
+
+                            proposedImageFilename = imageFile.getAbsolutePath();
+
+                            //Toast toast2 = Toast.makeText(getActivity(), proposedImageFilename, Toast.LENGTH_SHORT);
+                            //toast2.show();
 
                             Log.d("PostFragment.onActivityResult()","Configuring Intent, and starting Activity ...");
 
                             Uri fileUri = Uri.fromFile(imageFile);
                             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
                             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                        //} else {
-                        //    // TODO: report error?
-                        //}
+
+                        } else {
+                            Toast toast2 = Toast.makeText(getActivity(), "Image capture not supported on device.", Toast.LENGTH_SHORT);
+                            toast2.show();
+                        }
 
 
-                    } catch (IOException ex) {
+                    } catch (Exception ex) { //(IOException ex) {
                         // Error occurred while creating the File
-                        Toast toast = Toast.makeText(getActivity(), "There was a problem saving the photo...", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getActivity(), ex.toString(), Toast.LENGTH_SHORT);
                         toast.show();
 
-                        Log.d("imageButton.setOnClickListener(new View.OnClickListener()", "IO Exception: " + ex.toString());
+                        Log.d("imageButton.setOnClickListener().OnClick()", "Exception: " + ex.toString());
 
                     }
 
@@ -210,9 +215,9 @@ public class PostFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(getActivity(), "We're back from taking a picture", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "We're back from taking a picture", Toast.LENGTH_SHORT).show();
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            if ( resultCode == Activity.RESULT_OK) {
+            if ( resultCode == Activity.RESULT_OK ) {
 
                 //Toast.makeText(getActivity(), "We event we successful with RESULT_OK", Toast.LENGTH_SHORT).show();
 
@@ -221,13 +226,14 @@ public class PostFragment extends Fragment {
                 //Bundle extras = data.getExtras();
                 //Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-                Bitmap imageBitmap = BitmapFactory.decodeFile(this.imageFilename);
-
-                imagePreview.setImageBitmap(imageBitmap);
-
                 this.mediaType = "image";
                 this.imageFilename = proposedImageFilename;
 
+                Bitmap imageBitmap = BitmapFactory.decodeFile(this.imageFilename);
+                imagePreview.setImageBitmap(imageBitmap);
+
+            } else {
+                Toast.makeText(getActivity(), "result code was not RESULT_OK", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -272,9 +278,13 @@ public class PostFragment extends Fragment {
         postIntent.putExtra("assignmentId", assignmentId);
         postIntent.putExtra("text", postText.getText().toString());
         postIntent.putExtra("mediaType", this.mediaType);
-        postIntent.putExtra("imageFilename", this.imageFilename);
-        postIntent.putExtra("audioFilename", this.audioFilename);
-        postIntent.putExtra("videoFilename", this.videoFilename);
+        postIntent.putExtra(PublishPostIntentService.PARAM_IMAGE_FILENAME, this.imageFilename);
+        postIntent.putExtra(PublishPostIntentService.PARAM_AUDIO_FILENAME, this.audioFilename);
+        postIntent.putExtra(PublishPostIntentService.PARAM_VIDEO_FILENAME, this.videoFilename);
+
+        Log.d("SubmitPostToYellr()","Starting PublishPostIntentService intent ...");
+
+        Toast.makeText(getActivity(), "Sending " + this.imageFilename, Toast.LENGTH_SHORT).show();
 
         //postIntent.putExtra("title", "_");
         //postIntent.putExtra("mediaObjectDefinitionsJson", mediaObject);
@@ -283,6 +293,8 @@ public class PostFragment extends Fragment {
         postText.setText("");
         assignmentQuestion.setText(R.string.fragment_post_assignment_title);
         assignmentDescription.setText(R.string.fragment_post_assignment_description);
+
+
 
         Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -1,10 +1,13 @@
 package yellr.net.yellr_android.intent_services.publish_post;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -28,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -57,7 +61,7 @@ public class PublishPostIntentService extends IntentService {
         //Log.d("PublishPostIntentService.onHandleIntent()","Decoding intent action ...");
 
         String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
-        int assignmentId = intent.getIntExtra(PARAM_ASSIGNMENT_ID,0);
+        int assignmentId = intent.getIntExtra(PARAM_ASSIGNMENT_ID, 0);
         //String title = intent.getStringExtra(PARAM_TITLE);
         String text = intent.getStringExtra(PARAM_TEXT);
         String mediaType = intent.getStringExtra(PARAM_MEDIA_TYPE);
@@ -89,8 +93,8 @@ public class PublishPostIntentService extends IntentService {
                                             String imageFilename,
                                             String audioFilename,
                                             String videoFilename) {
-                                            //String title,
-                                            //MediaObjectDefinition[] mediaObjectDefinitions) {
+        //String title,
+        //MediaObjectDefinition[] mediaObjectDefinitions) {
 
         //Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Starting handleActionGetPublishPost() ...");
 
@@ -113,7 +117,7 @@ public class PublishPostIntentService extends IntentService {
 
         String languageCode = Locale.getDefault().getLanguage();
 
-        Log.d("PublishPostIntentService.handleActionGetPublishPost()","Uploading media objects ...");
+        Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Uploading media objects ...");
         /*
         Gson gson = new Gson();
 
@@ -140,7 +144,7 @@ public class PublishPostIntentService extends IntentService {
         String mediaText = text;
         String mediaCaption = "";
 
-        switch(mediaType) {
+        switch (mediaType) {
             case "text":
                 //mediaType = "text";
                 mediaFilename = "";
@@ -168,7 +172,7 @@ public class PublishPostIntentService extends IntentService {
                 mediaCaption
         );
         Gson gson = new Gson();
-        String mediaId = gson.fromJson(mediaObjectResponseJson,MediaObjectResponse.class).media_id;
+        String mediaId = gson.fromJson(mediaObjectResponseJson, MediaObjectResponse.class).media_id;
 
         //String mediaObjectIdsJson = gson.toJson(mediaObjectIds);
         String publishPostJson = publishPost(
@@ -179,7 +183,7 @@ public class PublishPostIntentService extends IntentService {
                 latitude,
                 longitude,
                 mediaId);
-                //mediaObjectIdsJson);
+        //mediaObjectIdsJson);
 
 
     }
@@ -191,7 +195,7 @@ public class PublishPostIntentService extends IntentService {
                                double lat,
                                double lng,
                                String mediaId) {
-                               //String mediaObjects){
+        //String mediaObjects){
 
         String uploadMediaUrl = "http://yellr.mycodespace.net/publish_post.json";
 
@@ -221,7 +225,7 @@ public class PublishPostIntentService extends IntentService {
             MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
             entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-            for(int index=0; index < params.size(); index++) {
+            for (int index = 0; index < params.size(); index++) {
 
                 entityBuilder.addPart(params.get(index).getName(),
                         new StringBody(params.get(index).getValue(), ContentType.TEXT_PLAIN));
@@ -246,7 +250,7 @@ public class PublishPostIntentService extends IntentService {
 
             publishPostJson = builder.toString();
 
-            Log.d("PublishPostIntentService.publishPost()","JSON: " + publishPostJson);
+            Log.d("PublishPostIntentService.publishPost()", "JSON: " + publishPostJson);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -262,6 +266,9 @@ public class PublishPostIntentService extends IntentService {
                                String mediaText,
                                String mediaCaption) {
 
+        Log.d("uploadMedia()", "media type: " + mediaType);
+        //Log.d("uploadMedia()", "param name: " + params.get(index).getName());
+
         String uploadMediaUrl = "http://yellr.mycodespace.net/upload_media.json";
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -269,15 +276,15 @@ public class PublishPostIntentService extends IntentService {
         params.add(new BasicNameValuePair("client_id", clientId));
         params.add(new BasicNameValuePair("media_type", mediaType));
 
-        if ( !mediaFilename.equals("") ) {
+        if (!mediaFilename.equals("")) {
             params.add(new BasicNameValuePair("media_file", mediaFilename));
         }
 
-        if ( !mediaText.equals("") ) {
+        if (!mediaText.equals("")) {
             params.add(new BasicNameValuePair("media_text", mediaText));
         }
 
-        if ( !mediaCaption.equals("") ) {
+        if (!mediaCaption.equals("")) {
             params.add(new BasicNameValuePair("media_caption", mediaCaption));
         }
 
@@ -292,26 +299,35 @@ public class PublishPostIntentService extends IntentService {
 
         String uploadMediaJson = "{}";
 
-        try {
 
-            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-            entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+        entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-            for(int index=0; index < params.size(); index++) {
-                if(params.get(index).getName().equalsIgnoreCase("image")) {
-                    // we only need to add a file if our media object type is not text
-                    if(mediaType != "text" ) {
-                        // If the key equals to "media_file", we use FileBody to transfer the data
+        for (int index = 0; index < params.size(); index++) {
 
-                        entityBuilder.addPart(params.get(index).getName(),
-                                new FileBody(new File(params.get(index).getValue())));
-                    }
-                } else {
-                    // Normal string data
-                    entityBuilder.addPart(params.get(index).getName(),
-                            new StringBody(params.get(index).getValue(), ContentType.TEXT_PLAIN));
-                }
+            Log.d("uploadMedia()", "param name: " + params.get(index).getName());
+
+            if (params.get(index).getName().equalsIgnoreCase("media_file") &&!mediaType.equalsIgnoreCase("text")) {
+                // we only need to add a file if our media object type is not text
+                //if (mediaType != "text") {
+                // If the key equals to "media_file", we use FileBody to transfer the data
+
+                Log.d("uploadMedia()", "adding binary file: " + params.get(index).getValue());
+
+                entityBuilder.addPart(params.get(index).getName(),
+                        new FileBody(new File(params.get(index).getValue())));
+                //}
+            } else {
+
+                Log.d("uploadMedia()", "adding text field: " + params.get(index).getValue());
+
+                // Normal string data
+                entityBuilder.addPart(params.get(index).getName(),
+                        new StringBody(params.get(index).getValue(), ContentType.TEXT_PLAIN));
             }
+        }
+
+        try {
 
             HttpEntity entity = entityBuilder.build();
             httpPost.setEntity(entity);
@@ -331,13 +347,15 @@ public class PublishPostIntentService extends IntentService {
 
             uploadMediaJson = builder.toString();
 
-            Log.d("PublishPostIntentService.uploadMedia()","JSON: " + uploadMediaJson);
+            Log.d("PublishPostIntentService.uploadMedia()", "JSON: " + uploadMediaJson);
 
-        } catch (IOException e) {
-            Log.d("PublishPostIntentService.uploadMedia()","ERROR: " + e.toString());
-            e.printStackTrace();
+        } catch (Exception e) {
+            //Toast.makeText(this, "upload_media: " + e.toString(), Toast.LENGTH_SHORT).show();
+
+            Log.d("PublishPostIntentService.uploadMedia()", "ERROR: " + e.toString());
+            //e.printStackTrace();
+
         }
-
         return uploadMediaJson;
 
     }

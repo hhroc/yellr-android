@@ -49,7 +49,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"/>
         
-
+    <!--
     <TextView
         android:id="@+id/frag_view_story_contents_rendered"
         android:text="loading story ..."
@@ -59,14 +59,25 @@
         android:textColor="@color/black"
         android:layout_below="@id/frag_view_story_published_datetime"
         android:padding="16dp"/>
-
+    -->
 
     <!--
+    <TextView
+        android:id="@+id/frag_view_story_loading"
+        android:text="Loading story ..."
+        android:textSize="14sp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_below="@id/frag_view_story_published_datetime"
+        android:padding="16dp"/>
+    -->
+
     <WebView
         android:id="@+id/frag_view_story_contents_rendered"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/frag_view_story_published_datetime"
         android:padding="16dp"/>
-    -->
+
 </RelativeLayout>
