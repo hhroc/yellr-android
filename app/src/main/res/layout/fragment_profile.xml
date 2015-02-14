@@ -104,7 +104,7 @@
         android:textSize="24sp"
         android:textColor="@color/black"
         android:gravity="center"
-        android:text="32"/>
+        android:text="0"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -144,7 +144,7 @@
         android:textSize="24sp"
         android:textColor="@color/black"
         android:gravity="center"
-        android:text="32"/>
+        android:text="0"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -184,6 +184,6 @@
         android:layout_below="@id/frag_profile_viewed_posts_number"
         android:layout_alignBottom="@id/frag_profile_used_posts_icon"
         android:gravity="center"
-        android:text="32"/>
+        android:text="0"/>
 
 </RelativeLayout>

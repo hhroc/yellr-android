@@ -1,6 +1,5 @@
 package yellr.net.yellr_android.activities;
 
-import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 
@@ -19,5 +18,4 @@ public class ProfileActivity extends ActionBarActivity{
                     .commit();
         }
     }
-
 }

@@ -1,5 +1,6 @@
 package yellr.net.yellr_android.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,16 +11,22 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
 
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.intent_services.profile.ProfileIntentService;
 import yellr.net.yellr_android.intent_services.profile.ProfileResponse;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,17 +35,19 @@ import yellr.net.yellr_android.intent_services.profile.ProfileResponse;
  */
 public class ProfileFragment extends Fragment {
 
+    public static final String DIALOG_RESET_UUID = "yellr.net.yellr_android.dialog.RESET_UUID";
+
     private String clientId;
     private TextView userImage;
     private TextView userName;
-    private TextView userUUID;
+    TextView userUUID;
     private TextView userVerifiedIcon;
     private TextView userVerified;
-    private TextView postsIcon;
+    TextView postsIcon;
     private TextView postsNumber;
-    private TextView postsViewedIcon;
+    TextView postsViewedIcon;
     private TextView postsViewedNumber;
-    private TextView postsUsedIcon;
+    TextView postsUsedIcon;
     private TextView postsUsedNumber;
 
     /**
@@ -83,6 +92,8 @@ public class ProfileFragment extends Fragment {
         }
 
         Log.d("ProfileFragment.onCreate()","Setting up IntentService receiver ...");
+
+        setHasOptionsMenu(true);
 
         // get clientId
         SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
@@ -129,6 +140,55 @@ public class ProfileFragment extends Fragment {
         postsUsedNumber = (TextView)view.findViewById(R.id.frag_profile_used_posts_number);
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_profile, menu);
+        if(this.isAdded()){
+            menu.findItem(R.id.action_profile_signup).setIcon(
+                    new IconDrawable(getActivity(), Iconify.IconValue.fa_user_plus)
+                            .colorRes(R.color.black)
+                            .actionBarSize()
+            );
+            menu.findItem(R.id.action_profile_new_uuid).setIcon(
+                    new IconDrawable(getActivity(), Iconify.IconValue.fa_key)
+                    .colorRes(R.color.black)
+                    .actionBarSize()
+            );
+        } else {
+            Log.d("onCreateOptionsMenu()", "Fragment not added to Activity");
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_profile_new_uuid:
+                ResetUUIDFragment resetUUIDFragment = new ResetUUIDFragment();
+                resetUUIDFragment.setTargetFragment(this, 1);
+                resetUUIDFragment.show(getFragmentManager(), DIALOG_RESET_UUID);
+                break;
+            case R.id.action_profile_signup:
+
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK){
+            userUUID.setText(String.format("UUID: %s", YellrUtils.getUUID(getActivity())));
+            postsNumber.setText("0");
+            postsViewedNumber.setText("0");
+            postsUsedNumber.setText("0");
+        }
     }
 
     public class ProfileReceiver extends BroadcastReceiver {
