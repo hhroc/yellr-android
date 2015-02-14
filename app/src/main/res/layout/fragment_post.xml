@@ -26,6 +26,11 @@
         android:id="@+id/frag_post_imagepreview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxHeight="70dp"
+        android:maxWidth="200dp"
+        android:minHeight="70dp"
+        android:minWidth="200dp"
+        android:adjustViewBounds="true"
         android:layout_gravity="center"
         android:layout_below="@+id/frag_post_assignment_description"/>
 

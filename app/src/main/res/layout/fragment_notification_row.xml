@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/frag_notification_text"
+        android:layout_width="fill_parent"
+        android:layout_height="64dp "
+        android:textSize="20sp"
+        android:text=""
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"/>
+
+</LinearLayout>
