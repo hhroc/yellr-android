@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
+import yellr.net.yellr_android.fragments.NotificationsFragment;
+
 public class NotificationsIntentService extends IntentService {
     public static final String ACTION_GET_NOTIFICATIONS =
             "yellr.net.yellr_android.action.GET_NOTIFICATIONS";
@@ -76,7 +78,7 @@ public class NotificationsIntentService extends IntentService {
             Log.d("NotificationsIntentService.UpdateData()","JSON: " + notificationsJson);
 
             Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(NotificationsReceiver.ACTION_NEW_NOTIFICATIONS);
+            broadcastIntent.setAction(NotificationsFragment.NotificationsReceiver.ACTION_NEW_NOTIFICATIONS);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
             broadcastIntent.putExtra(PARAM_NOTIFICATIONS_JSON, notificationsJson);
             sendBroadcast(broadcastIntent);

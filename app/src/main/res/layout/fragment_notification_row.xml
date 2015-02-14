@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/frag_home_notification_text"
+        android:id="@+id/frag_notification_text"
         android:layout_width="fill_parent"
         android:layout_height="64dp "
         android:textSize="20sp"

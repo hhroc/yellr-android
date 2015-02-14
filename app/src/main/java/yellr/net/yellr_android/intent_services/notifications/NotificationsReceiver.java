@@ -1,3 +1,4 @@
+/*
 package yellr.net.yellr_android.intent_services.notifications;
 
 import android.content.BroadcastReceiver;
@@ -92,3 +93,4 @@ public class NotificationsReceiver extends BroadcastReceiver {
 
     }
 }
+*/

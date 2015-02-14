@@ -111,12 +111,14 @@ public class NotificationsFragment extends Fragment{
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
     }
 
     @Override
@@ -168,22 +170,39 @@ public class NotificationsFragment extends Fragment{
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            String notificationsJson = intent.getStringExtra(NotificationsIntentService.PARAM_NOTIFICATIONS_JSON);
+            Log.d("NotificationsReceiver.onReceive()", "New notifications payload ...");
 
-            Gson gson = new Gson();
-            NotificationsResponse response = gson.fromJson(notificationsJson, NotificationsResponse.class);
+            try {
 
-            if (response.success) {
-                notificationsArrayAdapter.clear();
-                notifications = new Notification[response.notifications.length];
-                for (int i = 0; i < response.notifications.length; i++) {
-                    Notification notification = response.notifications[i];
-                    notificationsArrayAdapter.add(notification);
-                    notifications[i] = notification;
+                String notificationsJson = intent.getStringExtra(NotificationsIntentService.PARAM_NOTIFICATIONS_JSON);
+
+                Gson gson = new Gson();
+                NotificationsResponse response = gson.fromJson(notificationsJson, NotificationsResponse.class);
+
+                Log.d("NotificationsReceiver.onReceive()","Success: " + response.success);
+
+                if (response.success) {
+                    notificationsArrayAdapter.clear();
+                    notifications = new Notification[response.notifications.length];
+                    for (int i = 0; i < response.notifications.length; i++) {
+                        Notification notification = response.notifications[i];
+                        notificationsArrayAdapter.add(notification);
+                        notifications[i] = notification;
+                    }
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    Log.d("NotificationsReceiver.onReceive()","notifications.length = " + notifications.length);
+
                 }
-                swipeRefreshLayout.setRefreshing(false);
+
+            } catch ( Exception ex ){
+                Log.d("NotificationsReceiver.onReceive()","ERROR: " + ex.toString());
             }
 
+            /*
+
+
+            */
         }
     }
 
@@ -216,7 +235,7 @@ public class NotificationsFragment extends Fragment{
         private ArrayList<Notification> notifications;
 
         public NotificationsArrayAdapter(Context context, ArrayList<Notification> notifications) {
-            super(context, R.layout.fragment_notification_row, R.id.frag_home_notification_text, notifications);
+            super(context, R.layout.fragment_notification_row, R.id.frag_notification_text, notifications);
             this.notifications = notifications;
         }
 
@@ -224,7 +243,9 @@ public class NotificationsFragment extends Fragment{
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = super.getView(position, convertView, parent);
 
-            TextView textViewNotificationText = (TextView) row.findViewById(R.id.frag_home_notification_text);
+            Log.d("NotificationsArrayAdapter.getView()","Updating view ...");
+
+            TextView textViewNotificationText = (TextView) row.findViewById(R.id.frag_notification_text);
 
             String notificationText = "";
 
@@ -233,10 +254,13 @@ public class NotificationsFragment extends Fragment{
                     notificationText = "Your post was successful!";
                     break;
                 case "post_viewed":
+                    notificationText = "Your post was viewed by " + notifications.get(position).payload.organization + "!";
                     break;
                 case "new_message":
+                    notificationText = "You have new message from " + notifications.get(position).payload.organization + "!";
                     break;
                 case"message_sent":
+                    notificationText = "Your message was successfully sent.";
                     break;
                 default:
                     notificationText = "Generic notification";
