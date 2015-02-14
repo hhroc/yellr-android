@@ -82,6 +82,11 @@
             android:exported="true" >
         </receiver>
 
+        <activity
+            android:name=".activities.NotificationsActivity"
+            android:label="@string/title_activity_notifications" >
+        </activity>
+
         <service
             android:name=".intent_services.notifications.NotificationsIntentService"
             android:exported="false" >

@@ -163,6 +163,11 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                 startActivity(postIntent);
                 break;
 
+            case R.id.action_notification:
+                Intent notificationsIntent = new Intent(this, NotificationsActivity.class);
+                startActivity(notificationsIntent);
+                break;
+
             case R.id.action_profile:
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
                 startActivity(profileIntent);

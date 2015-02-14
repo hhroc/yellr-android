@@ -41,7 +41,7 @@ public class NotificationsIntentService extends IntentService {
      */
     private void handleActionGetNotifications(String clientId) {
 
-        //Log.d("NotificationsIntentService.UpdateData()", "Starting UpdateData() ...");
+        Log.d("NotificationsIntentService.handleActionGetNotifications()", "Starting handleActionGetNotifications() ...");
 
         String baseUrl = "http://yellr.mycodespace.net/get_notifications.json";
 
