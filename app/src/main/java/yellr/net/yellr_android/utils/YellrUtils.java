@@ -1,11 +1,14 @@
 package yellr.net.yellr_android.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by TDuffy on 2/7/2015.
@@ -46,5 +49,29 @@ public class YellrUtils {
         return null;
     }
 
+    public static String getUUID(Context context) {
+        String clientId;
+        SharedPreferences sharedPref = context.getSharedPreferences("clientId", Context.MODE_PRIVATE);
+        clientId = sharedPref.getString("clientId", "");
 
+        // check to see if there is a clientId on the device, if not created one
+        if (clientId.equals("")){
+
+            clientId = UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("clientId", clientId);
+            editor.commit();
+        }
+        return clientId;
+    }
+
+    public static void resetUUID(Context context){
+        String clientId;
+        SharedPreferences sharedPref = context.getSharedPreferences("clientId", Context.MODE_PRIVATE);
+
+        clientId = UUID.randomUUID().toString();
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("clientId", clientId);
+        editor.commit();
+    }
 }

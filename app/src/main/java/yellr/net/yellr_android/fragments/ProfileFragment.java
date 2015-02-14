@@ -6,56 +6,60 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.joanzapata.android.iconify.IconDrawable;
+import com.joanzapata.android.iconify.Iconify;
+
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.intent_services.profile.ProfileIntentService;
 import yellr.net.yellr_android.intent_services.profile.ProfileResponse;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public static final String DIALOG_RESET_UUID = "yellr.net.yellr_android.dialog.RESET_UUID";
 
     private String clientId;
-
-    private OnFragmentInteractionListener mListener;
+    private TextView userImage;
+    private TextView userName;
+    TextView userUUID;
+    private TextView userVerifiedIcon;
+    private TextView userVerified;
+    TextView postsIcon;
+    private TextView postsNumber;
+    TextView postsViewedIcon;
+    private TextView postsViewedNumber;
+    TextView postsUsedIcon;
+    private TextView postsUsedNumber;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,11 +88,12 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
 
         Log.d("ProfileFragment.onCreate()","Setting up IntentService receiver ...");
+
+        setHasOptionsMenu(true);
 
         // get clientId
         SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
@@ -107,46 +112,83 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        userImage = (TextView) view.findViewById(R.id.frag_profile_user_image);
+        userImage.setTypeface(font);
+        userImage.setText(R.string.fa_user_secret);
+
+        userName = (TextView) view.findViewById(R.id.frag_profile_name);
+        userUUID = (TextView) view.findViewById(R.id.frag_profile_id);
+        userUUID.setText(String.format("UUID: %s", clientId));
+
+        userVerified = (TextView) view.findViewById(R.id.frag_profile_verified);
+        userVerifiedIcon = (TextView)view.findViewById(R.id.frag_profile_verified_icon);
+        userVerifiedIcon.setTypeface(font);
+
+        postsIcon = (TextView)view.findViewById(R.id.frag_profile_posts_icon);
+        postsIcon.setTypeface(font);
+        postsNumber = (TextView)view.findViewById(R.id.frag_profile_posts_number);
+
+        postsViewedIcon = (TextView)view.findViewById(R.id.frag_profile_viewed_posts_icon);
+        postsViewedIcon.setTypeface(font);
+        postsViewedNumber = (TextView)view.findViewById(R.id.frag_profile_viewed_posts_number);
+
+        postsUsedIcon = (TextView)view.findViewById(R.id.frag_profile_used_posts_icon);
+        postsUsedIcon.setTypeface(font);
+        postsUsedNumber = (TextView)view.findViewById(R.id.frag_profile_used_posts_number);
+
+        return view;
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_profile, menu);
+        if(this.isAdded()){
+            menu.findItem(R.id.action_profile_signup).setIcon(
+                    new IconDrawable(getActivity(), Iconify.IconValue.fa_user_plus)
+                            .colorRes(R.color.black)
+                            .actionBarSize()
+            );
+            menu.findItem(R.id.action_profile_new_uuid).setIcon(
+                    new IconDrawable(getActivity(), Iconify.IconValue.fa_key)
+                    .colorRes(R.color.black)
+                    .actionBarSize()
+            );
+        } else {
+            Log.d("onCreateOptionsMenu()", "Fragment not added to Activity");
         }
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_profile_new_uuid:
+                ResetUUIDFragment resetUUIDFragment = new ResetUUIDFragment();
+                resetUUIDFragment.setTargetFragment(this, 1);
+                resetUUIDFragment.show(getFragmentManager(), DIALOG_RESET_UUID);
+                break;
+            case R.id.action_profile_signup:
+
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK){
+            userUUID.setText(String.format("UUID: %s", YellrUtils.getUUID(getActivity())));
+            postsNumber.setText("0");
+            postsViewedNumber.setText("0");
+            postsUsedNumber.setText("0");
+        }
     }
 
     public class ProfileReceiver extends BroadcastReceiver {
@@ -158,20 +200,25 @@ public class ProfileFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            //Log.d("ProfileReceiver.onReceive()", "onReceive called.");
-
             String profileJson = intent.getStringExtra(ProfileIntentService.PARAM_PROFILE_JSON);
-
-            //Log.d("ProfileReceiver.onReceive()", "JSON: " + profileJson);
 
             Gson gson = new Gson();
             ProfileResponse response = gson.fromJson(profileJson, ProfileResponse.class);
 
             if ( response.success ) {
+                if(!response.first_name.isEmpty()){
+                    userName.setText(response.first_name + " " + response.last_name);
+                    userImage.setText(R.string.fa_user);
 
-                // TODO: populate GUI with array of Profile
+                }
 
+                if(response.verified){
+                    userVerified.setText("Verified");
+                    userVerifiedIcon.setText(R.string.fa_check_square);
+                }
+                postsNumber.setText(String.valueOf(response.post_count));
+                postsViewedNumber.setText(String.valueOf(response.post_view_count));
+                postsUsedNumber.setText(String.valueOf(response.post_used_count));
             /*
             {
                 "first_name": "",

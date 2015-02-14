@@ -56,7 +56,11 @@
             android:text="@string/fa_camera"
             android:textSize="24dp"
             android:layout_weight="1"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:background="@drawable/yellr_button"
+            android:layout_margin="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
         <Button
             android:id="@+id/frag_post_video_button"
             android:layout_width="wrap_content"
@@ -64,7 +68,11 @@
             android:text="@string/fa_video_camera"
             android:textSize="24dp"
             android:layout_weight="1"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:background="@drawable/yellr_button"
+            android:layout_margin="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
         <Button
             android:id="@+id/frag_post_audio_button"
             android:layout_width="wrap_content"
@@ -72,7 +80,11 @@
             android:text="@string/fa_microphone"
             android:textSize="24dp"
             android:layout_weight="1"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:background="@drawable/yellr_button"
+            android:layout_margin="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
 
     </LinearLayout>
 
