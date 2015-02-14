@@ -65,114 +65,125 @@
         android:layout_alignParentRight="true"
         android:gravity="center"
         android:paddingTop="32dp"/>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/frag_profile_row_posts"
-        android:orientation="horizontal"
+        android:id="@+id/frag_profile_posts_icon"
         android:layout_below="@id/frag_profile_id"
         android:paddingTop="16dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/frag_profile_posts_icon"
-            android:textSize="36dp"
-            android:textColor="@color/black"
-            android:text="@string/fa_comment_o"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="left|center_vertical"
-            android:paddingLeft="16dp"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:layout_weight="1"
-            android:text="@string/frag_profile_posts_description"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:id="@+id/frag_profile_posts_number"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:layout_weight=".25"
-            android:text="32"/>
-        </LinearLayout>
-    <LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/frag_profile_row_viewed_posts"
-    android:orientation="horizontal"
-    android:layout_below="@id/frag_profile_row_posts"
-    android:paddingTop="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+        android:paddingRight="16dp"
+        android:textSize="36dp"
+        android:textColor="@color/black"
+        android:text="@string/fa_comment_o"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/frag_profile_posts_text"
+        android:gravity="left|center_vertical"
+        android:layout_below="@id/frag_profile_id"
+        android:layout_toRightOf="@id/frag_profile_posts_icon"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:layout_alignBottom="@id/frag_profile_posts_icon"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:text="@string/frag_profile_posts_description"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/frag_profile_posts_number"
+        android:layout_below="@id/frag_profile_id"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/frag_profile_posts_icon"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:text="32"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/frag_profile_viewed_posts_icon"
+        android:layout_below="@id/frag_profile_posts_icon"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
         android:textSize="36dp"
         android:textColor="@color/black"
         android:text="@string/fa_eye"
         />
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/frag_profile_viewed_posts_text"
         android:gravity="left|center_vertical"
         android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:layout_toRightOf="@id/frag_profile_viewed_posts_icon"
+        android:layout_below="@id/frag_profile_posts_text"
+        android:layout_alignBottom="@id/frag_profile_viewed_posts_icon"
         android:textSize="24sp"
         android:textColor="@color/black"
-        android:layout_weight="1"
         android:text="@string/frag_profile_viewed_posts_description"/>
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/frag_profile_viewed_posts_number"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/frag_profile_posts_number"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
         android:textSize="24sp"
         android:textColor="@color/black"
         android:gravity="center"
-        android:layout_weight=".25"
         android:text="32"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/frag_profile_row_viewed_posts"
+        android:id="@+id/frag_profile_used_posts_icon"
+        android:textSize="36dp"
         android:paddingTop="16dp"
+        android:paddingRight="16dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/frag_profile_used_posts_icon"
-            android:textSize="36dp"
-            android:textColor="@color/black"
-            android:text="@string/fa_comment"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="left|center_vertical"
-            android:paddingLeft="16dp"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:layout_weight="1"
-            android:text="@string/frag_profile_used_posts_description"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:id="@+id/frag_profile_used_posts_number"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:layout_weight=".25"
-            android:text="32"/>
-    </LinearLayout>
+        android:layout_below="@id/frag_profile_viewed_posts_icon"
+        android:textColor="@color/black"
+        android:text="@string/fa_comment"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/frag_profile_used_posts_text"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:layout_toRightOf="@id/frag_profile_used_posts_icon"
+        android:layout_below="@id/frag_profile_viewed_posts_text"
+        android:layout_alignBottom="@id/frag_profile_used_posts_icon"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:text="@string/frag_profile_used_posts_description"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/frag_profile_used_posts_number"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/frag_profile_viewed_posts_number"
+        android:layout_alignBottom="@id/frag_profile_used_posts_icon"
+        android:gravity="center"
+        android:text="32"/>
 
 </RelativeLayout>
