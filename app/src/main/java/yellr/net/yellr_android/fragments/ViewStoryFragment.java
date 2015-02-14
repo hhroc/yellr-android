@@ -90,7 +90,7 @@ public class ViewStoryFragment extends Fragment {
                 + "<style>"
                 + "body { background-color: #EEEEEE; }"
                 + "div.banner-wrapper { padding: 10px 10px 10px 10px;}"
-                + "#banner-image { max-width: 75%;}"
+                + "img { max-width: 75%;}"
                 + "div.top-text-wrapper { padding: 10px 10px 10px 10px; font-style: italic; text-align: center; font-size: 12px; }"
                 + "div.story-wrapper { padding: 10px 10px 10px 10px; }"
                 + "</style>"
