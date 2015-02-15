@@ -26,6 +26,7 @@ import com.joanzapata.android.iconify.Iconify;
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.intent_services.profile.ProfileIntentService;
 import yellr.net.yellr_android.intent_services.profile.ProfileResponse;
+import yellr.net.yellr_android.intent_services.verify_user.VerifyUserIntentService;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
@@ -138,6 +139,20 @@ public class ProfileFragment extends Fragment {
         postsUsedIcon = (TextView)view.findViewById(R.id.frag_profile_used_posts_icon);
         postsUsedIcon.setTypeface(font);
         postsUsedNumber = (TextView)view.findViewById(R.id.frag_profile_used_posts_number);
+
+        /*
+
+        // todo: hook up to dialog
+
+        Intent verifyUserIntent = new Intent(getActivity(), VerifyUserIntentService.class);
+        verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_CLIENT_ID, clientId);
+        verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_USERNAME, "jefffrank2");
+        verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_PASSWORD, "blah");
+        verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_FIRST_NAME, "Jefferson");
+        verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_LAST_NAME, "Franklin");
+        verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_EMAIL, "c@c.com");
+        getActivity().startService(verifyUserIntent);
+        */
 
         return view;
     }
