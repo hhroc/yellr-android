@@ -27,6 +27,7 @@
     <string name="fa_key">&#xf084;</string>
     <string name="fa_random">&#xf074;</string>
     <string name="fa_eye">&#xf06e;</string>
+    <string name="fa_chevron_left_circle">&#xf137;</string>
 
     <!-- Actionbar Action Buttons -->
     <string name="action_notification">Notifications</string>

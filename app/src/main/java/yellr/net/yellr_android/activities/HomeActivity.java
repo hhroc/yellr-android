@@ -1,12 +1,8 @@
 package yellr.net.yellr_android.activities;
 
 import java.util.Locale;
-import java.util.UUID;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -54,7 +50,8 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         //
         // See if we have a clientId in shared preferences, and if we
         // don't then create one
-        //
+        // TODO this actually set's a UUID of there isn't one
+        // This should be a seperate check
         String clientId = YellrUtils.getUUID(this);
 
         //IntentServicesHelper.getAssignments(this,clientId);
