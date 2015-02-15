@@ -223,17 +223,16 @@ public class PostFragment extends Fragment {
 
                 Log.d("PostFragment.onActivityResult()", "Attempting to display image thumbnail ...");
 
-                //Bundle extras = data.getExtras();
-                //Bitmap imageBitmap = (Bitmap) extras.get("data");
-
                 this.mediaType = "image";
                 this.imageFilename = proposedImageFilename;
 
+                // generate preview
                 Bitmap imageBitmap = BitmapFactory.decodeFile(this.imageFilename);
                 imagePreview.setImageBitmap(imageBitmap);
+                //imagePreview.set (this.imageFilename);
 
             } else {
-                Toast.makeText(getActivity(), "result code was not RESULT_OK", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "result code was not RESULT_OK", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -267,11 +266,6 @@ public class PostFragment extends Fragment {
     }
 
     private void SubmitPostToYellr() {
-        //Gson gson = new Gson();
-        //MediaObjectDefinition mod = new MediaObjectDefinition();
-        //mod.mediaType = "text";
-        //mod.mediaText = postText.getText().toString();
-        //String mediaObject = "[" + gson.toJson(mod) + "]"; //Hack to make it an array
 
         Intent postIntent = new Intent(getActivity(), PublishPostIntentService.class);
         postIntent.putExtra("clientId", clientId);
@@ -284,18 +278,17 @@ public class PostFragment extends Fragment {
 
         Log.d("SubmitPostToYellr()","Starting PublishPostIntentService intent ...");
 
-        Toast.makeText(getActivity(), "Sending " + this.imageFilename, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Sending post ...", Toast.LENGTH_SHORT).show();
 
-        //postIntent.putExtra("title", "_");
-        //postIntent.putExtra("mediaObjectDefinitionsJson", mediaObject);
+        // launch intent service
         getActivity().startService(postIntent);
 
+        // reset display
         postText.setText("");
         assignmentQuestion.setText(R.string.fragment_post_assignment_title);
         assignmentDescription.setText(R.string.fragment_post_assignment_description);
 
-
-
+        // go back to home screen
         Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(homeIntent);
