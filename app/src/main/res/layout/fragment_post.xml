@@ -40,7 +40,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/frag_post_imagepreview"
-        android:paddingTop="30dp"
+        android:textCursorDrawable="@null"
+        android:paddingTop="32dp"
         android:hint="@string/frag_post_edittext"/>
 
     <TextView
