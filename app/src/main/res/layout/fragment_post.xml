@@ -26,10 +26,10 @@
         android:id="@+id/frag_post_imagepreview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="30dp"
-        android:maxHeight="100dp"
+        android:paddingTop="20dp"
+        android:maxHeight="175dp"
 
-        android:minHeight="80dp"
+        android:minHeight="175dp"
 
         android:adjustViewBounds="true"
         android:layout_centerInParent="true"
