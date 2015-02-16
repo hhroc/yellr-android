@@ -2,8 +2,11 @@ package yellr.net.yellr_android.activities;
 
 import java.util.Locale;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -12,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +27,10 @@ import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
 import yellr.net.yellr_android.fragments.PostFragment;
 import yellr.net.yellr_android.fragments.StoriesFragment;
+import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
+import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
+import yellr.net.yellr_android.intent_services.profile.ProfileIntentService;
+import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, AssignmentsFragment.OnFragmentInteractionListener, StoriesFragment.OnFragmentInteractionListener {
@@ -41,6 +49,66 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+
+    static int CHECK_FOR_NEW_DATA_INTERVAL = 15 * 60 * 1000; // 15 minutes
+    final Handler checkNewDataHandler = new Handler();
+    Runnable checkNewDatarunable = new Runnable() {
+
+        @Override
+        public void run() {
+            try{
+
+                Log.d("checkNewDatarunable.run()","Calling all intent services to update HTTP data ...");
+
+                //do your code here
+
+                SharedPreferences sharedPref = getSharedPreferences("clientId", Context.MODE_PRIVATE);
+                String clientId = sharedPref.getString("clientId", "");
+
+                Context context = getApplicationContext();
+
+                // Assignments Intent Service
+                Intent assignmentsWebIntent = new Intent(context, AssignmentsIntentService.class);
+                assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CLIENT_ID, clientId);
+                assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
+                context.startService(assignmentsWebIntent);
+
+                // Notifications Intent Service
+                Intent notificationsWebIntent = new Intent(context, NotificationsIntentService.class);
+                notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CLIENT_ID, clientId);
+                notificationsWebIntent.setAction(NotificationsIntentService.ACTION_GET_NOTIFICATIONS);
+                context.startService(notificationsWebIntent);
+
+                // Stories Intent Service
+                Intent storiesWebIntent = new Intent(context, StoriesIntentService.class);
+                storiesWebIntent.putExtra(StoriesIntentService.PARAM_CLIENT_ID, clientId);
+                storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
+                context.startService(storiesWebIntent);
+
+                // Profile Intent Service
+                Intent profileWebIntent = new Intent(context, ProfileIntentService.class);
+                profileWebIntent.putExtra(ProfileIntentService.PARAM_CLIENT_ID, clientId);
+                profileWebIntent.setAction(ProfileIntentService.ACTION_GET_PROFILE);
+                context.startService(profileWebIntent);
+
+                //also call the same runnable
+                //checkNewDataHandler.postDelayed(this, CHECK_FOR_NEW_DATA_INTERVAL);
+            }
+            catch (Exception e) {
+
+                Log.d("checkNewDatarunable.run()","ERROR: " + e.toString());
+
+                // TODO: handle exception
+            }
+            finally{
+
+                Log.d("checkNewDatarunable.run()","re-launching postDelayed");
+
+                //also call the same runnable
+                checkNewDataHandler.postDelayed(this, CHECK_FOR_NEW_DATA_INTERVAL);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +161,10 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                             .setTabListener(this));
         }
 
+        Log.d("HomeActivity.onCreate()","Calling postDelayed on new data handler, delay: " + String.valueOf(CHECK_FOR_NEW_DATA_INTERVAL));
+
+        // fire handler to check for new data
+        checkNewDataHandler.postDelayed(checkNewDatarunable, CHECK_FOR_NEW_DATA_INTERVAL);
 
     }
 
