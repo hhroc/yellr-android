@@ -21,5 +21,4 @@ public class PostActivity extends ActionBarActivity {
                     .commit();
         }
     }
-
 }
