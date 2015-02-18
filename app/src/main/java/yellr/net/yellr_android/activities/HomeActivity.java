@@ -35,7 +35,7 @@ import yellr.net.yellr_android.receivers.CheckHttpReceiver;
 import yellr.net.yellr_android.receivers.CheckHttpStoriesReceiver;
 import yellr.net.yellr_android.utils.YellrUtils;
 
-public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, AssignmentsFragment.OnFragmentInteractionListener, StoriesFragment.OnFragmentInteractionListener {
+public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -204,11 +204,6 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     /**
