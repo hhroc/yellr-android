@@ -29,6 +29,7 @@ import yellr.net.yellr_android.activities.PostActivity;
 import yellr.net.yellr_android.intent_services.assignments.Assignment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,9 +73,8 @@ public class AssignmentsFragment extends Fragment {
         if (getArguments() != null) {
         }
 
-        // get clientId
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("cuid", Context.MODE_PRIVATE);
-        cuid = sharedPref.getString("cuid", "");
+        // get the cuid
+        this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
 
         // init new assignments receiver
         Context context = getActivity().getApplicationContext();

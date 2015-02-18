@@ -36,12 +36,12 @@ import yellr.net.yellr_android.utils.YellrUtils;
  */
 public class ProfileFragment extends Fragment {
 
-    public static final String DIALOG_RESET_UUID = "yellr.net.yellr_android.dialog.RESET_UUID";
+    public static final String DIALOG_RESET_CUID = "yellr.net.yellr_android.dialog.RESET_CUID";
 
-    private String clientId;
+    private String cuid;
     private TextView userImage;
     private TextView userName;
-    TextView userUUID;
+    TextView userCUID;
     private TextView userVerifiedIcon;
     private TextView userVerified;
     TextView postsIcon;
@@ -80,7 +80,7 @@ public class ProfileFragment extends Fragment {
         // init service
         Context context = getActivity().getApplicationContext();
         Intent profileWebIntent = new Intent(context, ProfileIntentService.class);
-        profileWebIntent.putExtra(ProfileIntentService.PARAM_CUID, clientId);
+        profileWebIntent.putExtra(ProfileIntentService.PARAM_CUID, cuid);
         profileWebIntent.setAction(ProfileIntentService.ACTION_GET_PROFILE);
         context.startService(profileWebIntent);
     }
@@ -96,9 +96,8 @@ public class ProfileFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        // get clientId
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
-        clientId = sharedPref.getString("clientId", "");
+        // get the cuid
+        this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
 
         // init new profile receiver
         Context context = getActivity().getApplicationContext();
@@ -121,8 +120,8 @@ public class ProfileFragment extends Fragment {
         userImage.setText(R.string.fa_user_secret);
 
         userName = (TextView) view.findViewById(R.id.frag_profile_name);
-        userUUID = (TextView) view.findViewById(R.id.frag_profile_id);
-        userUUID.setText(String.format("UUID: %s", clientId));
+        userCUID = (TextView) view.findViewById(R.id.frag_profile_id);
+        userCUID.setText(String.format("CUID: %s", cuid));
 
         userVerified = (TextView) view.findViewById(R.id.frag_profile_verified);
         userVerifiedIcon = (TextView)view.findViewById(R.id.frag_profile_verified_icon);
@@ -145,7 +144,7 @@ public class ProfileFragment extends Fragment {
         // todo: hook up to dialog
 
         Intent verifyUserIntent = new Intent(getActivity(), VerifyUserIntentService.class);
-        verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_CLIENT_ID, clientId);
+        verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_CLIENT_ID, cuid);
         verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_USERNAME, "jefffrank2");
         verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_PASSWORD, "blah");
         verifyUserIntent.putExtra(VerifyUserIntentService.PARAM_FIRST_NAME, "Jefferson");
@@ -181,9 +180,9 @@ public class ProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_profile_new_uuid:
-                ResetUUIDFragment resetUUIDFragment = new ResetUUIDFragment();
-                resetUUIDFragment.setTargetFragment(this, 1);
-                resetUUIDFragment.show(getFragmentManager(), DIALOG_RESET_UUID);
+                ResetCUIDFragment resetCUIDFragment = new ResetCUIDFragment();
+                resetCUIDFragment.setTargetFragment(this, 1);
+                resetCUIDFragment.show(getFragmentManager(), DIALOG_RESET_CUID);
                 break;
             case R.id.action_profile_signup:
 
@@ -199,7 +198,7 @@ public class ProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK){
-            userUUID.setText(String.format("UUID: %s", YellrUtils.getUUID(getActivity())));
+            userCUID.setText(String.format("CUID: %s", YellrUtils.getCUID(getActivity())));
             postsNumber.setText("0");
             postsViewedNumber.setText("0");
             postsUsedNumber.setText("0");
@@ -221,7 +220,8 @@ public class ProfileFragment extends Fragment {
             ProfileResponse response = gson.fromJson(profileJson, ProfileResponse.class);
 
             if ( response.success ) {
-                if(!response.first_name.isEmpty()){
+                if(response.first_name != null && response.last_name != null &&
+                        !response.first_name.isEmpty() && !response.last_name.isEmpty()){
                     userName.setText(response.first_name + " " + response.last_name);
                     userImage.setText(R.string.fa_user);
 

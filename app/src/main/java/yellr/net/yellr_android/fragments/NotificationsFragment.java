@@ -40,7 +40,7 @@ public class NotificationsFragment extends Fragment{
     private OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
-    private String clientId;
+    private String cuid;
     private NotificationsArrayAdapter notificationsArrayAdapter;
 
     private Notification[] notifications;
@@ -71,9 +71,8 @@ public class NotificationsFragment extends Fragment{
 
         Log.d("NotificationsFragment.onCreate()", "Creating fragment ...");
 
-        // get clientId
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
-        clientId = sharedPref.getString("clientId", "");
+        // get the cuid
+        this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
 
         // init new notifications receiver
         Context context = getActivity().getApplicationContext();
@@ -138,7 +137,7 @@ public class NotificationsFragment extends Fragment{
         // init service
         Context context = getActivity().getApplicationContext();
         Intent notificationsWebIntent = new Intent(context, NotificationsIntentService.class);
-        notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CUID, clientId);
+        notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CUID, cuid);
         notificationsWebIntent.setAction(NotificationsIntentService.ACTION_GET_NOTIFICATIONS);
         context.startService(notificationsWebIntent);
     }
