@@ -4,6 +4,9 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -40,7 +43,7 @@ public class PublishPostIntentService extends IntentService {
     public static final String ACTION_GET_PUBLISH_POST =
             "yellr.net.yellr_android.action.GET_PUBLISH_POST";
 
-    public static final String PARAM_CLIENT_ID = "clientId";
+    public static final String PARAM_CUID = "cuid";
     public static final String PARAM_ASSIGNMENT_ID = "assignmentId";
     public static final String PARAM_TEXT = "text";
     public static final String PARAM_MEDIA_TYPE = "mediaType";
@@ -60,7 +63,7 @@ public class PublishPostIntentService extends IntentService {
 
         //Log.d("PublishPostIntentService.onHandleIntent()","Decoding intent action ...");
 
-        String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
+        String cuid = intent.getStringExtra(PARAM_CUID);
         int assignmentId = intent.getIntExtra(PARAM_ASSIGNMENT_ID, 0);
         //String title = intent.getStringExtra(PARAM_TITLE);
         String text = intent.getStringExtra(PARAM_TEXT);
@@ -79,14 +82,14 @@ public class PublishPostIntentService extends IntentService {
 
         //String[] imageFilenames
 
-        handleActionGetPublishPost(clientId, assignmentId, mediaType, text, imageFilename, audioFilename, videoFilename);
+        handleActionGetPublishPost(cuid, assignmentId, mediaType, text, imageFilename, audioFilename, videoFilename);
 
     }
 
     /**
      * Handles get PublishPost
      */
-    private void handleActionGetPublishPost(String clientId,
+    private void handleActionGetPublishPost(String cuid,
                                             int assignmentId,
                                             String mediaType,
                                             String text,
@@ -110,34 +113,15 @@ public class PublishPostIntentService extends IntentService {
         //double latitude = location.getLatitude();
         //double longitude = location.getLongitude();
 
-        double latitude = 43.2;
-        double longitude = -77.5;
+        //double latitude = 43.2;
+        //double longitude = -77.5;
 
-        String publishPostUrl = "http://yellr.mycodespace.net/publish_post.json";
+        //String publishPostUrl = "http://yellr.mycodespace.net/publish_post.json";
 
-        String languageCode = Locale.getDefault().getLanguage();
+
 
         Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Uploading media objects ...");
-        /*
-        Gson gson = new Gson();
 
-        String[] mediaObjectIds = new String[mediaObjectDefinitions.length];
-        //TODO check for no mediaObjectDefinitions
-        for(int i = 0; i<mediaObjectDefinitions.length; i++) {
-
-            String mediaObjectResponseJson = uploadMedia(
-                    clientId,
-                    mediaObjectDefinitions[i].mediaType,
-                    mediaObjectDefinitions[i].mediaFilename,
-                    mediaObjectDefinitions[i].mediaText,
-                    mediaObjectDefinitions[i].mediaCaption);
-
-            mediaObjectIds[i] =
-                    gson.fromJson(mediaObjectResponseJson,MediaObjectResponse.class).media_id;
-
-        }
-        */
-        //Log.d("PublishPostIntentService.handleActionGetPublishPost()","Publishing post ...");
 
         //String mediaType = "text";
         String mediaFilename = "";
@@ -165,7 +149,7 @@ public class PublishPostIntentService extends IntentService {
         // TODO: switch on media type
 
         String mediaObjectResponseJson = uploadMedia(
-                clientId,
+                cuid,
                 mediaType,
                 mediaFilename,
                 mediaText,
@@ -176,37 +160,64 @@ public class PublishPostIntentService extends IntentService {
 
         //String mediaObjectIdsJson = gson.toJson(mediaObjectIds);
         String publishPostJson = publishPost(
-                clientId,
+                cuid,
                 assignmentId,
-                languageCode,
+                //languageCode,
                 //title,
-                latitude,
-                longitude,
+                //latitude,
+                //longitude,
                 mediaId);
         //mediaObjectIdsJson);
 
 
     }
 
-    private String publishPost(String clientId,
+    private String publishPost(String cuid,
                                int assignmentId,
-                               String languageCode,
+                               //String languageCode,
                                //String title,
-                               double lat,
-                               double lng,
+                               //double lat,
+                               //double lng,
                                String mediaId) {
         //String mediaObjects){
 
-        String uploadMediaUrl = "http://yellr.mycodespace.net/publish_post.json";
+        String baseUrl = "http://yellr.mycodespace.net/publish_post.json";
+
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        String bestProvider = lm.getBestProvider(criteria, true);
+        Location location = lm.getLastKnownLocation(bestProvider); //LocationManager.GPS_PROVIDER);
+        // default to center of Rochester, NY
+        double latitude = 43.1656;
+        double longitude = -77.6114;
+        // if we have a location available, then set it
+        if ( location != null ){
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        } else {
+            Log.d("PublishPostIntentService.handleActionGetAssignments()","No location available, defaulting to Rochester, NY");
+        }
+
+        String lat = String.valueOf(latitude);
+        String lng = String.valueOf(longitude);
+
+        String languageCode = Locale.getDefault().getLanguage();
+
+        String url =  baseUrl
+                + "?cuid=" + cuid
+                + "&language_code=" + languageCode
+                + "&lat=" + lat
+                + "&lng=" + lng;
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-        params.add(new BasicNameValuePair("client_id", clientId));
+        //params.add(new BasicNameValuePair("cuid", cuid));
         params.add(new BasicNameValuePair("assignment_id", String.valueOf(assignmentId)));
-        params.add(new BasicNameValuePair("language_code", languageCode));
+        //params.add(new BasicNameValuePair("language_code", languageCode));
         //params.add(new BasicNameValuePair("title", title));
-        params.add(new BasicNameValuePair("lat", String.valueOf(lat)));
-        params.add(new BasicNameValuePair("lng", String.valueOf(lng)));
+        //params.add(new BasicNameValuePair("lat", String.valueOf(lat)));
+        //params.add(new BasicNameValuePair("lng", String.valueOf(lng)));
         params.add(new BasicNameValuePair("media_objects", "[\"" + mediaId + "\"]"));
 
         //
@@ -216,7 +227,7 @@ public class PublishPostIntentService extends IntentService {
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
-        HttpPost httpPost = new HttpPost(uploadMediaUrl);
+        HttpPost httpPost = new HttpPost(url);
 
         String publishPostJson = "{}";
 
@@ -260,7 +271,7 @@ public class PublishPostIntentService extends IntentService {
 
     }
 
-    private String uploadMedia(String clientId,
+    private String uploadMedia(String cuid,
                                String mediaType,
                                String mediaFilename,
                                String mediaText,
@@ -269,11 +280,38 @@ public class PublishPostIntentService extends IntentService {
         Log.d("uploadMedia()", "media type: " + mediaType);
         //Log.d("uploadMedia()", "param name: " + params.get(index).getName());
 
-        String uploadMediaUrl = "http://yellr.mycodespace.net/upload_media.json";
+        String baseUrl = "http://yellr.mycodespace.net/upload_media.json";
+
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        String bestProvider = lm.getBestProvider(criteria, true);
+        Location location = lm.getLastKnownLocation(bestProvider); //LocationManager.GPS_PROVIDER);
+        // default to center of Rochester, NY
+        double latitude = 43.1656;
+        double longitude = -77.6114;
+        // if we have a location available, then set it
+        if ( location != null ){
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        } else {
+            Log.d("PublishPostIntentService.handleActionGetAssignments()","No location available, defaulting to Rochester, NY");
+        }
+
+        String lat = String.valueOf(latitude);
+        String lng = String.valueOf(longitude);
+
+        String languageCode = Locale.getDefault().getLanguage();
+
+        String url =  baseUrl
+                + "?cuid=" + cuid
+                + "&language_code=" + languageCode
+                + "&lat=" + lat
+                + "&lng=" + lng;
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-        params.add(new BasicNameValuePair("client_id", clientId));
+        //params.add(new BasicNameValuePair("cuid", cuid));
         params.add(new BasicNameValuePair("media_type", mediaType));
 
         if (!mediaFilename.equals("")) {
@@ -295,7 +333,7 @@ public class PublishPostIntentService extends IntentService {
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
-        HttpPost httpPost = new HttpPost(uploadMediaUrl);
+        HttpPost httpPost = new HttpPost(url);
 
         String uploadMediaJson = "{}";
 

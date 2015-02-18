@@ -31,12 +31,14 @@ import com.joanzapata.android.iconify.Iconify;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.activities.HomeActivity;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
  * Created by Andy on 2/6/2015.
@@ -61,7 +63,7 @@ public class PostFragment extends Fragment {
     ImageView imagePreview;
 
     // Post Details
-    String clientId;
+    String cuid;
     int assignmentId;
     String questionText;
     String questionDescription;
@@ -112,10 +114,9 @@ public class PostFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        // read the clientId from the device.
-        // TODO: null pointer check
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
-        clientId = sharedPref.getString("clientId", "");
+        // get the cuid
+        this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
+
     }
 
     @Override
@@ -268,17 +269,17 @@ public class PostFragment extends Fragment {
     private void SubmitPostToYellr() {
 
         Intent postIntent = new Intent(getActivity(), PublishPostIntentService.class);
-        postIntent.putExtra("clientId", clientId);
-        postIntent.putExtra("assignmentId", assignmentId);
-        postIntent.putExtra("text", postText.getText().toString());
-        postIntent.putExtra("mediaType", this.mediaType);
+        postIntent.putExtra(PublishPostIntentService.PARAM_CUID, cuid);
+        postIntent.putExtra(PublishPostIntentService.PARAM_ASSIGNMENT_ID, assignmentId);
+        postIntent.putExtra(PublishPostIntentService.PARAM_TEXT, postText.getText().toString());
+        postIntent.putExtra(PublishPostIntentService.PARAM_MEDIA_TYPE, this.mediaType);
         postIntent.putExtra(PublishPostIntentService.PARAM_IMAGE_FILENAME, this.imageFilename);
         postIntent.putExtra(PublishPostIntentService.PARAM_AUDIO_FILENAME, this.audioFilename);
         postIntent.putExtra(PublishPostIntentService.PARAM_VIDEO_FILENAME, this.videoFilename);
 
         Log.d("SubmitPostToYellr()","Starting PublishPostIntentService intent ...");
 
-        Toast.makeText(getActivity(), "Sending post ...", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Sending post ...", Toast.LENGTH_SHORT).show();
 
         // launch intent service
         getActivity().startService(postIntent);

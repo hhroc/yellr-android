@@ -1,7 +1,11 @@
 package yellr.net.yellr_android.intent_services.stories;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -23,7 +27,7 @@ public class StoriesIntentService extends IntentService {
     public static final String ACTION_GET_STORIES =
             "yellr.net.yellr_android.action.GET_STORIES";
 
-    public static final String PARAM_CLIENT_ID = "clientId";
+    public static final String PARAM_CUID = "clientId";
     public static final String PARAM_STORIES_JSON = "StoriesJson";
 
     public StoriesIntentService() {
@@ -36,33 +40,32 @@ public class StoriesIntentService extends IntentService {
 
         //Log.d("StoriesIntentService.onHandleIntent()","Decoding intent action ...");
 
-        String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
-        handleActionGetStories(clientId);
+        String cuid = intent.getStringExtra(PARAM_CUID);
+        handleActionGetStories(cuid);
     }
 
     /**
      * Handles get Stories
      */
-    private void handleActionGetStories(String clientId) {
-
-        //Log.d("StoriesIntentService.UpdateData()", "Starting UpdateData() ...");
-
-        // get location data
-
-        // via: http://stackoverflow.com/a/2227299
-        // TODO: check for last known good, and if null then
-        //       poll to get a fresh location.  This will be
-        //       okay for now though, even if it takes a while
-        //       to complete (since it's in the service)
-        //LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        //Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        //double latitude = location.getLatitude();
-        //double longitude = location.getLongitude();
-
-        double latitude = 43.2;
-        double longitude = -77.5;
+    private void handleActionGetStories(String cuid) {
 
         String baseUrl = "http://yellr.mycodespace.net/get_stories.json";
+
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        String bestProvider = lm.getBestProvider(criteria, true);
+        Location location = lm.getLastKnownLocation(bestProvider); //LocationManager.GPS_PROVIDER);
+        // default to center of Rochester, NY
+        double latitude = 43.1656;
+        double longitude = -77.6114;
+        // if we have a location available, then set it
+        if ( location != null ){
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        } else {
+            Log.d("AssignmentsIntentService.handleActionGetAssignments()","No location available, defaulting to Rochester, NY");
+        }
 
         String lat = String.valueOf(latitude);
         String lng = String.valueOf(longitude);
@@ -70,11 +73,10 @@ public class StoriesIntentService extends IntentService {
         String languageCode = Locale.getDefault().getLanguage();
 
         String url =  baseUrl
-                + "?client_id=" + clientId
+                + "?cuid=" + cuid
                 + "&language_code=" + languageCode
                 + "&lat=" + lat
                 + "&lng=" + lng;
-
         //Log.d("StoriesIntentService.UpdateData()","URL: " + url);
 
         //
