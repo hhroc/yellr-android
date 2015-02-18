@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
-import yellr.net.yellr_android.activities.HomeActivity;
 import yellr.net.yellr_android.fragments.ProfileFragment;
 
 public class ProfileIntentService extends IntentService {

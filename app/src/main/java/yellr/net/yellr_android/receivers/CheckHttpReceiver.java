@@ -3,16 +3,9 @@ package yellr.net.yellr_android.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
-import java.util.Arrays;
-
-import yellr.net.yellr_android.intent_services.assignments.Assignment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
-import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
 import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
 import yellr.net.yellr_android.intent_services.profile.ProfileIntentService;
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;

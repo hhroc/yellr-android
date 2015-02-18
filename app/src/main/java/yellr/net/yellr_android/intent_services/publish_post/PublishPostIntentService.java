@@ -3,12 +3,9 @@ package yellr.net.yellr_android.intent_services.publish_post;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,7 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -166,7 +162,13 @@ public class PublishPostIntentService extends IntentService {
                 mediaCaption
         );
         Gson gson = new Gson();
-        String mediaId = gson.fromJson(mediaObjectResponseJson, MediaObjectResponse.class).media_id;
+        String mediaId = new String();
+        try{
+            mediaId = gson.fromJson(mediaObjectResponseJson, MediaObjectResponse.class).media_id;
+        } catch (Exception e){
+            Log.d("PublishPostIntentService.handleActionGetPublishedPost", "GSON puked");
+        }
+
 
         //String mediaObjectIdsJson = gson.toJson(mediaObjectIds);
         String publishPostJson = publishPost(
@@ -178,7 +180,6 @@ public class PublishPostIntentService extends IntentService {
                 //longitude,
                 mediaId);
         //mediaObjectIdsJson);
-
 
     }
 
@@ -257,15 +258,21 @@ public class PublishPostIntentService extends IntentService {
             httpPost.setEntity(entity);
 
             HttpResponse response = httpClient.execute(httpPost, localContext);
-
+            final String toastMsg;
             if(response.getStatusLine().getStatusCode() == 200){
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Post Successful!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                toastMsg = "Post Successful!";
+            } else {
+                toastMsg = "Problem Submitting Post.";
             }
+
+            handler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
 
             //
             InputStream content = response.getEntity().getContent();

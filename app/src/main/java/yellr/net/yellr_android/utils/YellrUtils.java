@@ -2,12 +2,9 @@ package yellr.net.yellr_android.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
 

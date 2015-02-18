@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -34,7 +33,12 @@ public class CheckHttpStoriesReceiver extends BroadcastReceiver {
 
         String storiesJson = intent.getStringExtra(StoriesIntentService.PARAM_STORIES_JSON);
         Gson gson = new Gson();
-        StoriesResponse response = gson.fromJson(storiesJson, StoriesResponse.class);
+        StoriesResponse response = new StoriesResponse();
+        try{
+            response = gson.fromJson(storiesJson, StoriesResponse.class);
+        } catch (Exception e){
+            Log.d("CheckHttpStoriesReceiver.onReceive", "GSON puked");
+        }
 
         boolean newStories = false;
         if (response.success) {

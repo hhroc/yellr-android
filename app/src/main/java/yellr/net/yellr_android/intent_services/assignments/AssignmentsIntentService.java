@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -17,15 +15,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
-
-import yellr.net.yellr_android.activities.HomeActivity;
-import yellr.net.yellr_android.fragments.AssignmentsFragment;
 
 public class AssignmentsIntentService extends IntentService {
     public static final String ACTION_GET_ASSIGNMENTS =

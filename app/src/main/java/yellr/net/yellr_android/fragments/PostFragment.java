@@ -1,9 +1,7 @@
 package yellr.net.yellr_android.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,10 +28,6 @@ import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
 import java.io.File;
-import java.io.IOException;
-import java.security.PublicKey;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.activities.HomeActivity;

@@ -4,13 +4,10 @@ import java.util.Locale;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -23,8 +20,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
@@ -34,15 +29,13 @@ import yellr.net.yellr_android.fragments.AssignmentsFragment;
 import yellr.net.yellr_android.fragments.PostFragment;
 import yellr.net.yellr_android.fragments.StoriesFragment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
-import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
-import yellr.net.yellr_android.intent_services.profile.ProfileIntentService;
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
 import yellr.net.yellr_android.receivers.CheckHttpAssignmentsReceiver;
 import yellr.net.yellr_android.receivers.CheckHttpReceiver;
 import yellr.net.yellr_android.receivers.CheckHttpStoriesReceiver;
 import yellr.net.yellr_android.utils.YellrUtils;
 
-public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, AssignmentsFragment.OnFragmentInteractionListener, StoriesFragment.OnFragmentInteractionListener {
+public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -211,11 +204,6 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     /**
