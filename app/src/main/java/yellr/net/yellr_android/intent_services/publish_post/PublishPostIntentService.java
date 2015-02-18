@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,6 +41,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class PublishPostIntentService extends IntentService {
+
+    private Handler handler;
+
     public static final String ACTION_GET_PUBLISH_POST =
             "yellr.net.yellr_android.action.GET_PUBLISH_POST";
 
@@ -56,6 +60,12 @@ public class PublishPostIntentService extends IntentService {
     public PublishPostIntentService() {
         super("PublishPostIntentService");
         //Log.d("PublishPostIntentService()","Constructor.");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        handler = new Handler();
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -248,6 +258,15 @@ public class PublishPostIntentService extends IntentService {
 
             HttpResponse response = httpClient.execute(httpPost, localContext);
 
+            if(response.getStatusLine().getStatusCode() == 200){
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Post Successful!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
             //
             InputStream content = response.getEntity().getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(content));
@@ -372,7 +391,6 @@ public class PublishPostIntentService extends IntentService {
 
             HttpResponse response = httpClient.execute(httpPost, localContext);
 
-            //
             InputStream content = response.getEntity().getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(content));
 
