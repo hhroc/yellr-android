@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
+import yellr.net.yellr_android.BuildConfig;
+
 public class StoriesIntentService extends IntentService {
     public static final String ACTION_GET_STORIES =
             "yellr.net.yellr_android.action.GET_STORIES";
@@ -47,7 +49,7 @@ public class StoriesIntentService extends IntentService {
      */
     private void handleActionGetStories(String cuid) {
 
-        String baseUrl = "http://yellr.mycodespace.net/get_stories.json";
+        String baseUrl = BuildConfig.BASE_URL + "/get_stories.json";
 
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();

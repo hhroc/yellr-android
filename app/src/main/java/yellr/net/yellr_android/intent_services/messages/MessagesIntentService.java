@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
+import yellr.net.yellr_android.BuildConfig;
+
 public class MessagesIntentService extends IntentService {
     public static final String ACTION_GET_MESSAGES =
             "yellr.net.yellr_android.action.GET_MESSAGES";
@@ -47,7 +49,7 @@ public class MessagesIntentService extends IntentService {
 
         //Log.d("MessagesIntentService.UpdateData()", "Starting UpdateData() ...");
 
-        String baseUrl = "http://yellr.mycodespace.net/get_messages.json";
+        String baseUrl = BuildConfig.BASE_URL + "/get_messages.json";
 
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();

@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
+import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.fragments.NotificationsFragment;
 
 public class NotificationsIntentService extends IntentService {
@@ -49,7 +50,7 @@ public class NotificationsIntentService extends IntentService {
 
         Log.d("NotificationsIntentService.handleActionGetNotifications()", "Starting handleActionGetNotifications() ...");
 
-        String baseUrl = "http://yellr.mycodespace.net/get_notifications.json";
+        String baseUrl = BuildConfig.BASE_URL + "/get_notifications.json";
 
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();

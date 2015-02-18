@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import yellr.net.yellr_android.BuildConfig;
+
 public class PublishPostIntentService extends IntentService {
 
     private Handler handler;
@@ -122,10 +124,6 @@ public class PublishPostIntentService extends IntentService {
         //double latitude = 43.2;
         //double longitude = -77.5;
 
-        //String publishPostUrl = "http://yellr.mycodespace.net/publish_post.json";
-
-
-
         Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Uploading media objects ...");
 
 
@@ -192,7 +190,7 @@ public class PublishPostIntentService extends IntentService {
                                String mediaId) {
         //String mediaObjects){
 
-        String baseUrl = "http://yellr.mycodespace.net/publish_post.json";
+        String baseUrl = BuildConfig.BASE_URL + "/publish_post.json";
 
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
@@ -306,7 +304,7 @@ public class PublishPostIntentService extends IntentService {
         Log.d("uploadMedia()", "media type: " + mediaType);
         //Log.d("uploadMedia()", "param name: " + params.get(index).getName());
 
-        String baseUrl = "http://yellr.mycodespace.net/upload_media.json";
+        String baseUrl = BuildConfig.BASE_URL + "/upload_media.json";
 
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
