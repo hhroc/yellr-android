@@ -83,7 +83,7 @@ public class StoriesFragment extends Fragment {
 
         // init new stories receiver
         Context context = getActivity().getApplicationContext();
-        IntentFilter storiesFilter = new IntentFilter(StoriesReceiver.ACTION_NEW_STORIES);
+        IntentFilter storiesFilter = new IntentFilter(StoriesIntentService.ACTION_NEW_STORIES);
         storiesFilter.addCategory(Intent.CATEGORY_DEFAULT);
         StoriesReceiver storiesReceiver = new StoriesReceiver();
         context.registerReceiver(storiesReceiver, storiesFilter);
@@ -165,8 +165,6 @@ public class StoriesFragment extends Fragment {
     }
 
     public class StoriesReceiver extends BroadcastReceiver {
-        public static final String ACTION_NEW_STORIES =
-                "yellr.net.yellr_android.action.NEW_STORIES";
 
         public StoriesReceiver() {
         }

@@ -26,6 +26,8 @@ import yellr.net.yellr_android.fragments.StoriesFragment;
 public class StoriesIntentService extends IntentService {
     public static final String ACTION_GET_STORIES =
             "yellr.net.yellr_android.action.GET_STORIES";
+    public static final String ACTION_NEW_STORIES =
+            "yellr.net.yellr_android.action.NEW_STORIES";
 
     public static final String PARAM_CUID = "clientId";
     public static final String PARAM_STORIES_JSON = "StoriesJson";
@@ -108,7 +110,7 @@ public class StoriesIntentService extends IntentService {
             Log.d("StoriesIntentService.publishPost()","JSON: " + storiesJson);
 
             Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(StoriesFragment.StoriesReceiver.ACTION_NEW_STORIES);
+            broadcastIntent.setAction(StoriesIntentService.ACTION_NEW_STORIES);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
             broadcastIntent.putExtra(PARAM_STORIES_JSON, storiesJson);
             sendBroadcast(broadcastIntent);

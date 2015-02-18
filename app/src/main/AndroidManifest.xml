@@ -146,6 +146,10 @@
             android:name=".intent_services.verify_user.VerifyUserIntentService"
             android:exported="false" >
         </service>
+
+        <receiver android:name=".receivers.CheckHttpReceiver">
+
+        </receiver>
     </application>
 
 </manifest>

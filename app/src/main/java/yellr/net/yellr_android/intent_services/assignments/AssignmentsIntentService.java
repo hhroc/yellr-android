@@ -30,6 +30,8 @@ import yellr.net.yellr_android.fragments.AssignmentsFragment;
 public class AssignmentsIntentService extends IntentService {
     public static final String ACTION_GET_ASSIGNMENTS =
             "yellr.net.yellr_android.action.GET_ASSIGNMENTS";
+    public static final String ACTION_NEW_ASSIGNMENTS =
+            "yellr.net.yellr_android.action.NEW_ASSIGNMENTS";
 
     public static final String PARAM_CUID = "cuid";
     public static final String PARAM_ASSIGNMENTS_JSON = "assignmentsJson";
@@ -123,7 +125,7 @@ public class AssignmentsIntentService extends IntentService {
             Log.d("AssignmentsIntentService.UpdateData()","JSON: " + assignmentsJson);
 
             Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(AssignmentsFragment.AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
+            broadcastIntent.setAction(ACTION_NEW_ASSIGNMENTS);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
             broadcastIntent.putExtra(PARAM_ASSIGNMENTS_JSON, assignmentsJson);
             sendBroadcast(broadcastIntent);
