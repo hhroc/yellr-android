@@ -69,25 +69,25 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
                 // Assignments Intent Service
                 Intent assignmentsWebIntent = new Intent(context, AssignmentsIntentService.class);
-                assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CLIENT_ID, clientId);
+                assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CUID, clientId);
                 assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
                 context.startService(assignmentsWebIntent);
 
                 // Notifications Intent Service
                 Intent notificationsWebIntent = new Intent(context, NotificationsIntentService.class);
-                notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CLIENT_ID, clientId);
+                notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CUID, clientId);
                 notificationsWebIntent.setAction(NotificationsIntentService.ACTION_GET_NOTIFICATIONS);
                 context.startService(notificationsWebIntent);
 
                 // Stories Intent Service
                 Intent storiesWebIntent = new Intent(context, StoriesIntentService.class);
-                storiesWebIntent.putExtra(StoriesIntentService.PARAM_CLIENT_ID, clientId);
+                storiesWebIntent.putExtra(StoriesIntentService.PARAM_CUID, clientId);
                 storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
                 context.startService(storiesWebIntent);
 
                 // Profile Intent Service
                 Intent profileWebIntent = new Intent(context, ProfileIntentService.class);
-                profileWebIntent.putExtra(ProfileIntentService.PARAM_CLIENT_ID, clientId);
+                profileWebIntent.putExtra(ProfileIntentService.PARAM_CUID, clientId);
                 profileWebIntent.setAction(ProfileIntentService.ACTION_GET_PROFILE);
                 context.startService(profileWebIntent);
 

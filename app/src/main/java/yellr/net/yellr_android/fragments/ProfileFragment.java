@@ -80,7 +80,7 @@ public class ProfileFragment extends Fragment {
         // init service
         Context context = getActivity().getApplicationContext();
         Intent profileWebIntent = new Intent(context, ProfileIntentService.class);
-        profileWebIntent.putExtra(ProfileIntentService.PARAM_CLIENT_ID, clientId);
+        profileWebIntent.putExtra(ProfileIntentService.PARAM_CUID, clientId);
         profileWebIntent.setAction(ProfileIntentService.ACTION_GET_PROFILE);
         context.startService(profileWebIntent);
     }

@@ -278,7 +278,7 @@ public class PostFragment extends Fragment {
 
         Log.d("SubmitPostToYellr()","Starting PublishPostIntentService intent ...");
 
-        Toast.makeText(getActivity(), "Sending post ...", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Sending post ...", Toast.LENGTH_SHORT).show();
 
         // launch intent service
         getActivity().startService(postIntent);
