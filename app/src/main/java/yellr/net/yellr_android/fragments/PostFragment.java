@@ -130,8 +130,21 @@ public class PostFragment extends Fragment {
 
         imageButton = (Button)view.findViewById(R.id.frag_post_photo_button);
         videoButton = (Button)view.findViewById(R.id.frag_post_video_button);
+        videoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast toast = Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
         audioButton = (Button)view.findViewById(R.id.frag_post_audio_button);
-
+        audioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast toast = Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
         imagePreview = (ImageView)view.findViewById(R.id.frag_post_imagepreview);
 
         assignmentQuestion = (TextView)view.findViewById(R.id.frag_post_assignment_question);
@@ -268,6 +281,12 @@ public class PostFragment extends Fragment {
 
     private void SubmitPostToYellr() {
 
+        if(postText.getText().toString().isEmpty()){
+            Toast toast = Toast.makeText(getActivity(), "Please enter a message.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
         Intent postIntent = new Intent(getActivity(), PublishPostIntentService.class);
         postIntent.putExtra(PublishPostIntentService.PARAM_CUID, cuid);
         postIntent.putExtra(PublishPostIntentService.PARAM_ASSIGNMENT_ID, assignmentId);
@@ -277,7 +296,7 @@ public class PostFragment extends Fragment {
         postIntent.putExtra(PublishPostIntentService.PARAM_AUDIO_FILENAME, this.audioFilename);
         postIntent.putExtra(PublishPostIntentService.PARAM_VIDEO_FILENAME, this.videoFilename);
 
-        Log.d("SubmitPostToYellr()","Starting PublishPostIntentService intent ...");
+        Log.d("SubmitPostToYellr()", "Starting PublishPostIntentService intent ...");
 
         //Toast.makeText(getActivity(), "Sending post ...", Toast.LENGTH_SHORT).show();
 

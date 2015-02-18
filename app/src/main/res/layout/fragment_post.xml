@@ -13,6 +13,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/fragment_post_assignment_title"
+        android:textColor="@color/black"
         android:textSize="24sp"/>
 
     <TextView
@@ -76,7 +77,7 @@
             android:textSize="24dp"
             android:layout_weight="1"
             android:textColor="@color/black"
-            android:background="@drawable/yellr_button"
+            android:background="@drawable/yellr_button_deactivated"
             android:layout_margin="8dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"/>
@@ -88,7 +89,7 @@
             android:textSize="24dp"
             android:layout_weight="1"
             android:textColor="@color/black"
-            android:background="@drawable/yellr_button"
+            android:background="@drawable/yellr_button_deactivated"
             android:layout_margin="8dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"/>
