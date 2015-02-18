@@ -78,7 +78,7 @@ public class AssignmentsFragment extends Fragment {
 
         // init new assignments receiver
         Context context = getActivity().getApplicationContext();
-        IntentFilter assignmentsFilter = new IntentFilter(AssignmentsReceiver.ACTION_NEW_ASSIGNMENTS);
+        IntentFilter assignmentsFilter = new IntentFilter(AssignmentsIntentService.ACTION_NEW_ASSIGNMENTS);
         assignmentsFilter.addCategory(Intent.CATEGORY_DEFAULT);
         AssignmentsReceiver assignmentsReceiver = new AssignmentsReceiver();
         context.registerReceiver(assignmentsReceiver, assignmentsFilter);
@@ -162,8 +162,8 @@ public class AssignmentsFragment extends Fragment {
     }
 
     public class AssignmentsReceiver extends BroadcastReceiver {
-        public static final String ACTION_NEW_ASSIGNMENTS =
-                "yellr.net.yellr_android.action.NEW_ASSIGNMENTS";
+        //public static final String ACTION_NEW_ASSIGNMENTS =
+        //        "yellr.net.yellr_android.action.NEW_ASSIGNMENTS";
 
         public AssignmentsReceiver() {
         }

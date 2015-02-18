@@ -2,8 +2,12 @@ package yellr.net.yellr_android.activities;
 
 import java.util.Locale;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
@@ -19,6 +23,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
@@ -31,6 +37,9 @@ import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentServ
 import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
 import yellr.net.yellr_android.intent_services.profile.ProfileIntentService;
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
+import yellr.net.yellr_android.receivers.CheckHttpAssignmentsReceiver;
+import yellr.net.yellr_android.receivers.CheckHttpReceiver;
+import yellr.net.yellr_android.receivers.CheckHttpStoriesReceiver;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener, AssignmentsFragment.OnFragmentInteractionListener, StoriesFragment.OnFragmentInteractionListener {
@@ -50,62 +59,10 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
 
-    static int CHECK_FOR_NEW_DATA_INTERVAL = 15 * 60 * 1000; // 15 minutes
-    final Handler checkNewDataHandler = new Handler();
-    Runnable checkNewDatarunable = new Runnable() {
+    static int CHECK_FOR_NEW_DATA_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
-        @Override
-        public void run() {
-            try{
-
-                Log.d("checkNewDatarunable.run()","Calling all intent services to update HTTP data ...");
-
-                String cuid = YellrUtils.getCUID(getApplicationContext());
-
-                Context context = getApplicationContext();
-
-                // Assignments Intent Service
-                Intent assignmentsWebIntent = new Intent(context, AssignmentsIntentService.class);
-                assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CUID, cuid);
-                assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
-                context.startService(assignmentsWebIntent);
-
-                // Notifications Intent Service
-                Intent notificationsWebIntent = new Intent(context, NotificationsIntentService.class);
-                notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CUID, cuid);
-                notificationsWebIntent.setAction(NotificationsIntentService.ACTION_GET_NOTIFICATIONS);
-                context.startService(notificationsWebIntent);
-
-                // Stories Intent Service
-                Intent storiesWebIntent = new Intent(context, StoriesIntentService.class);
-                storiesWebIntent.putExtra(StoriesIntentService.PARAM_CUID, cuid);
-                storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
-                context.startService(storiesWebIntent);
-
-                // Profile Intent Service
-                Intent profileWebIntent = new Intent(context, ProfileIntentService.class);
-                profileWebIntent.putExtra(ProfileIntentService.PARAM_CUID, cuid);
-                profileWebIntent.setAction(ProfileIntentService.ACTION_GET_PROFILE);
-                context.startService(profileWebIntent);
-
-                //also call the same runnable
-                //checkNewDataHandler.postDelayed(this, CHECK_FOR_NEW_DATA_INTERVAL);
-            }
-            catch (Exception e) {
-
-                Log.d("checkNewDatarunable.run()","ERROR: " + e.toString());
-
-                // TODO: handle exception
-            }
-            finally{
-
-                Log.d("checkNewDatarunable.run()","re-launching postDelayed");
-
-                //also call the same runnable
-                checkNewDataHandler.postDelayed(this, CHECK_FOR_NEW_DATA_INTERVAL);
-            }
-        }
-    };
+    private PendingIntent checkHttpPendingIntent;
+    private AlarmManager checkHttpManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,10 +106,34 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                             .setTabListener(this));
         }
 
-        Log.d("HomeActivity.onCreate()","Calling postDelayed on new data handler, delay: " + String.valueOf(CHECK_FOR_NEW_DATA_INTERVAL));
+        Log.d("HomeActivity.onCreate()","Setting up AlarmManager for CheckHttpReceiver, delay: " + String.valueOf(CHECK_FOR_NEW_DATA_INTERVAL));
 
         // fire handler to check for new data
-        checkNewDataHandler.postDelayed(checkNewDatarunable, CHECK_FOR_NEW_DATA_INTERVAL);
+        //checkNewDataHandler.postDelayed(checkNewDatarunable, CHECK_FOR_NEW_DATA_INTERVAL);
+
+        // create alarm intent
+        Intent alarmIntent = new Intent(this, CheckHttpReceiver.class);
+        checkHttpPendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+
+        // setup receiver for assignments
+        IntentFilter checkHttpAssignmentsFilter = new IntentFilter(AssignmentsIntentService.ACTION_NEW_ASSIGNMENTS);
+        checkHttpAssignmentsFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        CheckHttpAssignmentsReceiver checkHttpAssignmentsReceiver = new CheckHttpAssignmentsReceiver();
+        getApplicationContext().registerReceiver(checkHttpAssignmentsReceiver, checkHttpAssignmentsFilter);
+
+        // set up receiver for stories
+        IntentFilter checkHttpStoriesFilter = new IntentFilter(StoriesIntentService.ACTION_NEW_STORIES);
+        checkHttpStoriesFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        CheckHttpStoriesReceiver checkHttpStoriesReceiver = new CheckHttpStoriesReceiver();
+        getApplicationContext().registerReceiver(checkHttpStoriesReceiver, checkHttpStoriesFilter);
+
+        // TODO: hook up reciever for messages
+
+        // TODO: hook up reciever for notifications
+
+        // start alarm manager
+        checkHttpManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        checkHttpManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), CHECK_FOR_NEW_DATA_INTERVAL, checkHttpPendingIntent);
 
     }
 
