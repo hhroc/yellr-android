@@ -258,15 +258,21 @@ public class PublishPostIntentService extends IntentService {
             httpPost.setEntity(entity);
 
             HttpResponse response = httpClient.execute(httpPost, localContext);
-
+            final String toastMsg;
             if(response.getStatusLine().getStatusCode() == 200){
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Post Successful!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                toastMsg = "Post Successful!";
+            } else {
+                toastMsg = "Problem Submitting Post.";
             }
+
+            handler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
 
             //
             InputStream content = response.getEntity().getContent();
