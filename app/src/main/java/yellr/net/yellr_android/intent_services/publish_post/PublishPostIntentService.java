@@ -162,7 +162,13 @@ public class PublishPostIntentService extends IntentService {
                 mediaCaption
         );
         Gson gson = new Gson();
-        String mediaId = gson.fromJson(mediaObjectResponseJson, MediaObjectResponse.class).media_id;
+        String mediaId = new String();
+        try{
+            mediaId = gson.fromJson(mediaObjectResponseJson, MediaObjectResponse.class).media_id;
+        } catch (Exception e){
+            Log.d("PublishPostIntentService.handleActionGetPublishedPost", "GSON puked");
+        }
+
 
         //String mediaObjectIdsJson = gson.toJson(mediaObjectIds);
         String publishPostJson = publishPost(
@@ -174,7 +180,6 @@ public class PublishPostIntentService extends IntentService {
                 //longitude,
                 mediaId);
         //mediaObjectIdsJson);
-
 
     }
 

@@ -33,7 +33,12 @@ public class CheckHttpStoriesReceiver extends BroadcastReceiver {
 
         String storiesJson = intent.getStringExtra(StoriesIntentService.PARAM_STORIES_JSON);
         Gson gson = new Gson();
-        StoriesResponse response = gson.fromJson(storiesJson, StoriesResponse.class);
+        StoriesResponse response = new StoriesResponse();
+        try{
+            response = gson.fromJson(storiesJson, StoriesResponse.class);
+        } catch (Exception e){
+            Log.d("CheckHttpStoriesReceiver.onReceive", "GSON puked");
+        }
 
         boolean newStories = false;
         if (response.success) {

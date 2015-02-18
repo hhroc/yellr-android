@@ -24,8 +24,6 @@ import yellr.net.yellr_android.utils.YellrUtils;
  */
 public class CheckHttpAssignmentsReceiver extends BroadcastReceiver {
 
-
-
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -33,8 +31,12 @@ public class CheckHttpAssignmentsReceiver extends BroadcastReceiver {
 
         String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
         Gson gson = new Gson();
-        AssignmentsResponse response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
-
+        AssignmentsResponse response = new AssignmentsResponse();
+        try{
+            response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
+        } catch (Exception e){
+            Log.d("CheckHttpAssignmentsReceiver.onReceive", "GSON puked");
+        }
         boolean newAssignments = false;
         if (response.success) {
 
