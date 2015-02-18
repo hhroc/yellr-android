@@ -281,6 +281,12 @@ public class PostFragment extends Fragment {
 
     private void SubmitPostToYellr() {
 
+        if(postText.getText().toString().isEmpty()){
+            Toast toast = Toast.makeText(getActivity(), "Please enter a message.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
         Intent postIntent = new Intent(getActivity(), PublishPostIntentService.class);
         postIntent.putExtra(PublishPostIntentService.PARAM_CUID, cuid);
         postIntent.putExtra(PublishPostIntentService.PARAM_ASSIGNMENT_ID, assignmentId);
