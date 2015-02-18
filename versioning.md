@@ -23,9 +23,9 @@ an 'as-needed' basis to ensure a consistently good experience for all users.
 
 ### Android versionCode
 versionCode will follow XX.yyy.zzz naming convention
-all leading zeros must be dropped
-e.g. version 0.1.0 will have versionCode 00.001.000 => 1000
-e.g. version 0.3.99 will have versionCode 00.003.099 => 3099
-e.g. version 1.0.0 will have versionCode 01.000.000 => 1000000
+all leading zeros must be dropped  
+  e.g. version 0.1.0 will have versionCode 00.001.000 => 1000  
+  e.g. version 0.3.99 will have versionCode 00.003.099 => 3099  
+  e.g. version 1.0.0 will have versionCode 01.000.000 => 1000000  
 this system allows for 100 major versions and 1000 minor and patch versions
 and ensures there is no collision.
