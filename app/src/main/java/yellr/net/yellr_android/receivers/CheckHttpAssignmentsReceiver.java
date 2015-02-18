@@ -14,9 +14,7 @@ import java.util.Arrays;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.activities.PostActivity;
-import yellr.net.yellr_android.activities.ViewStoryActivity;
 import yellr.net.yellr_android.fragments.PostFragment;
-import yellr.net.yellr_android.fragments.ViewStoryFragment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
 import yellr.net.yellr_android.utils.YellrUtils;

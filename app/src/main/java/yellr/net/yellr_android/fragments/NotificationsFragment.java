@@ -1,13 +1,9 @@
 package yellr.net.yellr_android.fragments;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,10 +19,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import yellr.net.yellr_android.R;
-//import yellr.net.yellr_android.activities.ViewNotificationActivity;
 import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
 import yellr.net.yellr_android.intent_services.notifications.NotificationsResponse;
 import yellr.net.yellr_android.intent_services.notifications.Notification;
@@ -37,7 +31,6 @@ import yellr.net.yellr_android.utils.YellrUtils;
  */
 public class NotificationsFragment extends Fragment{
 
-    private OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
     private String cuid;
@@ -108,25 +101,6 @@ public class NotificationsFragment extends Fragment{
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
     public void onResume() {
         Log.d("NotificationsFragment.onResume()", "Starting notifications intent service ...");
         refreshNotificationData();
@@ -140,23 +114,6 @@ public class NotificationsFragment extends Fragment{
         notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CUID, cuid);
         notificationsWebIntent.setAction(NotificationsIntentService.ACTION_GET_NOTIFICATIONS);
         context.startService(notificationsWebIntent);
-    }
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
     }
 
     public class NotificationsReceiver extends BroadcastReceiver {
@@ -176,7 +133,12 @@ public class NotificationsFragment extends Fragment{
                 String notificationsJson = intent.getStringExtra(NotificationsIntentService.PARAM_NOTIFICATIONS_JSON);
 
                 Gson gson = new Gson();
-                NotificationsResponse response = gson.fromJson(notificationsJson, NotificationsResponse.class);
+                NotificationsResponse response = new NotificationsResponse();
+                try{
+                    response = gson.fromJson(notificationsJson, NotificationsResponse.class);
+                } catch (Exception e){
+                    Log.d("NotificationsFragment.onReceive", "GSON puked");
+                }
 
                 Log.d("NotificationsReceiver.onReceive()","Success: " + response.success);
 

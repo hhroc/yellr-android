@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,7 +25,6 @@ import com.joanzapata.android.iconify.Iconify;
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.intent_services.profile.ProfileIntentService;
 import yellr.net.yellr_android.intent_services.profile.ProfileResponse;
-import yellr.net.yellr_android.intent_services.verify_user.VerifyUserIntentService;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
@@ -217,7 +215,12 @@ public class ProfileFragment extends Fragment {
             String profileJson = intent.getStringExtra(ProfileIntentService.PARAM_PROFILE_JSON);
 
             Gson gson = new Gson();
-            ProfileResponse response = gson.fromJson(profileJson, ProfileResponse.class);
+            ProfileResponse response = new ProfileResponse();
+            try{
+                response = gson.fromJson(profileJson, ProfileResponse.class);
+            } catch (Exception e){
+                Log.d("ProfileFragment.onReceive", "GSON puked");
+            }
 
             if ( response.success ) {
                 if(response.first_name != null && response.last_name != null &&

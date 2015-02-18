@@ -3,7 +3,6 @@ package yellr.net.yellr_android.intent_services.stories;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.google.gson.Gson;
 

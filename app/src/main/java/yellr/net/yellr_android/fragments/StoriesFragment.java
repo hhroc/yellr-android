@@ -1,12 +1,10 @@
 package yellr.net.yellr_android.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,13 +21,10 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import yellr.net.yellr_android.R;
-import yellr.net.yellr_android.activities.HomeActivity;
 import yellr.net.yellr_android.activities.ViewStoryActivity;
 import yellr.net.yellr_android.intent_services.stories.Story;
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
@@ -38,15 +33,11 @@ import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StoriesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link StoriesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class StoriesFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
     private String cuid;
@@ -115,23 +106,6 @@ public class StoriesFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
     public void onResume() {
         Log.d("StoriesFragment.onResume()", "Starting stories intent service ...");
         refreshStoryData();
@@ -147,23 +121,6 @@ public class StoriesFragment extends Fragment {
         context.startService(storiesWebIntent);
     }
 
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
-
     public class StoriesReceiver extends BroadcastReceiver {
 
         public StoriesReceiver() {
@@ -175,7 +132,12 @@ public class StoriesFragment extends Fragment {
             String storiesJson = intent.getStringExtra(StoriesIntentService.PARAM_STORIES_JSON);
 
             Gson gson = new Gson();
-            StoriesResponse response = gson.fromJson(storiesJson, StoriesResponse.class);
+            StoriesResponse response = new StoriesResponse();
+            try{
+                response = gson.fromJson(storiesJson, StoriesResponse.class);
+            } catch (Exception e){
+                Log.d("StoriesFragment.onReceive", "GSON puked");
+            }
 
             if (response.success) {
                 storiesArrayAdapter.clear();
