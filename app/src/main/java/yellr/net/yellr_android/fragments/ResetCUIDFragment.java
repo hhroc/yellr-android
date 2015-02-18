@@ -10,7 +10,7 @@ import android.support.v4.app.DialogFragment;
 
 import yellr.net.yellr_android.utils.YellrUtils;
 
-public class ResetUUIDFragment extends DialogFragment {
+public class ResetCUIDFragment extends DialogFragment {
 
     @NonNull
     @Override
@@ -22,7 +22,7 @@ public class ResetUUIDFragment extends DialogFragment {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        YellrUtils.resetUUID(getActivity());
+                        YellrUtils.resetCUID(getActivity());
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
                     }
                 })

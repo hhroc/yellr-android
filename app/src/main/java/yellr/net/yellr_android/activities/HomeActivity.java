@@ -60,34 +60,31 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
                 Log.d("checkNewDatarunable.run()","Calling all intent services to update HTTP data ...");
 
-                //do your code here
-
-                SharedPreferences sharedPref = getSharedPreferences("clientId", Context.MODE_PRIVATE);
-                String clientId = sharedPref.getString("clientId", "");
+                String cuid = YellrUtils.getCUID(getApplicationContext());
 
                 Context context = getApplicationContext();
 
                 // Assignments Intent Service
                 Intent assignmentsWebIntent = new Intent(context, AssignmentsIntentService.class);
-                assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CLIENT_ID, clientId);
+                assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CUID, cuid);
                 assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
                 context.startService(assignmentsWebIntent);
 
                 // Notifications Intent Service
                 Intent notificationsWebIntent = new Intent(context, NotificationsIntentService.class);
-                notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CLIENT_ID, clientId);
+                notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CUID, cuid);
                 notificationsWebIntent.setAction(NotificationsIntentService.ACTION_GET_NOTIFICATIONS);
                 context.startService(notificationsWebIntent);
 
                 // Stories Intent Service
                 Intent storiesWebIntent = new Intent(context, StoriesIntentService.class);
-                storiesWebIntent.putExtra(StoriesIntentService.PARAM_CLIENT_ID, clientId);
+                storiesWebIntent.putExtra(StoriesIntentService.PARAM_CUID, cuid);
                 storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
                 context.startService(storiesWebIntent);
 
                 // Profile Intent Service
                 Intent profileWebIntent = new Intent(context, ProfileIntentService.class);
-                profileWebIntent.putExtra(ProfileIntentService.PARAM_CLIENT_ID, clientId);
+                profileWebIntent.putExtra(ProfileIntentService.PARAM_CUID, cuid);
                 profileWebIntent.setAction(ProfileIntentService.ACTION_GET_PROFILE);
                 context.startService(profileWebIntent);
 
@@ -115,17 +112,8 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //
-        // See if we have a clientId in shared preferences, and if we
-        // don't then create one
-        // TODO this actually set's a UUID of there isn't one
-        // This should be a seperate check
-        String clientId = YellrUtils.getUUID(this);
-
-        //IntentServicesHelper.getAssignments(this,clientId);
-        //IntentServicesHelper.getStories(this,clientId);
-        //IntentServicesHelper.getNotifications(this,clientId);
-        //IntentServicesHelper.getMessages(this,clientId);
+        // get the cuid for the device
+        String cuid = YellrUtils.getCUID(this);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();

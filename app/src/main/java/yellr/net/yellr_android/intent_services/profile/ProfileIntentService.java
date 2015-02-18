@@ -1,7 +1,11 @@
 package yellr.net.yellr_android.intent_services.profile;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -22,7 +26,7 @@ public class ProfileIntentService extends IntentService {
     public static final String ACTION_GET_PROFILE =
             "yellr.net.yellr_android.action.GET_PROFILE";
 
-    public static final String PARAM_CLIENT_ID = "clientId";
+    public static final String PARAM_CUID = "cuid";
     public static final String PARAM_PROFILE_JSON = "profileJson";
 
     public ProfileIntentService() {
@@ -35,22 +39,44 @@ public class ProfileIntentService extends IntentService {
 
         //Log.d("ProfileIntentService.onHandleIntent()","Decoding intent action ...");
 
-        String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
-        handleActionGetProfile(clientId);
+        String cuid = intent.getStringExtra(PARAM_CUID);
+        handleActionGetProfile(cuid);
     }
 
     /**
      * Handles get profile
      */
-    private void handleActionGetProfile(String clientId) {
+    private void handleActionGetProfile(String cuid) {
 
 
         String baseUrl = "http://yellr.mycodespace.net/get_profile.json";
 
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        String bestProvider = lm.getBestProvider(criteria, true);
+        Location location = lm.getLastKnownLocation(bestProvider); //LocationManager.GPS_PROVIDER);
+        // default to center of Rochester, NY
+        double latitude = 43.1656;
+        double longitude = -77.6114;
+        // if we have a location available, then set it
+        if ( location != null ){
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        } else {
+            Log.d("ProfileIntentService.handleActionGetAssignments()","No location available, defaulting to Rochester, NY");
+        }
+
+        String lat = String.valueOf(latitude);
+        String lng = String.valueOf(longitude);
+
         String languageCode = Locale.getDefault().getLanguage();
 
         String url =  baseUrl
-                + "?client_id=" + clientId;
+                + "?cuid=" + cuid
+                + "&language_code=" + languageCode
+                + "&lat=" + lat
+                + "&lng=" + lng;
         //
         // TODO: need to check for exceptions better, this bombs out sometimes
         //

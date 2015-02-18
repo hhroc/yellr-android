@@ -1,7 +1,11 @@
 package yellr.net.yellr_android.intent_services.messages;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -19,7 +23,7 @@ public class MessagesIntentService extends IntentService {
     public static final String ACTION_GET_MESSAGES =
             "yellr.net.yellr_android.action.GET_MESSAGES";
 
-    public static final String PARAM_CLIENT_ID = "clientId";
+    public static final String PARAM_CUID = "cuid";
     public static final String PARAM_MESSAGES_JSON = "messagesJson";
 
     public MessagesIntentService() {
@@ -32,23 +36,45 @@ public class MessagesIntentService extends IntentService {
 
         //Log.d("MessagesIntentService.onHandleIntent()","Decoding intent action ...");
 
-        String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
-        handleActionGetMessages(clientId);
+        String cuid = intent.getStringExtra(PARAM_CUID);
+        handleActionGetMessages(cuid);
     }
 
     /**
      * Handles get messages
      */
-    private void handleActionGetMessages(String clientId) {
+    private void handleActionGetMessages(String cuid) {
 
         //Log.d("MessagesIntentService.UpdateData()", "Starting UpdateData() ...");
 
         String baseUrl = "http://yellr.mycodespace.net/get_messages.json";
 
-        String url =  baseUrl
-                + "?client_id=" + clientId;
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        String bestProvider = lm.getBestProvider(criteria, true);
+        Location location = lm.getLastKnownLocation(bestProvider); //LocationManager.GPS_PROVIDER);
+        // default to center of Rochester, NY
+        double latitude = 43.1656;
+        double longitude = -77.6114;
+        // if we have a location available, then set it
+        if ( location != null ){
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        } else {
+            Log.d("MessagesIntentService.handleActionGetAssignments()","No location available, defaulting to Rochester, NY");
+        }
 
-        //Log.d("MessagesIntentService.UpdateData()","URL: " + url);
+        String lat = String.valueOf(latitude);
+        String lng = String.valueOf(longitude);
+
+        String languageCode = Locale.getDefault().getLanguage();
+
+        String url =  baseUrl
+                + "?cuid=" + cuid
+                + "&language_code=" + languageCode
+                + "&lat=" + lat
+                + "&lng=" + lng;
 
         try {
 

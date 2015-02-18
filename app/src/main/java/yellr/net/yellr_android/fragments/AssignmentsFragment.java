@@ -29,6 +29,7 @@ import yellr.net.yellr_android.activities.PostActivity;
 import yellr.net.yellr_android.intent_services.assignments.Assignment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,7 +44,7 @@ public class AssignmentsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
-    private String clientId;
+    private String cuid;
     private AssignmentsArrayAdapter assignmentsArrayAdapter;
 
     private Assignment[] assignments;
@@ -72,9 +73,8 @@ public class AssignmentsFragment extends Fragment {
         if (getArguments() != null) {
         }
 
-        // get clientId
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
-        clientId = sharedPref.getString("clientId", "");
+        // get the cuid
+        this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
 
         // init new assignments receiver
         Context context = getActivity().getApplicationContext();
@@ -139,7 +139,7 @@ public class AssignmentsFragment extends Fragment {
         // init service
         Context context = getActivity().getApplicationContext();
         Intent assignmentsWebIntent = new Intent(context, AssignmentsIntentService.class);
-        assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CLIENT_ID, clientId);
+        assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CUID, cuid);
         assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
         context.startService(assignmentsWebIntent);
     }

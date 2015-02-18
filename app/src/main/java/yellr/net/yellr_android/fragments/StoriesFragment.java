@@ -31,7 +31,6 @@ import java.util.Date;
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.activities.HomeActivity;
 import yellr.net.yellr_android.activities.ViewStoryActivity;
-import yellr.net.yellr_android.intent_services.IntentServicesHelper;
 import yellr.net.yellr_android.intent_services.stories.Story;
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
 import yellr.net.yellr_android.intent_services.stories.StoriesResponse;
@@ -50,7 +49,7 @@ public class StoriesFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
-    private String clientId;
+    private String cuid;
     private StoriesArrayAdapter storiesArrayAdapter;
 
     private Story[] stories;
@@ -79,9 +78,8 @@ public class StoriesFragment extends Fragment {
         if (getArguments() != null) {
         }
 
-        // get clientId
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("clientId", Context.MODE_PRIVATE);
-        clientId = sharedPref.getString("clientId", "");
+        // get cuid
+        this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
 
         // init new stories receiver
         Context context = getActivity().getApplicationContext();
@@ -144,7 +142,7 @@ public class StoriesFragment extends Fragment {
         // init service
         Context context = getActivity().getApplicationContext();
         Intent storiesWebIntent = new Intent(context, StoriesIntentService.class);
-        storiesWebIntent.putExtra(StoriesIntentService.PARAM_CLIENT_ID, clientId);
+        storiesWebIntent.putExtra(StoriesIntentService.PARAM_CUID, cuid);
         storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
         context.startService(storiesWebIntent);
     }
