@@ -40,10 +40,10 @@
             android:name=".activities.PostActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_post"
-            android:parentActivityName=".activities.SplashActivity">
+            android:parentActivityName=".activities.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.SplashActivity"/>
+                android:value=".activities.HomeActivity"/>
         </activity>
         <activity
             android:name=".activities.ViewStoryActivity"
