@@ -26,6 +26,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import yellr.net.yellr_android.BuildConfig;
+
 public class VerifyUserIntentService extends IntentService {
     public static final String ACTION_GET_VERIFY_USER =
             "yellr.net.yellr_android.action.GET_VERIFY_USER";
@@ -69,7 +71,7 @@ public class VerifyUserIntentService extends IntentService {
                                         String last_name,
                                         String email) {
 
-        String baseUrl = "http://yellr.mycodespace.net/verify_user.json";
+        String baseUrl = BuildConfig.BASE_URL +" /verify_user.json";
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 

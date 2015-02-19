@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
+import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.fragments.ProfileFragment;
 
 public class ProfileIntentService extends IntentService {
@@ -48,7 +49,7 @@ public class ProfileIntentService extends IntentService {
     private void handleActionGetProfile(String cuid) {
 
 
-        String baseUrl = "http://yellr.mycodespace.net/get_profile.json";
+        String baseUrl = BuildConfig.BASE_URL + "/get_profile.json";
 
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();

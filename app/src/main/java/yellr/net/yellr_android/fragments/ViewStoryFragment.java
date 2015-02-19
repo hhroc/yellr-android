@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.Date;
 
+import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.utils.YellrUtils;
 
@@ -101,7 +102,7 @@ public class ViewStoryFragment extends Fragment {
                 + "</body>"
                 + "</html>";
 
-        String banner = "http://yellr.mycodespace.net/media/" + bannerMediaFilename;
+        String banner = BuildConfig.BASE_URL + "/media/" + bannerMediaFilename;
 
         String renderedHtml = htmlTemplate.replace("<banner />",banner).replace("<topText />",topText).replace("<renderedMarkdown />",renderedMarkdown);
 

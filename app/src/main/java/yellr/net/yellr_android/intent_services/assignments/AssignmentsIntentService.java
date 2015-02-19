@@ -19,6 +19,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
 
+import yellr.net.yellr_android.BuildConfig;
+import yellr.net.yellr_android.utils.YellrUtils;
+
 public class AssignmentsIntentService extends IntentService {
     public static final String ACTION_GET_ASSIGNMENTS =
             "yellr.net.yellr_android.action.GET_ASSIGNMENTS";
@@ -57,7 +60,7 @@ public class AssignmentsIntentService extends IntentService {
         //       okay for now though, even if it takes a while
         //       to complete (since it's in the service)
 
-        String baseUrl = "http://yellr.mycodespace.net/get_assignments.json";
+        String baseUrl = BuildConfig.BASE_URL + "/get_assignments.json";
 
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
@@ -81,7 +84,7 @@ public class AssignmentsIntentService extends IntentService {
         String languageCode = Locale.getDefault().getLanguage();
 
         String url =  baseUrl
-                + "?cuid=" + cuid
+                + "?cuid=" + YellrUtils.getCUID(getApplicationContext())//cuid
                 + "&language_code=" + languageCode
                 + "&lat=" + lat
                 + "&lng=" + lng;
