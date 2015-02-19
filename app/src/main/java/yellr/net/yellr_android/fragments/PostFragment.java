@@ -165,8 +165,30 @@ public class PostFragment extends Fragment {
                     return;
                 }
 
+                // Create an image file name
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String imageFileName = "JPEG_" + timeStamp + "_";
+                File storageDir = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES);
+                File imageFile = null;
+                Log.d("image create","file: " + storageDir + "/" + imageFileName + ".jpg");
+                try {
+                    imageFile = File.createTempFile(
+                            imageFileName,  /* prefix */
+                            ".jpg",         /* suffix */
+                            storageDir      /* directory */
+                    );
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                    Log.d("image create", "ERROR:" + e.toString());
+                }
+
+                proposedImageFilename = imageFile.getAbsolutePath();
+
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                            Uri.fromFile(imageFile));//new File(proposedImageFilename)));
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
             }
@@ -183,30 +205,35 @@ public class PostFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Toast.makeText(getActivity(), "We're back from taking a picture", Toast.LENGTH_SHORT).show();
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imagePreview.setImageBitmap(imageBitmap);
+
+            try {
+                Bitmap imageBitmap;
+                //if (data.getData() == null) {
+                //    imageBitmap = (Bitmap) data.getExtras().get("data");
+                //} else {
+                //    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+                //}
+
+                imageBitmap = BitmapFactory.decodeFile(this.proposedImageFilename);
+                imagePreview.setImageBitmap(imageBitmap);
+
+            }catch (Exception e) {
+                // todo: display error
+            }
+
+            //Bundle extras = data.getExtras();
+            //Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //
 
             Log.d("PostFragment.onActivityResult()", "Attempting to display image thumbnail ...");
 
-            // Create an image file name
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String imageFileName = "JPEG_" + timeStamp + "_";
-            File storageDir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
-            File imageFile = null;
-            try {
-                imageFile = File.createTempFile(
-                        imageFileName,  /* prefix */
-                        ".jpg",         /* suffix */
-                        storageDir      /* directory */
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
 
             // Save a file: path for use with ACTION_VIEW intents
-            proposedImageFilename = "file:" + imageFile.getAbsolutePath();
+            //proposedImageFilename = "file:" + imageFile.getAbsolutePath();
+
+
+            Toast.makeText(getActivity(), proposedImageFilename, Toast.LENGTH_SHORT).show();
 
             this.mediaType = "image";
             this.imageFilename = proposedImageFilename;
