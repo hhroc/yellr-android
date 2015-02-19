@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 
 import yellr.net.yellr_android.BuildConfig;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 public class PublishPostIntentService extends IntentService {
 
@@ -214,7 +215,7 @@ public class PublishPostIntentService extends IntentService {
         String languageCode = Locale.getDefault().getLanguage();
 
         String url =  baseUrl
-                + "?cuid=" + cuid
+                + "?cuid=" + YellrUtils.getCUID(getApplicationContext()) //cuid
                 + "&language_code=" + languageCode
                 + "&lat=" + lat
                 + "&lng=" + lng;
@@ -328,7 +329,7 @@ public class PublishPostIntentService extends IntentService {
         String languageCode = Locale.getDefault().getLanguage();
 
         String url =  baseUrl
-                + "?cuid=" + cuid
+                + "?cuid=" + YellrUtils.getCUID(getApplicationContext()) //cuid
                 + "&language_code=" + languageCode
                 + "&lat=" + lat
                 + "&lng=" + lng;

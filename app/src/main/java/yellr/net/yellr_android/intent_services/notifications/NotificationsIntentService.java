@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.fragments.NotificationsFragment;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 public class NotificationsIntentService extends IntentService {
     public static final String ACTION_GET_NOTIFICATIONS =
@@ -74,7 +75,7 @@ public class NotificationsIntentService extends IntentService {
         String languageCode = Locale.getDefault().getLanguage();
 
         String url =  baseUrl
-                + "?cuid=" + cuid
+                + "?cuid=" + YellrUtils.getCUID(getApplicationContext()) //cuid
                 + "&language_code=" + languageCode
                 + "&lat=" + lat
                 + "&lng=" + lng;

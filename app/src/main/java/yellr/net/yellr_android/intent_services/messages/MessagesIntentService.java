@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.util.Locale;
 
 import yellr.net.yellr_android.BuildConfig;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 public class MessagesIntentService extends IntentService {
     public static final String ACTION_GET_MESSAGES =
@@ -73,7 +74,7 @@ public class MessagesIntentService extends IntentService {
         String languageCode = Locale.getDefault().getLanguage();
 
         String url =  baseUrl
-                + "?cuid=" + cuid
+                + "?cuid=" + YellrUtils.getCUID(getApplicationContext()) //cuid
                 + "&language_code=" + languageCode
                 + "&lat=" + lat
                 + "&lng=" + lng;
