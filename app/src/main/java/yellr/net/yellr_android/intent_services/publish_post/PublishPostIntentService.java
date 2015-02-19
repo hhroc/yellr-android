@@ -131,7 +131,7 @@ public class PublishPostIntentService extends IntentService {
         //String mediaType = "text";
         String mediaFilename = "";
         String mediaText = text;
-        String mediaCaption = "";
+        String mediaCaption = text;
 
         switch (mediaType) {
             case "text":
@@ -338,6 +338,7 @@ public class PublishPostIntentService extends IntentService {
 
         //params.add(new BasicNameValuePair("cuid", cuid));
         params.add(new BasicNameValuePair("media_type", mediaType));
+        params.add(new BasicNameValuePair("media_type", mediaType));
 
         if (!mediaFilename.equals("")) {
             params.add(new BasicNameValuePair("media_file", mediaFilename));
@@ -348,7 +349,7 @@ public class PublishPostIntentService extends IntentService {
         }
 
         if (!mediaCaption.equals("")) {
-            params.add(new BasicNameValuePair("media_caption", mediaCaption));
+            params.add(new BasicNameValuePair("caption", mediaCaption));
         }
 
         //
