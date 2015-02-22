@@ -4,6 +4,7 @@
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.hardware.camera.autofocus" />
@@ -27,6 +28,7 @@
             android:theme="@style/NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,20 +42,21 @@
             android:name=".activities.PostActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_post"
-            android:parentActivityName=".activities.HomeActivity">
+            android:parentActivityName=".activities.HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.HomeActivity"/>
+                android:value=".activities.HomeActivity" />
         </activity>
         <activity
             android:name=".activities.ViewStoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_view_story"
-            android:parentActivityName=".activities.HomeActivity">
+            android:parentActivityName=".activities.HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.HomeActivity"/>
+                android:value=".activities.HomeActivity" />
         </activity>
+
         <service
             android:name=".intent_services.assignments.AssignmentsIntentService"
             android:exported="false" >
@@ -123,10 +126,10 @@
         <activity
             android:name=".activities.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".activities.HomeActivity">
+            android:parentActivityName=".activities.HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.HomeActivity"/>
+                android:value=".activities.HomeActivity" />
         </activity>
 
         <service
@@ -147,9 +150,23 @@
             android:exported="false" >
         </service>
 
-        <receiver android:name=".receivers.CheckHttpReceiver">
-
+        <receiver android:name=".receivers.CheckHttpReceiver" >
         </receiver>
+
+        <service
+            android:name=".intent_services.data.DataIntentService"
+            android:exported="false" >
+        </service>
+
+        <activity
+            android:name=".activities.LocationActivity"
+            android:label="@string/title_activity_location" >
+        </activity>
+
+        <service
+            android:name=".intent_services.zipcode.ZipcodeIntentService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

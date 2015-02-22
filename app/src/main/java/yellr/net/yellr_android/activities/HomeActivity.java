@@ -32,6 +32,7 @@ import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
 import yellr.net.yellr_android.receivers.CheckHttpAssignmentsReceiver;
 import yellr.net.yellr_android.receivers.CheckHttpReceiver;
 import yellr.net.yellr_android.receivers.CheckHttpStoriesReceiver;
+//import yellr.net.yellr_android.utils.LocationDetector;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 public class HomeActivity extends ActionBarActivity implements ActionBar.TabListener{
@@ -51,7 +52,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
 
-    static int CHECK_FOR_NEW_DATA_INTERVAL = 5 * 60 * 1000; // 5 minutes
+    static int CHECK_FOR_NEW_DATA_INTERVAL = 15 * 60 * 1000; // 15 minutes ( 96 times a day )
 
     private PendingIntent checkHttpPendingIntent;
     private AlarmManager checkHttpManager;
@@ -60,6 +61,11 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // LocationDetector ld = new LocationDetector(this);
+        //if(!ld.canGetLocation()) {
+        //    ld.showSettingsAlert();
+        //}
 
         // get the cuid for the device
         String cuid = YellrUtils.getCUID(this);
@@ -103,6 +109,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         // fire handler to check for new data
         //checkNewDataHandler.postDelayed(checkNewDatarunable, CHECK_FOR_NEW_DATA_INTERVAL);
 
+
         // create alarm intent
         Intent alarmIntent = new Intent(this, CheckHttpReceiver.class);
         checkHttpPendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
@@ -126,6 +133,8 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         // start alarm manager
         checkHttpManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         checkHttpManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), CHECK_FOR_NEW_DATA_INTERVAL, checkHttpPendingIntent);
+
+
 
     }
 

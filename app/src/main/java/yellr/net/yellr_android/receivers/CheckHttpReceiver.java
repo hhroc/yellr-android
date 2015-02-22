@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
+import yellr.net.yellr_android.intent_services.data.DataIntentService;
 import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
 import yellr.net.yellr_android.intent_services.profile.ProfileIntentService;
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
@@ -27,6 +28,7 @@ public class CheckHttpReceiver extends BroadcastReceiver {
 
             //Context context = getApplicationContext();
 
+            /*
             // Assignments Intent Service
             Intent assignmentsWebIntent = new Intent(context, AssignmentsIntentService.class);
             assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CUID, cuid);
@@ -51,6 +53,13 @@ public class CheckHttpReceiver extends BroadcastReceiver {
             profileWebIntent.putExtra(ProfileIntentService.PARAM_CUID, cuid);
             profileWebIntent.setAction(ProfileIntentService.ACTION_GET_PROFILE);
             context.startService(profileWebIntent);
+            */
+
+            // Profile Intent Service
+            Intent dataWebIntent = new Intent(context, DataIntentService.class);
+            //dataWebIntent.putExtra(DataIntentService.PARAM_CUID, cuid);
+            dataWebIntent.setAction(DataIntentService.ACTION_GET_DATA);
+            context.startService(dataWebIntent);
 
             //also call the same runnable
             //checkNewDataHandler.postDelayed(this, CHECK_FOR_NEW_DATA_INTERVAL);

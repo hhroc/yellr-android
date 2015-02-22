@@ -1,0 +1,49 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="yellr.net.yellr_android.activities.LocationActivity$PlaceholderFragment">
+
+    <TextView
+        android:id="@+id/frag_location_infotext"
+        android:text="Yellr uses location to send you assignments and stories.  Enter the zipcode you would like to set as your home location."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        />
+
+    <EditText
+        android:id="@+id/frag_location_zipcode"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/frag_location_infotext"
+        android:textCursorDrawable="@null"
+        android:paddingTop="32dp"
+        android:hint="Enter your zipcode."/>
+
+    <Button
+        android:id="@+id/frag_location_next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/frag_location_zipcode"
+        android:text="Next >"
+        android:textSize="20dp"
+        android:layout_weight="1"
+        android:textColor="@color/black"
+        android:background="@drawable/yellr_button"
+        android:layout_margin="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        />
+
+</RelativeLayout>

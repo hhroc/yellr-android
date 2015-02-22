@@ -26,7 +26,7 @@ public class MessagesIntentService extends IntentService {
     public static final String ACTION_GET_MESSAGES =
             "yellr.net.yellr_android.action.GET_MESSAGES";
 
-    public static final String PARAM_CUID = "cuid";
+    //public static final String PARAM_CUID = "cuid";
     public static final String PARAM_MESSAGES_JSON = "messagesJson";
 
     public MessagesIntentService() {
@@ -39,37 +39,23 @@ public class MessagesIntentService extends IntentService {
 
         //Log.d("MessagesIntentService.onHandleIntent()","Decoding intent action ...");
 
-        String cuid = intent.getStringExtra(PARAM_CUID);
-        handleActionGetMessages(cuid);
+        //String cuid = intent.getStringExtra(PARAM_CUID);
+        if ( YellrUtils.isHomeLocationSet(getApplicationContext()) )
+            handleActionGetMessages(); //cuid);
     }
 
     /**
      * Handles get messages
      */
-    private void handleActionGetMessages(String cuid) {
+    private void handleActionGetMessages() {
 
         //Log.d("MessagesIntentService.UpdateData()", "Starting UpdateData() ...");
 
         String baseUrl = BuildConfig.BASE_URL + "/get_messages.json";
 
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        String bestProvider = lm.getBestProvider(criteria, true);
-        Location location = lm.getLastKnownLocation(bestProvider); //LocationManager.GPS_PROVIDER);
-        // default to center of Rochester, NY
-        double latitude = 43.1656;
-        double longitude = -77.6114;
-        // if we have a location available, then set it
-        if ( location != null ){
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-        } else {
-            Log.d("MessagesIntentService.handleActionGetAssignments()","No location available, defaulting to Rochester, NY");
-        }
-
-        String lat = String.valueOf(latitude);
-        String lng = String.valueOf(longitude);
+        double latLng[] = YellrUtils.getLocation(getApplicationContext());
+        String lat = String.valueOf(latLng[0]);
+        String lng = String.valueOf(latLng[1]);
 
         String languageCode = Locale.getDefault().getLanguage();
 
@@ -104,11 +90,13 @@ public class MessagesIntentService extends IntentService {
 
             Log.d("MessagesIntentService.UpdateData()","JSON: " + messagesJson);
 
+            /*
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(MessagesReceiver.ACTION_NEW_MESSAGES);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
             broadcastIntent.putExtra(PARAM_MESSAGES_JSON, messagesJson);
             sendBroadcast(broadcastIntent);
+            */
 
         } catch( Exception e) {
 

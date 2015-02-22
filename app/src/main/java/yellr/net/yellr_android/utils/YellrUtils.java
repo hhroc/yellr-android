@@ -2,9 +2,14 @@ package yellr.net.yellr_android.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -45,6 +50,104 @@ public class YellrUtils {
         }
         //Throw an exception instead?
         return null;
+    }
+
+    public static double[] getLocation(Context context) {
+
+        /*
+        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        String bestProvider = lm.getBestProvider(criteria, true);
+        Location location = lm.getLastKnownLocation(bestProvider); //LocationManager.GPS_PROVIDER);
+        */
+
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+        List<String> providers = lm.getAllProviders();
+        //providers.add(LocationManager.NETWORK_PROVIDER);
+        Location location = null;
+        Log.d("YellrUtils.getLocation()", "providers: " + providers.toString());
+        for (int i = 0; i < providers.size(); i++) {
+            Location l = lm.getLastKnownLocation(providers.get(i));
+            if (l != null) {
+                location = l;
+            }
+        }
+
+        // default to center of Rochester, NY
+        double latitude = 0; //43.1656;
+        double longitude = 0; //-77.6114;
+        // if we have a location available, then set it
+        if (location != null) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        } else {
+            Log.d("YellrUtils.getLocation()", "No location available, defaulting to Home Location");
+            Float[] latLng = YellrUtils.getHomeLocation(context);
+            latitude = latLng[0];
+            longitude = latLng[1];
+        }
+
+        /*
+        LocationDetector myloc = new LocationDetector(
+                context);
+        //double myLat = 0;
+        //double myLong = 0;
+        double latitude = 43.1656;
+        double longitude = -77.6114;
+        if (myloc.canGetLocation) {
+
+            latitude = myloc.getLatitude();
+            longitude = myloc.getLongitude();
+
+            Log.v("get location values", Double.toString(latitude) + ", " + Double.toString(longitude));
+        }
+        */
+
+
+        double[] latLng = new double[2];
+        latLng[0] = latitude;
+        latLng[1] = longitude;
+
+        return latLng;
+    }
+
+    public static void resetHomeLocation(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("homeLocationSet", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("homeLocationSet", String.valueOf(false));
+        editor.commit();
+    }
+
+    public static boolean isHomeLocationSet(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("homeLocationSet", Context.MODE_PRIVATE);
+        String homeLocationSetString = sharedPref.getString("homeLocationSet", "false");
+        return Boolean.valueOf(homeLocationSetString);
+    }
+
+    public static void setHomeLocation(Context context, String zipcode, String city, String stateCode, Float lat, Float lng) {
+        SharedPreferences sharedPref = context.getSharedPreferences("homeLocationSet", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("zipcode", zipcode);
+        editor.putString("city", city);
+        editor.putString("stateCode", stateCode);
+        editor.putString("lat", String.valueOf(lat));
+        editor.putString("lng", String.valueOf(lng));
+        editor.putString("homeLocationSet", String.valueOf(true));
+        editor.commit();
+        //String homeLocationSetString = sharedPref.getString("homeLocationSet", "false");
+        //return Boolean.valueOf(homeLocationSetString);
+    }
+
+    public static Float[] getHomeLocation(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("homeLocationSet", Context.MODE_PRIVATE);
+        Float lat = Float.valueOf(sharedPref.getString("lat", "0"));
+        Float lng = Float.valueOf(sharedPref.getString("lng", "0"));
+        Float[] latLng = new Float[2];
+        latLng[0] = lat;
+        latLng[1] = lng;
+        return latLng;
     }
 
     public static String getCUID(Context context) {
@@ -96,7 +199,7 @@ public class YellrUtils {
         SharedPreferences currentAssignmentIdsPref = context.getSharedPreferences("current_assignment_ids", Context.MODE_PRIVATE);
 
         String currentAssignmentIdsCsv = currentAssignmentIdsPref.getString("current_assignment_ids", "");
-        int count = Integer.parseInt(currentAssignmentIdsCountPref.getString("current_assignment_ids_count","0"));
+        int count = Integer.parseInt(currentAssignmentIdsCountPref.getString("current_assignment_ids_count", "0"));
 
         StringTokenizer st = new StringTokenizer(currentAssignmentIdsCsv, ",");
         String[] currentAssignmentIds = new String[count];

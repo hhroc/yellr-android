@@ -114,7 +114,7 @@ public class StoriesFragment extends Fragment {
         // init service
         Context context = getActivity().getApplicationContext();
         Intent storiesWebIntent = new Intent(context, StoriesIntentService.class);
-        storiesWebIntent.putExtra(StoriesIntentService.PARAM_CUID, cuid);
+        //storiesWebIntent.putExtra(StoriesIntentService.PARAM_CUID, cuid);
         storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
         context.startService(storiesWebIntent);
     }

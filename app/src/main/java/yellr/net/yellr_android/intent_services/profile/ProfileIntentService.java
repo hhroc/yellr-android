@@ -21,12 +21,13 @@ import java.util.Locale;
 
 import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.fragments.ProfileFragment;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 public class ProfileIntentService extends IntentService {
     public static final String ACTION_GET_PROFILE =
             "yellr.net.yellr_android.action.GET_PROFILE";
 
-    public static final String PARAM_CUID = "cuid";
+    //public static final String PARAM_CUID = "cuid";
     public static final String PARAM_PROFILE_JSON = "profileJson";
 
     public ProfileIntentService() {
@@ -39,41 +40,27 @@ public class ProfileIntentService extends IntentService {
 
         //Log.d("ProfileIntentService.onHandleIntent()","Decoding intent action ...");
 
-        String cuid = intent.getStringExtra(PARAM_CUID);
-        handleActionGetProfile(cuid);
+        //String cuid = intent.getStringExtra(PARAM_CUID);
+        if ( YellrUtils.isHomeLocationSet(getApplicationContext()) )
+            handleActionGetProfile(); //cuid);
     }
 
     /**
      * Handles get profile
      */
-    private void handleActionGetProfile(String cuid) {
+    private void handleActionGetProfile() {
 
 
         String baseUrl = BuildConfig.BASE_URL + "/get_profile.json";
 
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        String bestProvider = lm.getBestProvider(criteria, true);
-        Location location = lm.getLastKnownLocation(bestProvider); //LocationManager.GPS_PROVIDER);
-        // default to center of Rochester, NY
-        double latitude = 43.1656;
-        double longitude = -77.6114;
-        // if we have a location available, then set it
-        if ( location != null ){
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-        } else {
-            Log.d("ProfileIntentService.handleActionGetAssignments()","No location available, defaulting to Rochester, NY");
-        }
-
-        String lat = String.valueOf(latitude);
-        String lng = String.valueOf(longitude);
+        double latLng[] = YellrUtils.getLocation(getApplicationContext());
+        String lat = String.valueOf(latLng[0]);
+        String lng = String.valueOf(latLng[1]);
 
         String languageCode = Locale.getDefault().getLanguage();
 
         String url =  baseUrl
-                + "?cuid=" + cuid
+                + "?cuid=" + YellrUtils.getCUID(getApplicationContext())
                 + "&language_code=" + languageCode
                 + "&lat=" + lat
                 + "&lng=" + lng;

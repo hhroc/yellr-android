@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 public class SplashActivity extends Activity{
 
@@ -19,15 +20,30 @@ public class SplashActivity extends Activity{
     protected void onResume() {
         super.onResume();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent;
-                intent = new Intent(getApplicationContext(), HomeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            }
-        }, 500);
+        //YellrUtils.resetHomeLocation(getApplicationContext());
+
+        if (YellrUtils.isHomeLocationSet(getApplicationContext())) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent;
+                    intent = new Intent(getApplicationContext(), HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+            }, 500);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent;
+                    intent = new Intent(getApplicationContext(), LocationActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+            }, 500);
+        }
     }
 }

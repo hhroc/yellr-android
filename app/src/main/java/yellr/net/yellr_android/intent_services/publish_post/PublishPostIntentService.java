@@ -46,7 +46,7 @@ public class PublishPostIntentService extends IntentService {
     public static final String ACTION_GET_PUBLISH_POST =
             "yellr.net.yellr_android.action.GET_PUBLISH_POST";
 
-    public static final String PARAM_CUID = "cuid";
+    //public static final String PARAM_CUID = "cuid";
     public static final String PARAM_ASSIGNMENT_ID = "assignmentId";
     public static final String PARAM_TEXT = "text";
     public static final String PARAM_MEDIA_TYPE = "mediaType";
@@ -72,7 +72,7 @@ public class PublishPostIntentService extends IntentService {
 
         //Log.d("PublishPostIntentService.onHandleIntent()","Decoding intent action ...");
 
-        String cuid = intent.getStringExtra(PARAM_CUID);
+        //String cuid = intent.getStringExtra(PARAM_CUID);
         int assignmentId = intent.getIntExtra(PARAM_ASSIGNMENT_ID, 0);
         //String title = intent.getStringExtra(PARAM_TITLE);
         String text = intent.getStringExtra(PARAM_TEXT);
@@ -91,39 +91,22 @@ public class PublishPostIntentService extends IntentService {
 
         //String[] imageFilenames
 
-        handleActionGetPublishPost(cuid, assignmentId, mediaType, text, imageFilename, audioFilename, videoFilename);
+        // TODO: we really cant get here unless the home locsation is set, so we prob dont need to check tyhis
+
+        if ( YellrUtils.isHomeLocationSet(getApplicationContext()) )
+            handleActionGetPublishPost(assignmentId, mediaType, text, imageFilename, audioFilename, videoFilename);
 
     }
 
     /**
      * Handles get PublishPost
      */
-    private void handleActionGetPublishPost(String cuid,
-                                            int assignmentId,
+    private void handleActionGetPublishPost(int assignmentId,
                                             String mediaType,
                                             String text,
                                             String imageFilename,
                                             String audioFilename,
                                             String videoFilename) {
-        //String title,
-        //MediaObjectDefinition[] mediaObjectDefinitions) {
-
-        //Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Starting handleActionGetPublishPost() ...");
-
-        // get location data
-
-        // via: http://stackoverflow.com/a/2227299
-        // TODO: check for last known good, and if null then
-        //       poll to get a fresh location.  This will be
-        //       okay for now though, even if it takes a while
-        //       to complete (since it's in the service)
-        //LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        //Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        //double latitude = location.getLatitude();
-        //double longitude = location.getLongitude();
-
-        //double latitude = 43.2;
-        //double longitude = -77.5;
 
         Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Uploading media objects ...");
 
@@ -154,7 +137,6 @@ public class PublishPostIntentService extends IntentService {
         // TODO: switch on media type
 
         String mediaObjectResponseJson = uploadMedia(
-                cuid,
                 mediaType,
                 mediaFilename,
                 mediaText,
@@ -171,7 +153,6 @@ public class PublishPostIntentService extends IntentService {
 
         //String mediaObjectIdsJson = gson.toJson(mediaObjectIds);
         String publishPostJson = publishPost(
-                cuid,
                 assignmentId,
                 //languageCode,
                 //title,
@@ -182,8 +163,7 @@ public class PublishPostIntentService extends IntentService {
 
     }
 
-    private String publishPost(String cuid,
-                               int assignmentId,
+    private String publishPost(int assignmentId,
                                //String languageCode,
                                //String title,
                                //double lat,
@@ -193,24 +173,9 @@ public class PublishPostIntentService extends IntentService {
 
         String baseUrl = BuildConfig.BASE_URL + "/publish_post.json";
 
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        String bestProvider = lm.getBestProvider(criteria, true);
-        Location location = lm.getLastKnownLocation(bestProvider); //LocationManager.GPS_PROVIDER);
-        // default to center of Rochester, NY
-        double latitude = 43.1656;
-        double longitude = -77.6114;
-        // if we have a location available, then set it
-        if ( location != null ){
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-        } else {
-            Log.d("PublishPostIntentService.handleActionGetAssignments()","No location available, defaulting to Rochester, NY");
-        }
-
-        String lat = String.valueOf(latitude);
-        String lng = String.valueOf(longitude);
+        double latLng[] = YellrUtils.getLocation(getApplicationContext());
+        String lat = String.valueOf(latLng[0]);
+        String lng = String.valueOf(latLng[1]);
 
         String languageCode = Locale.getDefault().getLanguage();
 
@@ -296,8 +261,7 @@ public class PublishPostIntentService extends IntentService {
 
     }
 
-    private String uploadMedia(String cuid,
-                               String mediaType,
+    private String uploadMedia(String mediaType,
                                String mediaFilename,
                                String mediaText,
                                String mediaCaption) {
@@ -307,24 +271,9 @@ public class PublishPostIntentService extends IntentService {
 
         String baseUrl = BuildConfig.BASE_URL + "/upload_media.json";
 
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        String bestProvider = lm.getBestProvider(criteria, true);
-        Location location = lm.getLastKnownLocation(bestProvider); //LocationManager.GPS_PROVIDER);
-        // default to center of Rochester, NY
-        double latitude = 43.1656;
-        double longitude = -77.6114;
-        // if we have a location available, then set it
-        if ( location != null ){
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-        } else {
-            Log.d("PublishPostIntentService.handleActionGetAssignments()","No location available, defaulting to Rochester, NY");
-        }
-
-        String lat = String.valueOf(latitude);
-        String lng = String.valueOf(longitude);
+        double latLng[] = YellrUtils.getLocation(getApplicationContext());
+        String lat = String.valueOf(latLng[0]);
+        String lng = String.valueOf(latLng[1]);
 
         String languageCode = Locale.getDefault().getLanguage();
 
