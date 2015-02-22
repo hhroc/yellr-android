@@ -23,26 +23,13 @@
         android:layout_below="@+id/frag_post_assignment_question"
         android:text="@string/fragment_post_assignment_description"/>
 
-    <ImageView
-        android:id="@+id/frag_post_imagepreview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:maxHeight="175dp"
-
-        android:minHeight="175dp"
-
-        android:adjustViewBounds="true"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/frag_post_assignment_description"/>
-
     <EditText
         android:id="@+id/frag_post_edittext"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/frag_post_imagepreview"
+        android:layout_below="@+id/frag_post_assignment_description"
         android:textCursorDrawable="@null"
-        android:paddingTop="32dp"
+        android:layout_marginTop="32dp"
         android:hint="@string/frag_post_edittext"/>
 
     <TextView
@@ -52,7 +39,9 @@
         android:layout_below="@id/frag_post_edittext"
         android:text="@string/frag_post_media_text"
         android:paddingTop="16dp"/>
+
     <LinearLayout
+        android:id="@+id/frag_post_media_buttons_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/frag_post_media_text">
@@ -95,6 +84,19 @@
             android:paddingBottom="8dp"/>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/frag_post_imagepreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:maxHeight="175dp"
+
+        android:minHeight="175dp"
+
+        android:adjustViewBounds="true"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/frag_post_media_buttons_layout"/>
 
 
 </RelativeLayout>

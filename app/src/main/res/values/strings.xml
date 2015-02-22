@@ -37,8 +37,8 @@
 
     <!-- PostFragment -->
     <string name="title_activity_post">New Post</string>
-    <string name="frag_post_edittext">What\'s on your mind?</string>
-    <string name="frag_post_media_text">Add extra media:</string>
+    <string name="frag_post_edittext">Tell us about your community</string>
+    <string name="frag_post_media_text">Add media:</string>
     <string name="action_post">Send</string>
 
     <!-- ViewStoryFragment -->

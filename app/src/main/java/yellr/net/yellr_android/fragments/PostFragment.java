@@ -233,7 +233,7 @@ public class PostFragment extends Fragment {
             //proposedImageFilename = "file:" + imageFile.getAbsolutePath();
 
 
-            Toast.makeText(getActivity(), proposedImageFilename, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), proposedImageFilename, Toast.LENGTH_SHORT).show();
 
             this.mediaType = "image";
             this.imageFilename = proposedImageFilename;
