@@ -70,7 +70,7 @@ public class YellrUtils {
         Log.d("YellrUtils.getLocation()", "providers: " + providers.toString());
         for (int i = 0; i < providers.size(); i++) {
             Location l = lm.getLastKnownLocation(providers.get(i));
-            if (l != null) {
+            if (null != l) {
                 location = l;
             }
         }
@@ -79,7 +79,7 @@ public class YellrUtils {
         double latitude = 0; //43.1656;
         double longitude = 0; //-77.6114;
         // if we have a location available, then set it
-        if (location != null) {
+        if (null != location) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
         } else {

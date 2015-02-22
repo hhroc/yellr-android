@@ -65,4 +65,7 @@
     <string name="action_new_uuid">New UUID</string>
     <string name="title_activity_location">Set A Location</string>
 
+    <!-- location -->
+    <string name="frag_location_infotext">Yellr uses location to send you assignments and stories.  Enter the zipcode you would like to set as your home location.</string>
+
 </resources>

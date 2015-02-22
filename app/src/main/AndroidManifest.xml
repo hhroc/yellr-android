@@ -56,43 +56,35 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.HomeActivity" />
         </activity>
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:parentActivityName=".activities.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".activities.LocationActivity"
+            android:label="@string/title_activity_location"
+            android:parentActivityName=".activities.SplashActivity" >
+            android:noHistory="true">
+        </activity>
 
         <service
             android:name=".intent_services.assignments.AssignmentsIntentService"
             android:exported="false" >
         </service>
 
-        <!--
-        <receiver
-            android:name=".intent_services.assignments.AssignmentsReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
-        -->
-
         <service
             android:name=".intent_services.stories.StoriesIntentService"
             android:exported="false" >
         </service>
 
-        <receiver
-            android:name=".intent_services.stories.StoriesReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
-
         <service
             android:name=".intent_services.publish_post.PublishPostIntentService"
             android:exported="false" >
         </service>
-
-        <!--
-        <receiver
-            android:name=".intent_services.publish_post.PublishPostReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
-        -->
 
         <activity
             android:name=".activities.NotificationsActivity"
@@ -104,46 +96,15 @@
             android:exported="false" >
         </service>
 
-        <!--
-        <receiver
-            android:name=".intent_services.notifications.NotificationsReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
-        -->
-
         <service
             android:name=".intent_services.messages.MessagesIntentService"
             android:exported="false" >
         </service>
 
-        <receiver
-            android:name=".intent_services.messages.MessagesReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
-
-        <activity
-            android:name=".activities.ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:parentActivityName=".activities.HomeActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.HomeActivity" />
-        </activity>
-
         <service
             android:name=".intent_services.profile.ProfileIntentService"
             android:exported="false" >
         </service>
-
-        <!--
-        <receiver
-            android:name=".intent_services.profile.ProfileReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
-        -->
 
         <service
             android:name=".intent_services.verify_user.VerifyUserIntentService"
@@ -157,11 +118,6 @@
             android:name=".intent_services.data.DataIntentService"
             android:exported="false" >
         </service>
-
-        <activity
-            android:name=".activities.LocationActivity"
-            android:label="@string/title_activity_location" >
-        </activity>
 
         <service
             android:name=".intent_services.zipcode.ZipcodeIntentService"

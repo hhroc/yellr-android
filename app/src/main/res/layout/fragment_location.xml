@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/frag_location_infotext"
-        android:text="Yellr uses location to send you assignments and stories.  Enter the zipcode you would like to set as your home location."
+        android:text="@string/frag_location_infotext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -29,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.R;
@@ -81,12 +83,22 @@ public class LocationFragment extends Fragment {
 
                 String zipcode = String.valueOf(zipcodeEditText.getText());
 
-                Context context = getActivity().getApplicationContext();
-                Intent zipcodeWebIntent = new Intent(context, ZipcodeIntentService.class);
-                zipcodeWebIntent.putExtra(ZipcodeIntentService.PARAM_ZIPCODE, zipcode);
-                zipcodeWebIntent.setAction(ZipcodeIntentService.ACTION_GET_ZIPCODE);
-                context.startService(zipcodeWebIntent);
+                String regex = "^\\d{5}(-\\d{4})?$";
+                if ( Pattern.matches(regex,zipcode) ) {
 
+                    Context context = getActivity().getApplicationContext();
+                    Intent zipcodeWebIntent = new Intent(context, ZipcodeIntentService.class);
+                    zipcodeWebIntent.putExtra(ZipcodeIntentService.PARAM_ZIPCODE, zipcode);
+                    zipcodeWebIntent.setAction(ZipcodeIntentService.ACTION_GET_ZIPCODE);
+                    context.startService(zipcodeWebIntent);
+
+                    nextButton.setEnabled(false);
+                    nextButton.setBackground(getResources().getDrawable(R.drawable.yellr_button_deactivated));
+                } else {
+
+                    Toast.makeText(getActivity(), "Please enter a valid Zipcode.", Toast.LENGTH_SHORT).show();
+
+                }
             }
 
         });
@@ -148,6 +160,9 @@ public class LocationFragment extends Fragment {
                 intent = new Intent(getActivity(), HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getActivity().startActivity(intent);
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                nextButton.setEnabled(true);
+                nextButton.setBackground(getResources().getDrawable( R.drawable.yellr_button));
             }
         //}
     }
@@ -176,6 +191,13 @@ public class LocationFragment extends Fragment {
             if ( response.success ) {
 
                 showZipcodeDialog(response.zipcode, response.city, response.state_code, response.lat, response.lng);
+
+            } else {
+
+                Toast.makeText(getActivity(), "Please enter a valid Zipcode.", Toast.LENGTH_SHORT).show();
+
+                nextButton.setEnabled(true);
+                nextButton.setBackground(getResources().getDrawable( R.drawable.yellr_button));
 
             }
 
