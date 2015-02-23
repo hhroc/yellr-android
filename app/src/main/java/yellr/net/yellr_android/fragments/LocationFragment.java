@@ -53,6 +53,8 @@ public class LocationFragment extends Fragment {
     private EditText zipcodeEditText;
     private Button nextButton;
 
+    ZipcodeReceiver zipcodeReceiver;
+
     public LocationFragment() {
     }
 
@@ -74,7 +76,7 @@ public class LocationFragment extends Fragment {
 
 //        /showZipcodeDialog();
 
-        zipcodeEditText = (EditText)view.findViewById(R.id.frag_location_zipcode);
+        zipcodeEditText = (EditText) view.findViewById(R.id.frag_location_zipcode);
 
         zipcodeEditText.addTextChangedListener(new TextWatcher() {
 
@@ -92,25 +94,25 @@ public class LocationFragment extends Fragment {
                 // if the user hit enter, then remove the \n and call the nextButton.onClick() function
                 String text = s.toString();
                 //Log.d("afterTextChanged()","text: " + text + ", text(-1): " + text.substring(text.length() - 1));
-                if ( text.length() > 0 && text.substring(text.length() - 1).equals("\n") ) {
+                if (text.length() > 0 && text.substring(text.length() - 1).equals("\n")) {
                     s.replace(s.length() - 1, s.length(), "");
                     nextButton.callOnClick();
                 }
             }
         });
 
-        nextButton = (Button)view.findViewById(R.id.frag_location_next_button);
+        nextButton = (Button) view.findViewById(R.id.frag_location_next_button);
 
         nextButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
 
-                Log.d("LocationFragment.onCreateView().setOnClickListener()","Calling ZipcodeIntentService ...");
+                Log.d("LocationFragment.onCreateView().setOnClickListener()", "Calling ZipcodeIntentService ...");
 
                 String zipcode = String.valueOf(zipcodeEditText.getText()).trim();
 
                 String regex = "^\\d{5}(-\\d{4})?$";
-                if ( Pattern.matches(regex,zipcode) ) {
+                if (Pattern.matches(regex, zipcode)) {
 
                     Context context = getActivity().getApplicationContext();
                     Intent zipcodeWebIntent = new Intent(context, ZipcodeIntentService.class);
@@ -142,10 +144,18 @@ public class LocationFragment extends Fragment {
         Context context = getActivity().getApplicationContext();
         IntentFilter zipcodeFilter = new IntentFilter(ZipcodeIntentService.ACTION_NEW_ZIPCODE);
         zipcodeFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        ZipcodeReceiver zipcodeReceiver = new ZipcodeReceiver();
+        this.zipcodeReceiver = new ZipcodeReceiver();
         context.registerReceiver(zipcodeReceiver, zipcodeFilter);
 
 
+    }
+
+    @Override
+    public void onStop() {
+        // unregister receiver so activity will close out completely.
+        Context context = getActivity().getApplicationContext();
+        context.unregisterReceiver(this.zipcodeReceiver);
+        super.onStop();
     }
 
     @Override
@@ -159,7 +169,7 @@ public class LocationFragment extends Fragment {
         SetHomeLocationFragment setHomeLocationFragment = new SetHomeLocationFragment();
         Bundle setHomeLocationBundle = new Bundle();
         setHomeLocationBundle.putString("zipcode",zipcode);
-        setHomeLocationBundle.putString("city",city);
+        setHomeLocationBundle.putString("city", city);
         setHomeLocationBundle.putString("stateCode",stateCode);
         setHomeLocationBundle.putFloat("lat",lat);
         setHomeLocationBundle.putFloat("lng",lng);
@@ -186,6 +196,10 @@ public class LocationFragment extends Fragment {
                 intent = new Intent(getActivity(), HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getActivity().startActivity(intent);
+
+                // remove from history stack
+                this.getActivity().finish();
+
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 nextButton.setEnabled(true);
                 nextButton.setBackground(getResources().getDrawable( R.drawable.yellr_button));

@@ -27,7 +27,9 @@
         android:layout_below="@+id/frag_location_infotext"
         android:textCursorDrawable="@null"
         android:paddingTop="32dp"
-        android:hint="Enter your zipcode."/>
+        android:hint="Enter your zipcode."
+        android:digits="0123456789\n"
+        android:inputType="numberDecimal"/>
 
     <Button
         android:id="@+id/frag_location_next_button"

@@ -1,8 +1,10 @@
 package yellr.net.yellr_android.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -34,6 +36,7 @@ import java.util.Date;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.activities.HomeActivity;
+import yellr.net.yellr_android.activities.PostActivity;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
 import yellr.net.yellr_android.utils.YellrUtils;
 
@@ -114,6 +117,12 @@ public class PostFragment extends Fragment {
         // get the cuid
         this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
 
+    }
+
+    @Override
+    public void onStop() {
+        // unregister any receivers here.
+        super.onStop();
     }
 
     @Override
@@ -217,6 +226,43 @@ public class PostFragment extends Fragment {
                 imageBitmap = BitmapFactory.decodeFile(this.proposedImageFilename);
                 imagePreview.setImageBitmap(imageBitmap);
 
+                //getBitmapFromCameraData()
+
+                //
+                // This code taken from here:
+                //     https://github.com/rexstjohn/UltimateAndroidCameraGuide/blob/master/camera/src/main/java/com/ultimate/camera/fragments/SimpleAndroidImagePickerFragment.java
+
+                //PostActivity activity = (PostActivity)getActivity();
+                //Bitmap bitmap = getBitmapFromCameraData(data, activity);
+                //imagePreview.setImageBitmap(bitmap);
+
+                /*
+                //
+                // This code taken from here:
+                //     https://github.com/rexstjohn/UltimateAndroidCameraGuide/blob/master/camera/src/main/java/com/ultimate/camera/fragments/SimpleAndroidImagePickerFragment.java
+
+                // Get the dimensions of the View
+                int targetW = imagePreview.getWidth();
+                int targetH = imagePreview.getHeight();
+
+                // Get the dimensions of the bitmap
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(this.proposedImageFilename, bmOptions);
+                int photoW = bmOptions.outWidth;
+                int photoH = bmOptions.outHeight;
+
+                // Determine how much to scale down the image
+                int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+                // Decode the image file into a Bitmap sized to fill the View
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                bmOptions.inPurgeable = true;
+                Bitmap bitmap = BitmapFactory.decodeFile(this.proposedImageFilename, bmOptions);
+                imagePreview.setImageBitmap(bitmap);
+                */
+
             }catch (Exception e) {
                 // todo: display error
             }
@@ -238,6 +284,17 @@ public class PostFragment extends Fragment {
             this.mediaType = "image";
             this.imageFilename = proposedImageFilename;
         }
+    }
+
+    public static Bitmap getBitmapFromCameraData(Intent data, Context context){
+        Uri selectedImage = data.getData();
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
+        return BitmapFactory.decodeFile(picturePath);
     }
 
     @Override
@@ -287,7 +344,7 @@ public class PostFragment extends Fragment {
 
         Log.d("SubmitPostToYellr()", "Starting PublishPostIntentService intent ...");
 
-        //Toast.makeText(getActivity(), "Sending post ...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Sending post ...", Toast.LENGTH_SHORT).show();
 
         // launch intent service
         getActivity().startService(postIntent);
@@ -301,5 +358,8 @@ public class PostFragment extends Fragment {
         Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(homeIntent);
+
+        // remove from history stack
+        this.getActivity().finish();
     }
 }
