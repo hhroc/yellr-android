@@ -1,4 +1,4 @@
-package yellr.net.yellr_android.intent_services.assignments;
+package yellr.net.yellr_android.intent_services.data;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,45 +24,36 @@ import java.util.Locale;
 import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.utils.YellrUtils;
 
-public class AssignmentsIntentService extends IntentService {
-    public static final String ACTION_GET_ASSIGNMENTS =
-            "yellr.net.yellr_android.action.GET_ASSIGNMENTS";
-    public static final String ACTION_NEW_ASSIGNMENTS =
-            "yellr.net.yellr_android.action.NEW_ASSIGNMENTS";
+public class DataIntentService extends IntentService {
+    public static final String ACTION_GET_DATA =
+            "yellr.net.yellr_android.action.GET_DATA";
+    public static final String ACTION_NEW_DATA =
+            "yellr.net.yellr_android.action.NEW_DATA";
 
-    //public static final String PARAM_CUID = "cuid";
-    public static final String PARAM_ASSIGNMENTS_JSON = "assignmentsJson";
+    public static final String PARAM_CUID = "cuid";
+    public static final String PARAM_DATA_JSON = "dataJson";
 
-    public AssignmentsIntentService() {
-        super("AssignmentsIntentService");
-        //Log.d("AssignmentsIntentService()","Constructor.");
+    public DataIntentService() {
+        super("DataIntentService");
+        //Log.d("DataIntentService()","Constructor.");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        //Log.d("AssignmentsIntentService.onHandleIntent()","Decoding intent action ...");
+        //Log.d("DataIntentService.onHandleIntent()","Decoding intent action ...");
 
         //String cuid = intent.getStringExtra(PARAM_CUID);
-        handleActionGetAssignments(); //cuid);
+        if ( YellrUtils.isHomeLocationSet(getApplicationContext()) )
+            handleActionGetData(); //cuid);
     }
 
     /**
-     * Handles get assignments
+     * Handles get data
      */
-    private void handleActionGetAssignments() {
+    private void handleActionGetData() {
 
-        //Log.d("AssignmentsIntentService.UpdateData()", "Starting UpdateData() ...");
-
-        // get location data
-
-        // via: http://stackoverflow.com/a/2227299
-        // TODO: check for last known good, and if null then
-        //       poll to get a fresh location.  This will be
-        //       okay for now though, even if it takes a while
-        //       to complete (since it's in the service)
-
-        String baseUrl = BuildConfig.BASE_URL + "/get_assignments.json";
+        String baseUrl = BuildConfig.BASE_URL + "/get_data.json";
 
         double latLng[] = YellrUtils.getLocation(getApplicationContext());
         String lat = String.valueOf(latLng[0]);
@@ -74,7 +67,7 @@ public class AssignmentsIntentService extends IntentService {
                 + "&lat=" + lat
                 + "&lng=" + lng;
 
-        //Log.d("AssignmentsIntentService.UpdateData()","URL: " + url);
+        //Log.d("DataIntentService.UpdateData()","URL: " + url);
 
         //
         // TODO: need to check for exceptions better, this bombs out sometimes
@@ -98,21 +91,23 @@ public class AssignmentsIntentService extends IntentService {
                 builder.append(line);
             }
 
-            String assignmentsJson = builder.toString();
+            String dataJson = builder.toString();
 
-            //Log.d("AssignmentsIntentService.UpdateData()","Broadcasting result ...");
+            //Log.d("DataIntentService.UpdateData()","Broadcasting result ...");
 
-            Log.d("AssignmentsIntentService.UpdateData()","JSON: " + assignmentsJson);
+            Log.d("DataIntentService.UpdateData()","JSON: " + dataJson);
+
+            //Gson gson
 
             Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(ACTION_NEW_ASSIGNMENTS);
+            broadcastIntent.setAction(DataIntentService.ACTION_NEW_DATA);
             broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            broadcastIntent.putExtra(PARAM_ASSIGNMENTS_JSON, assignmentsJson);
+            broadcastIntent.putExtra(DataIntentService.PARAM_DATA_JSON, dataJson);
             sendBroadcast(broadcastIntent);
 
         } catch( Exception e) {
 
-            Log.d("AssignmentsIntentService.UpdateData()","Error: " + e.toString());
+            Log.d("DataIntentService.UpdateData()","Error: " + e.toString());
 
             //e.printStackTrace();
         }

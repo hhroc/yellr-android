@@ -20,14 +20,14 @@
     <string name="fa_question_circle"></string>
     <string name="fa_user"></string>
     <string name="fa_pencil"></string>
-    <string name="fa_user_secret">&#xf21b;</string>
-    <string name="fa_user_plus">&#xf234;</string>
-    <string name="fa_check_square">&#xf14a;</string>
-    <string name="fa_times">&#xf00d;</string>
-    <string name="fa_key">&#xf084;</string>
-    <string name="fa_random">&#xf074;</string>
-    <string name="fa_eye">&#xf06e;</string>
-    <string name="fa_chevron_left_circle">&#xf137;</string>
+    <string name="fa_user_secret"></string>
+    <string name="fa_user_plus"></string>
+    <string name="fa_check_square"></string>
+    <string name="fa_times"></string>
+    <string name="fa_key"></string>
+    <string name="fa_random"></string>
+    <string name="fa_eye"></string>
+    <string name="fa_chevron_left_circle"></string>
 
     <!-- Actionbar Action Buttons -->
     <string name="action_notification">Notifications</string>
@@ -37,8 +37,8 @@
 
     <!-- PostFragment -->
     <string name="title_activity_post">New Post</string>
-    <string name="frag_post_edittext">What\'s on your mind?</string>
-    <string name="frag_post_media_text">Add extra media:</string>
+    <string name="frag_post_edittext">Tell us about your community</string>
+    <string name="frag_post_media_text">Add media:</string>
     <string name="action_post">Send</string>
 
     <!-- ViewStoryFragment -->
@@ -63,5 +63,9 @@
     <string name="frag_profile_used_posts_description">Posts Used</string>
     <string name="action_signup">SignUp</string>
     <string name="action_new_uuid">New UUID</string>
+    <string name="title_activity_location">Set A Location</string>
+
+    <!-- location -->
+    <string name="frag_location_infotext">Yellr uses location to send you assignments and stories.  Enter the zipcode you would like to set as your home location.</string>
 
 </resources>

@@ -115,7 +115,7 @@ public class AssignmentsFragment extends Fragment {
         // init service
         Context context = getActivity().getApplicationContext();
         Intent assignmentsWebIntent = new Intent(context, AssignmentsIntentService.class);
-        assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CUID, cuid);
+        //assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CUID, cuid);
         assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
         context.startService(assignmentsWebIntent);
     }

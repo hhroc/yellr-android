@@ -27,12 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import yellr.net.yellr_android.BuildConfig;
+import yellr.net.yellr_android.utils.YellrUtils;
 
 public class VerifyUserIntentService extends IntentService {
     public static final String ACTION_GET_VERIFY_USER =
             "yellr.net.yellr_android.action.GET_VERIFY_USER";
 
-    public static final String PARAM_CLIENT_ID = "clientId";
+   // public static final String PARAM_CLIENT_ID = "clientId";
     public static final String PARAM_USERNAME = "username";
     public static final String PARAM_PASSWORD = "password";
     public static final String PARAM_FIRST_NAME = "firstName";
@@ -50,7 +51,7 @@ public class VerifyUserIntentService extends IntentService {
 
         Log.d("VerifyUserIntentService.onHandleIntent()","Decoding intent action ...");
 
-        String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
+        //String clientId = intent.getStringExtra(PARAM_CLIENT_ID);
         String username = intent.getStringExtra(PARAM_USERNAME);
         String password = intent.getStringExtra(PARAM_PASSWORD);
         String first_name = intent.getStringExtra(PARAM_FIRST_NAME);
@@ -58,24 +59,23 @@ public class VerifyUserIntentService extends IntentService {
         String email = intent.getStringExtra(PARAM_EMAIL);
 
 
-        handleActionVerifyUser(clientId, username, password, first_name, last_name, email);
+        handleActionVerifyUser(username, password, first_name, last_name, email);
     }
 
     /**
      * Handles get verifyUser
      */
-    private void handleActionVerifyUser(String clientId,
-                                        String username,
+    private void handleActionVerifyUser(String username,
                                         String password,
                                         String first_name,
                                         String last_name,
                                         String email) {
 
-        String baseUrl = BuildConfig.BASE_URL +" /verify_user.json";
+        String baseUrl = BuildConfig.BASE_URL + "/verify_user.json";
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-        params.add(new BasicNameValuePair("client_id", clientId));
+        params.add(new BasicNameValuePair("cuid", YellrUtils.getCUID(getApplicationContext())));
         params.add(new BasicNameValuePair("username", username));
         params.add(new BasicNameValuePair("password", password));
         params.add(new BasicNameValuePair("first_name", first_name));
@@ -83,8 +83,8 @@ public class VerifyUserIntentService extends IntentService {
         if( !email.isEmpty() ) {
             params.add(new BasicNameValuePair("email", email));
         }
-        String url =  baseUrl
-                + "?client_id=" + clientId;
+        String url =  baseUrl;
+                //+ "?client_id=" + clientId;
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();

@@ -111,7 +111,7 @@ public class NotificationsFragment extends Fragment{
         // init service
         Context context = getActivity().getApplicationContext();
         Intent notificationsWebIntent = new Intent(context, NotificationsIntentService.class);
-        notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CUID, cuid);
+        //notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CUID, cuid);
         notificationsWebIntent.setAction(NotificationsIntentService.ACTION_GET_NOTIFICATIONS);
         context.startService(notificationsWebIntent);
     }

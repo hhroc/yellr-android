@@ -23,7 +23,9 @@
         android:textSize="16sp"
         android:textColor="@color/grey"
         android:paddingLeft="16dp"
-        android:paddingBottom="8dp"/>
+        android:paddingBottom="8dp"
+        android:singleLine="true"
+        />
 
     <TextView
         android:id="@+id/frag_home_assignment_post_count"

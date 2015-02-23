@@ -233,7 +233,7 @@ public class PostFragment extends Fragment {
             //proposedImageFilename = "file:" + imageFile.getAbsolutePath();
 
 
-            Toast.makeText(getActivity(), proposedImageFilename, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), proposedImageFilename, Toast.LENGTH_SHORT).show();
 
             this.mediaType = "image";
             this.imageFilename = proposedImageFilename;
@@ -277,7 +277,7 @@ public class PostFragment extends Fragment {
         }
 
         Intent postIntent = new Intent(getActivity(), PublishPostIntentService.class);
-        postIntent.putExtra(PublishPostIntentService.PARAM_CUID, cuid);
+        //postIntent.putExtra(PublishPostIntentService.PARAM_CUID, cuid);
         postIntent.putExtra(PublishPostIntentService.PARAM_ASSIGNMENT_ID, assignmentId);
         postIntent.putExtra(PublishPostIntentService.PARAM_TEXT, postText.getText().toString());
         postIntent.putExtra(PublishPostIntentService.PARAM_MEDIA_TYPE, this.mediaType);
