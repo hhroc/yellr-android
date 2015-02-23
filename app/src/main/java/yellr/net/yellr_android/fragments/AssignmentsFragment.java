@@ -194,7 +194,7 @@ public class AssignmentsFragment extends Fragment {
             textViewPostCount.setTypeface(font);
 
             textViewQuestionText.setText(this.assignments.get(position).question_text);
-            textViewOrganization.setText("Organization: " + this.assignments.get(position).organization);
+            textViewOrganization.setText("Organization: " + YellrUtils.ShortenString(this.assignments.get(position).organization));
             textViewPostCount.setText(getString(R.string.fa_comments) + " " + String.valueOf(this.assignments.get(position).post_count));
 
             return row;

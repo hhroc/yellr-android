@@ -75,6 +75,14 @@ public class YellrUtils {
         return retString;
     }
 
+    public static String ShortenString(String str) {
+        String retString = str;
+        if ( str.length() > 20) {
+            retString = str.substring(0,20) + " ...";
+        }
+        return retString;
+    }
+
     public static double[] getLocation(Context context) {
 
         /*
