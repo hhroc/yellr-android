@@ -200,7 +200,6 @@ public class StoriesFragment extends Fragment {
             Date pubDateStr = YellrUtils.PrettifyDateTime(this.stories.get(position).publish_datetime);
             String pubAgo = YellrUtils.calcTimeBetween(pubDateStr, new Date());
 
-            Log.v("dateissue", this.stories.get(position).publish_datetime);
             textViewPublishDateTime.setText(getString(R.string.fa_pencil) + " " + pubAgo + " ago.");
 
             return row;

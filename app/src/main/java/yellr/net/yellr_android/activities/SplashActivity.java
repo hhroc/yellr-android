@@ -20,7 +20,7 @@ public class SplashActivity extends Activity{
     protected void onResume() {
         super.onResume();
 
-        YellrUtils.resetHomeLocation(getApplicationContext());
+        //YellrUtils.resetHomeLocation(getApplicationContext());
 
         if (YellrUtils.isHomeLocationSet(getApplicationContext())) {
             new Handler().postDelayed(new Runnable() {

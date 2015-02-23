@@ -22,34 +22,57 @@ public class YellrUtils {
 
         Date date = new Date();
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             date = dateFormat.parse(rawDateTime);
         } catch (Exception e) {
             // todo: report
+            Log.d("YellrUtils.PrettifyDateTime()", "Error: " + e.toString());
         }
         return date;
     }
 
     public static String calcTimeBetween(Date start, Date end) {
+
         int SECOND = 1000;
         int MINUTE = SECOND * 60;
         int HOUR = MINUTE * 60;
         int DAY = HOUR * 24;
+
         int milliSeconds = Math.round(end.getTime() - start.getTime());
+        int t = 0;
+        String retString = "";
+
         if (milliSeconds > DAY) {
-            return String.format("%d days", Math.round(milliSeconds / DAY));
+            t = Math.round(milliSeconds / DAY);
+            retString = String.format("%d day", t);
+            if( t > 1) {
+                retString += "s";
+            }
+            //return retString;
         }
-        if (milliSeconds < DAY && milliSeconds > HOUR) {
-            return String.format("%d hours", Math.round(milliSeconds / HOUR));
+        else if (milliSeconds < DAY && milliSeconds > HOUR) {
+            t = Math.round(milliSeconds / HOUR);
+            retString = String.format("%d hour", t);
+            if (t > 1 ) {
+                retString += "s";
+            }
+            //return retString;
         }
-        if (milliSeconds < HOUR && milliSeconds > 15 * MINUTE) {
-            return String.format("%d minutes", Math.round(milliSeconds / MINUTE));
+        else if (milliSeconds < HOUR && milliSeconds > 15 * MINUTE) {
+            t = Math.round(milliSeconds / MINUTE);
+            retString = String.format("%d minute", t);
+            if ( t > 1 ) {
+                retString += "s";
+            }
+            //return retString;
         }
-        if (milliSeconds < 15 * MINUTE) {
-            return "Moments";
+        else if (milliSeconds < 15 * MINUTE) {
+            retString = "Moments";
         }
-        //Throw an exception instead?
-        return null;
+        else {
+            //Throw an exception instead?
+        }
+        return retString;
     }
 
     public static double[] getLocation(Context context) {
