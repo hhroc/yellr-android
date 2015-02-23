@@ -10,6 +10,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +75,30 @@ public class LocationFragment extends Fragment {
 //        /showZipcodeDialog();
 
         zipcodeEditText = (EditText)view.findViewById(R.id.frag_location_zipcode);
+
+        zipcodeEditText.addTextChangedListener(new TextWatcher() {
+
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void afterTextChanged(Editable s) {
+                // if the user hit enter, then remove the \n and call the nextButton.onClick() function
+                String text = s.toString();
+                //Log.d("afterTextChanged()","text: " + text + ", text(-1): " + text.substring(text.length() - 1));
+                if ( text.length() > 0 && text.substring(text.length() - 1).equals("\n") ) {
+                    s.replace(s.length() - 1, s.length(), "");
+                    nextButton.callOnClick();
+                }
+            }
+        });
+
         nextButton = (Button)view.findViewById(R.id.frag_location_next_button);
 
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +107,7 @@ public class LocationFragment extends Fragment {
 
                 Log.d("LocationFragment.onCreateView().setOnClickListener()","Calling ZipcodeIntentService ...");
 
-                String zipcode = String.valueOf(zipcodeEditText.getText());
+                String zipcode = String.valueOf(zipcodeEditText.getText()).trim();
 
                 String regex = "^\\d{5}(-\\d{4})?$";
                 if ( Pattern.matches(regex,zipcode) ) {
