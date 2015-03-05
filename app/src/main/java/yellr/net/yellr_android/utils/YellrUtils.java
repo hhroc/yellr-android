@@ -99,26 +99,38 @@ public class YellrUtils {
         //providers.add(LocationManager.NETWORK_PROVIDER);
         Location location = null;
         Log.d("YellrUtils.getLocation()", "providers: " + providers.toString());
-        for (int i = 0; i < providers.size(); i++) {
-            Location l = lm.getLastKnownLocation(providers.get(i));
-            if (null != l) {
-                location = l;
+        try {
+            for (int i = 0; i < providers.size(); i++) {
+                Location l = lm.getLastKnownLocation(providers.get(i));
+                if (null != l) {
+                    location = l;
+                    break;
+                }
             }
+        }catch (Exception ex) {
+            Log.d("YellrUtils.getLocation()","Error: " + ex.toString());
         }
 
-        // default to center of Rochester, NY
-        double latitude = 0; //43.1656;
-        double longitude = 0; //-77.6114;
+        // default to invalid lat/lng values
+        double latitude = 1000; //43.1656;
+        double longitude = 1000; //-77.6114;
+        double[] latLng = null;
         // if we have a location available, then set it
         if (null != location) {
+
             latitude = location.getLatitude();
             longitude = location.getLongitude();
-        } else {
-            Log.d("YellrUtils.getLocation()", "No location available, defaulting to Home Location");
-            Float[] latLng = YellrUtils.getHomeLocation(context);
-            latitude = latLng[0];
-            longitude = latLng[1];
+
+            latLng =  new double[2];
+            latLng[0] = latitude;
+            latLng[1] = longitude;
         }
+        //} else {
+        //    Log.d("YellrUtils.getLocation()", "No location available, defaulting to Home Location");
+        //    Float[] latLng = YellrUtils.getHomeLocation(context);
+        //    latitude = latLng[0];
+        //    longitude = latLng[1];
+        //}
 
         /*
         LocationDetector myloc = new LocationDetector(
@@ -137,9 +149,7 @@ public class YellrUtils {
         */
 
 
-        double[] latLng = new double[2];
-        latLng[0] = latitude;
-        latLng[1] = longitude;
+
 
         return latLng;
     }

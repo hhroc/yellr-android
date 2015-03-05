@@ -150,7 +150,6 @@ public class PublishPostIntentService extends IntentService {
             Log.d("PublishPostIntentService.handleActionGetPublishedPost", "GSON puked");
         }
 
-
         //String mediaObjectIdsJson = gson.toJson(mediaObjectIds);
         String publishPostJson = publishPost(
                 assignmentId,
@@ -173,7 +172,12 @@ public class PublishPostIntentService extends IntentService {
 
         String baseUrl = BuildConfig.BASE_URL + "/publish_post.json";
 
+        // get the location, but if the user has turned off location services,
+        // it will come back null.  If it's null, just dump out.
+        // TODO: pop-up a dialog maybe??
         double latLng[] = YellrUtils.getLocation(getApplicationContext());
+        if (latLng == null )
+            return null;
         String lat = String.valueOf(latLng[0]);
         String lng = String.valueOf(latLng[1]);
 
