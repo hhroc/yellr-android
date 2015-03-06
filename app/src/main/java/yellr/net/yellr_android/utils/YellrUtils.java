@@ -2,6 +2,7 @@ package yellr.net.yellr_android.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -10,6 +11,7 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -18,7 +20,7 @@ import java.util.UUID;
  */
 public class YellrUtils {
 
-    public static Date PrettifyDateTime(String rawDateTime) {
+    public static Date prettifyDateTime(String rawDateTime) {
 
         Date date = new Date();
         try {
@@ -45,42 +47,70 @@ public class YellrUtils {
         if (milliSeconds > DAY) {
             t = Math.round(milliSeconds / DAY);
             retString = String.format("%d day", t);
-            if( t > 1) {
+            if (t > 1) {
                 retString += "s";
             }
             //return retString;
-        }
-        else if (milliSeconds < DAY && milliSeconds > HOUR) {
+        } else if (milliSeconds < DAY && milliSeconds > HOUR) {
             t = Math.round(milliSeconds / HOUR);
             retString = String.format("%d hour", t);
-            if (t > 1 ) {
+            if (t > 1) {
                 retString += "s";
             }
             //return retString;
-        }
-        else if (milliSeconds < HOUR && milliSeconds > 15 * MINUTE) {
+        } else if (milliSeconds < HOUR && milliSeconds > 15 * MINUTE) {
             t = Math.round(milliSeconds / MINUTE);
             retString = String.format("%d minute", t);
-            if ( t > 1 ) {
+            if (t > 1) {
                 retString += "s";
             }
             //return retString;
-        }
-        else if (milliSeconds < 15 * MINUTE) {
+        } else if (milliSeconds < 15 * MINUTE) {
             retString = "Moments";
-        }
-        else {
+        } else {
             //Throw an exception instead?
         }
         return retString;
     }
 
-    public static String ShortenString(String str) {
+    public static String shortenString(String str) {
         String retString = str;
-        if ( str.length() > 20) {
-            retString = str.substring(0,20) + " ...";
+        if (str.length() > 20) {
+            retString = str.substring(0, 20) + " ...";
         }
         return retString;
+    }
+
+    public static String getAppVersion(Context context) {
+        String version = "Unknown";
+        try {
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            version = pInfo.versionName;
+        } catch (Exception ex) {
+            Log.d("YellrUtils.GetAppVersion()", "Error: " + ex.toString());
+        }
+        return version;
+    }
+
+    public static String buildUrl(Context context, String baseUrl ) {
+
+        String url = null;
+
+        double latLng[] = YellrUtils.getLocation(context);
+        if (latLng != null) {
+
+            String languageCode = Locale.getDefault().getLanguage();
+
+            url = baseUrl
+                + "?cuid=" + YellrUtils.getCUID(context)
+                + "&language_code=" + languageCode
+                + "&lat=" + latLng[0]
+                + "&lng=" + latLng[1]
+                + "&platform=" + "Android"
+                + "&app_version=" + YellrUtils.getAppVersion(context);
+        }
+
+        return url;
     }
 
     public static double[] getLocation(Context context) {

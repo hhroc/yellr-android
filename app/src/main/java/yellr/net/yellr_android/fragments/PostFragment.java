@@ -362,8 +362,8 @@ public class PostFragment extends Fragment {
 
         // reset display
         postText.setText("");
-        assignmentQuestion.setText(R.string.frag_post_assignment_title);
-        assignmentDescription.setText(R.string.frag_post_assignment_description);
+        assignmentQuestion.setText(getString(R.string.frag_post_assignment_title));
+        assignmentDescription.setText(getString(R.string.frag_post_assignment_description));
 
         // go back to home screen
         Intent homeIntent = new Intent(getActivity(), HomeActivity.class);

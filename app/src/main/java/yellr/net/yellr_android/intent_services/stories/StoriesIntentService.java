@@ -51,14 +51,15 @@ public class StoriesIntentService extends IntentService {
      */
     private void handleActionGetStories() {
 
-        String baseUrl = BuildConfig.BASE_URL + "/get_stories.json";
+        //String baseUrl = BuildConfig.BASE_URL + "/get_stories.json";
 
-        String storiesJson = "[]";
+        //String storiesJson = "[]";
 
         // get the location, but if the user has turned off location services,
         // it will come back null.  If it's null, we won't ping the server
         // and just return a blank json list
 
+        /*
         double latLng[] = YellrUtils.getLocation(getApplicationContext());
         if (latLng != null ) {
 
@@ -72,7 +73,12 @@ public class StoriesIntentService extends IntentService {
                     + "&language_code=" + languageCode
                     + "&lat=" + lat
                     + "&lng=" + lng;
+*/
+        String storiesJson = "[]";
 
+        String baseUrl = BuildConfig.BASE_URL + "/get_stories.json";
+        String url = YellrUtils.buildUrl(getApplicationContext(),baseUrl);
+        if (url != null) {
             try {
 
                 //

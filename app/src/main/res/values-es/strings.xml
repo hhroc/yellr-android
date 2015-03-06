@@ -84,6 +84,7 @@
     <string name="activity_location_title">Set A Location</string>
     <string name="frag_location_info_text">Yellr uses location to send you assignments and stories.  Enter the zipcode you would like to set as your home location.</string>
 
+
     <!--<string name="action_settings">Settings</string>-->
 
 </resources>

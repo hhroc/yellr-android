@@ -9,8 +9,8 @@
     tools:context="yellr.net.yellr_android.activities.LocationActivity$PlaceholderFragment">
 
     <TextView
-        android:id="@+id/frag_location_infotext"
-        android:text="@string/frag_location_infotext"
+        android:id="@+id/frag_location_info_text"
+        android:text="@string/frag_location_info_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"

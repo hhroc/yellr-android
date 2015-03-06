@@ -50,14 +50,13 @@ public class AssignmentsIntentService extends IntentService {
      */
     private void handleActionGetAssignments() {
 
-        String baseUrl = BuildConfig.BASE_URL + "/get_assignments.json";
 
-        String assignmentsJson = "[]";
 
         // get the location, but if the user has turned off location services,
         // it will come back null.  If it's null, we won't ping the server
         // and just return a blank json list
 
+        /*
         double latLng[] = YellrUtils.getLocation(getApplicationContext());
         if (latLng != null ) {
 
@@ -71,8 +70,13 @@ public class AssignmentsIntentService extends IntentService {
                     + "&language_code=" + languageCode
                     + "&lat=" + lat
                     + "&lng=" + lng;
+        */
 
-            //Log.d("AssignmentsIntentService.UpdateData()","URL: " + url);
+        String assignmentsJson = "[]";
+
+        String baseUrl = BuildConfig.BASE_URL + "/get_assignments.json";
+        String url = YellrUtils.buildUrl(getApplicationContext(),baseUrl);
+        if (url != null) {
 
             //
             // TODO: need to check for exceptions better, this bombs out sometimes

@@ -62,7 +62,7 @@ public class ViewStoryFragment extends Fragment {
         String contentsRendered = intent.getStringExtra(ViewStoryFragment.ARG_STORY_CONTENTS_RENDERED);
 
         //TODO Use new datetime prettifier
-        Date pubDT = YellrUtils.PrettifyDateTime(publishedDateTime);
+        Date pubDT = YellrUtils.prettifyDateTime(publishedDateTime);
         String pubAgo = YellrUtils.calcTimeBetween(pubDT, new Date());
 
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");

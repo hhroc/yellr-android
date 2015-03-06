@@ -4,7 +4,7 @@
     tools:context="yellr.net.yellr_android.activities.PostActivity">
 
     <item android:id="@+id/action_post_upload"
-        android:title="@string/action_post"
+        android:title=""
         android:orderInCategory="100"
         app:showAsAction="always" />
 </menu>

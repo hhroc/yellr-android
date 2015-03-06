@@ -248,9 +248,9 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_fragment_assignments).toUpperCase(l);
+                    return getString(R.string.fragment_assignments_title).toUpperCase(l);
                 case 1:
-                    return getString(R.string.title_fragment_stories).toUpperCase(l);
+                    return getString(R.string.fragment_stories_title).toUpperCase(l);
             }
             return null;
         }
