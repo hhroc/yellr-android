@@ -9,8 +9,13 @@
         android:orderInCategory="99"
         app:showAsAction="always"/>
 
+    <!--
+
+    TD: removed until the activity/fragment has been made
+
     <item android:id="@+id/action_profile_signup"
         android:title="@string/frag_profile_action_signup"
         android:orderInCategory="100"
         app:showAsAction="always" />
+    -->
 </menu>

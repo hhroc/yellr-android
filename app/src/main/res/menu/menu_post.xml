@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="yellr.net.yellr_android.activities.PostActivity">
 
+    <!--
+
+    TD: Removing since we have a submit button
+
     <item android:id="@+id/action_post_upload"
         android:title=""
         android:orderInCategory="100"
         app:showAsAction="always" />
+    -->
 </menu>

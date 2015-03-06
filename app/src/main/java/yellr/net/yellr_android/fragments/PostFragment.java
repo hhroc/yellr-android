@@ -313,11 +313,16 @@ public class PostFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_post, menu);
         if(this.isAdded()){
+            /*
+
+            TD: removed since we have a submit button
+
             menu.findItem(R.id.action_post_upload).setIcon(
                     new IconDrawable(getActivity(), Iconify.IconValue.fa_upload)
                             .colorRes(R.color.black)
                             .actionBarSize()
             );
+            */
         } else {
             Log.d("onCreateOptionsMenu()", "Fragment not added to Activity");
         }
@@ -327,9 +332,12 @@ public class PostFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
-            case R.id.action_post_upload:
-                SubmitPostToYellr();
-                break;
+            //
+            // TD: removed since we have a submit button
+            //
+            //case R.id.action_post_upload:
+            //    SubmitPostToYellr();
+            //    break;
             default:
                 break;
         }

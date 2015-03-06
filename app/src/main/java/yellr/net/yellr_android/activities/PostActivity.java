@@ -15,10 +15,15 @@ public class PostActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //setTheme();
+
         // Setup the action bar
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.hide();
+        //actionBar.setDisplayShowHomeEnabled(false);
+        //actionBar.setDisplayShowTitleEnabled(false);
 
         setContentView(R.layout.activity_post);
         if (savedInstanceState == null) {
