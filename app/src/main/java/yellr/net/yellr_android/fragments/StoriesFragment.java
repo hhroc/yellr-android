@@ -145,9 +145,9 @@ public class StoriesFragment extends Fragment {
                     storiesArrayAdapter.add(story);
                     stories[i] = story;
                 }
-                swipeRefreshLayout.setRefreshing(false);
             }
 
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 

@@ -44,7 +44,7 @@
         <activity
             android:name=".activities.PostActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_post"
+            android:label="@string/activity_post_title"
             android:parentActivityName=".activities.HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -61,7 +61,7 @@
         </activity>
         <activity
             android:name=".activities.ProfileActivity"
-            android:label="@string/title_activity_profile"
+            android:label="@string/activity_profile_title"
             android:parentActivityName=".activities.HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -69,7 +69,7 @@
         </activity>
         <activity
             android:name=".activities.LocationActivity"
-            android:label="@string/title_activity_location"
+            android:label="@string/activity_location_title"
             android:parentActivityName=".activities.SplashActivity" >
             android:noHistory="true">
         </activity>

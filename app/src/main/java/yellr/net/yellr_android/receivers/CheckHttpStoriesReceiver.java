@@ -82,10 +82,11 @@ public class CheckHttpStoriesReceiver extends BroadcastReceiver {
                     PendingIntent pendingStoryIntent = PendingIntent.getActivity(context, 0, storyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     mBuilder.setContentIntent(pendingStoryIntent);
+                    mBuilder.setAutoCancel(true); // closes notification after click
                     int storyNotificationId = 1;
                     NotificationManager mNotificationMgr =
                             (NotificationManager)  context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    mNotificationMgr.notify(storyNotificationId, mBuilder.build());
+                    mNotificationMgr.notify(storyNotificationId, mBuilder .build());
                 }
 
 

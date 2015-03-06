@@ -40,7 +40,7 @@ public class MessagesIntentService extends IntentService {
         //Log.d("MessagesIntentService.onHandleIntent()","Decoding intent action ...");
 
         //String cuid = intent.getStringExtra(PARAM_CUID);
-        if ( YellrUtils.isHomeLocationSet(getApplicationContext()) )
+        //if ( YellrUtils.isHomeLocationSet(getApplicationContext()) )
             handleActionGetMessages(); //cuid);
     }
 

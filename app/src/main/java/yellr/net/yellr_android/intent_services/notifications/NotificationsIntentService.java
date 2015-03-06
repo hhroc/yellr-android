@@ -41,7 +41,7 @@ public class NotificationsIntentService extends IntentService {
         //Log.d("NotificationsIntentService.onHandleIntent()","Decoding intent action ...");
 
         //String cuid = intent.getStringExtra(PARAM_CUID);
-        if (YellrUtils.isHomeLocationSet(getApplicationContext()))
+        //if (YellrUtils.isHomeLocationSet(getApplicationContext()))
             handleActionGetNotifications(); //cuid);
     }
 

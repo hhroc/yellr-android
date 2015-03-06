@@ -50,76 +50,67 @@ public class AssignmentsIntentService extends IntentService {
      */
     private void handleActionGetAssignments() {
 
-        //Log.d("AssignmentsIntentService.UpdateData()", "Starting UpdateData() ...");
-
-        // get location data
-
-        // via: http://stackoverflow.com/a/2227299
-        // TODO: check for last known good, and if null then
-        //       poll to get a fresh location.  This will be
-        //       okay for now though, even if it takes a while
-        //       to complete (since it's in the service)
-
         String baseUrl = BuildConfig.BASE_URL + "/get_assignments.json";
 
+        String assignmentsJson = "[]";
+
         // get the location, but if the user has turned off location services,
-        // it will come back null.  If it's null, just dump out.
-        // TODO: pop-up a dialog maybe??
+        // it will come back null.  If it's null, we won't ping the server
+        // and just return a blank json list
+
         double latLng[] = YellrUtils.getLocation(getApplicationContext());
-        if (latLng == null )
-            return;
-        String lat = String.valueOf(latLng[0]);
-        String lng = String.valueOf(latLng[1]);
+        if (latLng != null ) {
 
-        String languageCode = Locale.getDefault().getLanguage();
+            String lat = String.valueOf(latLng[0]);
+            String lng = String.valueOf(latLng[1]);
 
-        String url =  baseUrl
-                + "?cuid=" + YellrUtils.getCUID(getApplicationContext())//cuid
-                + "&language_code=" + languageCode
-                + "&lat=" + lat
-                + "&lng=" + lng;
+            String languageCode = Locale.getDefault().getLanguage();
 
-        //Log.d("AssignmentsIntentService.UpdateData()","URL: " + url);
+            String url = baseUrl
+                    + "?cuid=" + YellrUtils.getCUID(getApplicationContext())//cuid
+                    + "&language_code=" + languageCode
+                    + "&lat=" + lat
+                    + "&lng=" + lng;
 
-        //
-        // TODO: need to check for exceptions better, this bombs out sometimes
-        //
-        try {
+            //Log.d("AssignmentsIntentService.UpdateData()","URL: " + url);
 
             //
-            HttpClient client = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(url);
-            HttpResponse response = client.execute(httpGet);
-            HttpEntity entity = response.getEntity();
-
+            // TODO: need to check for exceptions better, this bombs out sometimes
             //
-            InputStream content = entity.getContent();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+            try {
 
-            //
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
+                //
+                HttpClient client = new DefaultHttpClient();
+                HttpGet httpGet = new HttpGet(url);
+                HttpResponse response = client.execute(httpGet);
+                HttpEntity entity = response.getEntity();
+
+                //
+                InputStream content = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+
+                //
+                StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+
+                assignmentsJson = builder.toString();
+
+                Log.d("AssignmentsIntentService.UpdateData()", "Successfully got new assignments list from server.");
+
+            } catch (Exception e) {
+                Log.d("AssignmentsIntentService.UpdateData()", "Error: " + e.toString());
             }
-
-            String assignmentsJson = builder.toString();
-
-            //Log.d("AssignmentsIntentService.UpdateData()","Broadcasting result ...");
-
-            Log.d("AssignmentsIntentService.UpdateData()","JSON: " + assignmentsJson);
-
-            Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(ACTION_NEW_ASSIGNMENTS);
-            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            broadcastIntent.putExtra(PARAM_ASSIGNMENTS_JSON, assignmentsJson);
-            sendBroadcast(broadcastIntent);
-
-        } catch( Exception e) {
-
-            Log.d("AssignmentsIntentService.UpdateData()","Error: " + e.toString());
-
-            //e.printStackTrace();
         }
+
+        Log.d("AssignmentsIntentService.UpdateData()", "JSON: " + assignmentsJson);
+
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(ACTION_NEW_ASSIGNMENTS);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(PARAM_ASSIGNMENTS_JSON, assignmentsJson);
+        sendBroadcast(broadcastIntent);
     }
 }

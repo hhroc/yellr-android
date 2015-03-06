@@ -5,12 +5,12 @@
     tools:context="yellr.net.yellr_android.activities.PostActivity">
 
     <item android:id="@+id/action_profile_new_uuid"
-        android:title="@string/action_new_uuid"
+        android:title="@string/frag_profile_action_new_uuid"
         android:orderInCategory="99"
         app:showAsAction="always"/>
 
     <item android:id="@+id/action_profile_signup"
-        android:title="@string/action_signup"
+        android:title="@string/frag_profile_action_signup"
         android:orderInCategory="100"
         app:showAsAction="always" />
 </menu>

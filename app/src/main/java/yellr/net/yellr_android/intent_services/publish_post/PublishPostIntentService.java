@@ -93,7 +93,7 @@ public class PublishPostIntentService extends IntentService {
 
         // TODO: we really cant get here unless the home locsation is set, so we prob dont need to check tyhis
 
-        if ( YellrUtils.isHomeLocationSet(getApplicationContext()) )
+        //if ( YellrUtils.isHomeLocationSet(getApplicationContext()) )
             handleActionGetPublishPost(assignmentId, mediaType, text, imageFilename, audioFilename, videoFilename);
 
     }
