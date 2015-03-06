@@ -25,7 +25,7 @@ android {
         // this system allows for 100 major versions and 1000 minor and patch versions
         // and ensures there is no collision.
         versionCode 1000
-        versionName "0.1.0"
+        versionName "0.1.1"
     }
     buildTypes {
         release {

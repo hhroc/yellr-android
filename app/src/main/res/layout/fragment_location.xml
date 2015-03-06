@@ -24,7 +24,7 @@
         android:id="@+id/frag_location_zipcode"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/frag_location_infotext"
+        android:layout_below="@+id/frag_location_info_text"
         android:textCursorDrawable="@null"
         android:paddingTop="32dp"
         android:hint="Enter your zipcode."
