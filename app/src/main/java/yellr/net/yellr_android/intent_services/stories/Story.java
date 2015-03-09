@@ -8,9 +8,9 @@ public class Story {
     public String story_unique_id;
 
     public String title;
-    public String banner_media_id;
-    public String banner_media_file_name;
-    public String top_text;
+    //public String banner_media_id;
+    //public String banner_media_file_name;
+    //public String top_text;
     public String contents;
     public String contents_rendered;
 
