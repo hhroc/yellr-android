@@ -20,7 +20,7 @@ public class CheckHttpReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        //try{
+        try{
 
             Log.d("CheckHttpReceiver.onReceive()", "Calling all intent services to update HTTP data ...");
 
@@ -28,26 +28,29 @@ public class CheckHttpReceiver extends BroadcastReceiver {
 
             //Context context = getApplicationContext();
 
-            /*
+
             // Assignments Intent Service
             Intent assignmentsWebIntent = new Intent(context, AssignmentsIntentService.class);
-            assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CUID, cuid);
+            //assignmentsWebIntent.putExtra(AssignmentsIntentService.PARAM_CUID, cuid);
             assignmentsWebIntent.setAction(AssignmentsIntentService.ACTION_GET_ASSIGNMENTS);
             context.startService(assignmentsWebIntent);
 
 
+            /*
             // Notifications Intent Service
             Intent notificationsWebIntent = new Intent(context, NotificationsIntentService.class);
             notificationsWebIntent.putExtra(NotificationsIntentService.PARAM_CUID, cuid);
             notificationsWebIntent.setAction(NotificationsIntentService.ACTION_GET_NOTIFICATIONS);
             context.startService(notificationsWebIntent);
+            */
 
             // Stories Intent Service
             Intent storiesWebIntent = new Intent(context, StoriesIntentService.class);
-            storiesWebIntent.putExtra(StoriesIntentService.PARAM_CUID, cuid);
+            //storiesWebIntent.putExtra(StoriesIntentService.PARAM_CUID, cuid);
             storiesWebIntent.setAction(StoriesIntentService.ACTION_GET_STORIES);
             context.startService(storiesWebIntent);
 
+            /*
             // Profile Intent Service
             Intent profileWebIntent = new Intent(context, ProfileIntentService.class);
             profileWebIntent.putExtra(ProfileIntentService.PARAM_CUID, cuid);
@@ -55,21 +58,23 @@ public class CheckHttpReceiver extends BroadcastReceiver {
             context.startService(profileWebIntent);
             */
 
-            // Profile Intent Service
+            /*
+            // Data Intent Service
             Intent dataWebIntent = new Intent(context, DataIntentService.class);
             //dataWebIntent.putExtra(DataIntentService.PARAM_CUID, cuid);
             dataWebIntent.setAction(DataIntentService.ACTION_GET_DATA);
             context.startService(dataWebIntent);
+            */
 
             //also call the same runnable
             //checkNewDataHandler.postDelayed(this, CHECK_FOR_NEW_DATA_INTERVAL);
-        //}
-        //catch (Exception e) {
+        }
+        catch (Exception e) {
 
-        //    Log.d("CheckHttpReceiver.onReceive()","ERROR: " + e.toString());
+            Log.d("CheckHttpReceiver.onReceive()","ERROR: " + e.toString());
 
             // TODO: handle exception
-        //}
+        }
         //finally{
 
         //    Log.d("CheckHttpReceiver.onReceive()","re-launching postDelayed");
