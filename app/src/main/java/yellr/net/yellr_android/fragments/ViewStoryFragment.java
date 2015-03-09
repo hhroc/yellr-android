@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -32,7 +34,7 @@ public class ViewStoryFragment extends Fragment {
     private TextView storyTitle;
     private TextView storyAuthor;
     private TextView storyPublishedDatetTime;
-    //private TextView storyLoading;
+    private TextView storyLoading;
     //private TextView storyContentsRendered;
     private WebView storyContentsRendered;
 
@@ -47,7 +49,7 @@ public class ViewStoryFragment extends Fragment {
         storyTitle = (TextView) view.findViewById(R.id.frag_view_story_title);
         storyAuthor = (TextView) view.findViewById(R.id.frag_view_story_author);
         storyPublishedDatetTime = (TextView) view.findViewById(R.id.frag_view_story_published_datetime);
-        //storyLoading = (TextView) view.findViewById(R.id.frag_view_story_loading);
+        storyLoading = (TextView) view.findViewById(R.id.frag_view_story_loading);
         //storyContentsRendered = (TextView)view.findViewById(R.id.frag_view_story_contents_rendered);
         storyContentsRendered = (WebView) view.findViewById(R.id.frag_view_story_contents_rendered);
 
@@ -62,7 +64,7 @@ public class ViewStoryFragment extends Fragment {
         String contentsRendered = intent.getStringExtra(ViewStoryFragment.ARG_STORY_CONTENTS_RENDERED);
 
         //TODO Use new datetime prettifier
-        Date pubDT = YellrUtils.PrettifyDateTime(publishedDateTime);
+        Date pubDT = YellrUtils.prettifyDateTime(publishedDateTime);
         String pubAgo = YellrUtils.calcTimeBetween(pubDT, new Date());
 
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
@@ -77,6 +79,15 @@ public class ViewStoryFragment extends Fragment {
         //storyLoading.setText("");
 
         //storyContentsRendered.setText(Html.fromHtml(contentsRendered));
+        //storyContentsRendered.evaluateJavascript();
+        storyContentsRendered.setVisibility(View.GONE);
+        storyContentsRendered.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                storyLoading.setVisibility(View.GONE);
+                storyContentsRendered.setVisibility(View.VISIBLE);
+            }
+        });
         storyContentsRendered.loadData(generateStoryHtml(bannerMediaFilename, topText, contentsRendered), "text/html", null);
 
         return view;
@@ -88,19 +99,29 @@ public class ViewStoryFragment extends Fragment {
                 + "<html>"
                 + "<head>"
                 + "<style>"
-                + "body { background-color: #EEEEEE; }"
-                + "div.banner-wrapper { padding: 10px 10px 10px 10px;}"
-                + "img { max-width: 75%;}"
+                + "body { background-color: #EEEEEE; } "
+                + "div.banner-wrapper { padding: 10px 10px 10px 10px;} "
+                + "img { max-width: 75%;} "
                 //+ "div.top-text-wrapper { padding: 10px 10px 10px 10px; font-style: italic; text-align: center; font-size: 12px; }"
-                + "div.story-wrapper { padding: 10px 10px 10px 10px; font-size: 12px; }"
+                //+ "div.loading { padding 10px 10px 10px 10px; font-size: 12px; }"
+                + "div.story-wrapper { padding: 25px 25px 25px 25px; font-size: 16dp; } " // display: none; }"
                 + "</style>"
                 + "</head>"
                 + "<body>"
                 //+ "<div class=\"top-text-wrapper\"><center><img id=\"banner-image\" src=\"<banner />\"></img></center></div>"
                 //+ "<div class=\"top-text-wrapper\"><topText /></div>"
-                + "<div class=\"story-wrapper\"><renderedMarkdown /></div>"
+                //+ "<div id=\"loading\" class=\"loading\">Loading Story ...</div>"
+                + "<div id=\"story\" class=\"story-wrapper\"><renderedMarkdown /></div>"
+                //+ "<script>"
+                //+ "  //(function() {"
+                //+ "    document.getElementById('loading').style.display = 'none';"
+                //+ "    document.getElementById('story').style.display = 'block';"
+                //+ "  //})();"
+                //+ "</script>"
                 + "</body>"
                 + "</html>";
+
+        Log.d("generateStoryHtml()", "HTML: \n" + htmlTemplate);
 
         String banner = BuildConfig.BASE_URL + "/media/" + bannerMediaFilename;
 

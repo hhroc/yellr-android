@@ -141,7 +141,7 @@ public class AssignmentsFragment extends Fragment {
                 Log.d("AssignmentsFragment.onReceive", "GSON puked");
             }
 
-            if (response.success) {
+            if (response.success && response.assignments != null) {
                 assignmentsArrayAdapter.clear();
                 assignments = new Assignment[response.assignments.length];
                 for (int i = 0; i < response.assignments.length; i++) {
@@ -149,9 +149,9 @@ public class AssignmentsFragment extends Fragment {
                     assignmentsArrayAdapter.add(assignment);
                     assignments[i] = assignment;
                 }
-
-                swipeRefreshLayout.setRefreshing(false);
             }
+
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -191,10 +191,11 @@ public class AssignmentsFragment extends Fragment {
             TextView textViewPostCount = (TextView) row.findViewById(R.id.frag_home_assignment_post_count);
 
             Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
+            textViewOrganization.setTypeface(font);
             textViewPostCount.setTypeface(font);
 
             textViewQuestionText.setText(this.assignments.get(position).question_text);
-            textViewOrganization.setText("Organization: " + YellrUtils.ShortenString(this.assignments.get(position).organization));
+            textViewOrganization.setText(getString(R.string.fa_user) + "   " + YellrUtils.shortenString(this.assignments.get(position).organization));
             textViewPostCount.setText(getString(R.string.fa_comments) + " " + String.valueOf(this.assignments.get(position).post_count));
 
             return row;

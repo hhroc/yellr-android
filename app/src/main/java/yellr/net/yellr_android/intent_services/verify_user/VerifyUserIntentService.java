@@ -127,9 +127,9 @@ public class VerifyUserIntentService extends IntentService {
             Log.d("VerifyUserIntentService.publishPost()", "JSON: " + verifyUserJson);
 
             Gson gson = new Gson();
-            VerifyUserResponse verifyUserresponse = gson.fromJson(verifyUserJson, VerifyUserResponse.class);
+            VerifyUserResponse verifyUserResponse = gson.fromJson(verifyUserJson, VerifyUserResponse.class);
 
-            if ( !verifyUserresponse.success ) {
+            if ( !verifyUserResponse.success ) {
                 // TODO: report failure back to calling fragment
             }
 

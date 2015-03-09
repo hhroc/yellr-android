@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/frag_view_story_title"
-        android:text="loading story ..."
+        android:text="Title"
         android:textSize="24sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,14 +29,17 @@
 
     <TextView
         android:id="@+id/frag_view_story_author"
-        android:text="Story by: Tim Duffy"
+        android:text="Author"
         android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/frag_view_story_title"
         android:layout_alignParentLeft="true"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"/>
+        android:paddingRight="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        />
 
     <TextView
         android:id="@+id/frag_view_story_published_datetime"
@@ -47,31 +50,19 @@
         android:layout_below="@id/frag_view_story_title"
         android:layout_alignParentRight="true"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"/>
-        
-    <!--
-    <TextView
-        android:id="@+id/frag_view_story_contents_rendered"
-        android:text="loading story ..."
-        android:textSize="14sp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:layout_below="@id/frag_view_story_published_datetime"
-        android:padding="16dp"/>
-    -->
+        android:paddingRight="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
 
-    <!--
     <TextView
         android:id="@+id/frag_view_story_loading"
         android:text="Loading story ..."
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:layout_below="@id/frag_view_story_published_datetime"
-        android:padding="16dp"/>
-    -->
+        android:padding="25dp"/>
 
     <WebView
         android:id="@+id/frag_view_story_contents_rendered"

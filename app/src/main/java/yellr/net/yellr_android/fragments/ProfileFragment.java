@@ -158,11 +158,13 @@ public class ProfileFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_profile, menu);
         if(this.isAdded()){
+            /* removing until we've made the activity/fragment for this
             menu.findItem(R.id.action_profile_signup).setIcon(
                     new IconDrawable(getActivity(), Iconify.IconValue.fa_user_plus)
                             .colorRes(R.color.black)
                             .actionBarSize()
             );
+            */
             menu.findItem(R.id.action_profile_new_uuid).setIcon(
                     new IconDrawable(getActivity(), Iconify.IconValue.fa_key)
                     .colorRes(R.color.black)
@@ -182,9 +184,9 @@ public class ProfileFragment extends Fragment {
                 resetCUIDFragment.setTargetFragment(this, 1);
                 resetCUIDFragment.show(getFragmentManager(), DIALOG_RESET_CUID);
                 break;
-            case R.id.action_profile_signup:
-
-                break;
+            //case R.id.action_profile_signup:
+                // todo: hook this up
+            //    break;
             default:
                 break;
         }

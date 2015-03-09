@@ -30,6 +30,9 @@ public class CheckHttpAssignmentsReceiver extends BroadcastReceiver {
         Log.d("CheckHttpAssignmentsReceiver.onReceive()","Handling new assignments ...");
 
         String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
+
+        Log.d("CheckHttpAssignmentsReceiver.onReceiver()","Assignments JSON: " + assignmentsJson);
+
         Gson gson = new Gson();
         AssignmentsResponse response = new AssignmentsResponse();
         try{
@@ -38,6 +41,7 @@ public class CheckHttpAssignmentsReceiver extends BroadcastReceiver {
             Log.d("CheckHttpAssignmentsReceiver.onReceive", "GSON puked");
         }
         boolean newAssignments = false;
+
         if (response.success) {
 
             String[] currentAssignmentIds = YellrUtils.getCurrentAssignmentIds(context);
@@ -74,10 +78,11 @@ public class CheckHttpAssignmentsReceiver extends BroadcastReceiver {
                     PendingIntent pendingAssignmentIntent = PendingIntent.getActivity(context, 0, assignmentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     mBuilder.setContentIntent(pendingAssignmentIntent);
+                    mBuilder.setAutoCancel(true); // clear notification after click
                     int assignmentNotificationId = 2;
                     NotificationManager mNotificationMgr =
                             (NotificationManager)  context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    mNotificationMgr.notify(assignmentNotificationId, mBuilder.build());
+                    mNotificationMgr.notify(assignmentNotificationId, mBuilder .build());
                 }
                 Log.d("CheckHttpAssignmentsReceiver.onReceive()", "New Assignments!");
             }

@@ -71,6 +71,8 @@ public class PostFragment extends Fragment {
     TextView assignmentQuestion;
     TextView assignmentDescription;
 
+    Button submitButton;
+
     String mediaType = "text";
     String imageFilename = "";
     String proposedImageFilename = "";
@@ -115,7 +117,9 @@ public class PostFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // get the cuid
-        this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
+        //this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
+
+
 
     }
 
@@ -132,7 +136,15 @@ public class PostFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
-        postText = (EditText)view.findViewById(R.id.frag_post_edittext);
+        submitButton = (Button)view.findViewById(R.id.frag_post_submit_button);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SubmitPostToYellr();
+            }
+        });
+
+        postText = (EditText)view.findViewById(R.id.frag_post_edit_text);
 
         imageButton = (Button)view.findViewById(R.id.frag_post_photo_button);
         videoButton = (Button)view.findViewById(R.id.frag_post_video_button);
@@ -157,8 +169,8 @@ public class PostFragment extends Fragment {
         assignmentDescription = (TextView)view.findViewById(R.id.frag_post_assignment_description);
 
         if(questionText == null){
-            assignmentQuestion.setText(R.string.fragment_post_assignment_title);
-            assignmentDescription.setText(R.string.fragment_post_assignment_description);
+            assignmentQuestion.setText(R.string.frag_post_assignment_title);
+            assignmentDescription.setText(R.string.frag_post_assignment_description);
         } else {
             assignmentQuestion.setText(questionText);
             assignmentDescription.setText(questionDescription);
@@ -301,12 +313,16 @@ public class PostFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_post, menu);
         if(this.isAdded()){
-                    /*New Story*/
+            /*
+
+            TD: removed since we have a submit button
+
             menu.findItem(R.id.action_post_upload).setIcon(
                     new IconDrawable(getActivity(), Iconify.IconValue.fa_upload)
                             .colorRes(R.color.black)
                             .actionBarSize()
             );
+            */
         } else {
             Log.d("onCreateOptionsMenu()", "Fragment not added to Activity");
         }
@@ -316,9 +332,12 @@ public class PostFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
-            case R.id.action_post_upload:
-                SubmitPostToYellr();
-                break;
+            //
+            // TD: removed since we have a submit button
+            //
+            //case R.id.action_post_upload:
+            //    SubmitPostToYellr();
+            //    break;
             default:
                 break;
         }
@@ -344,15 +363,15 @@ public class PostFragment extends Fragment {
 
         Log.d("SubmitPostToYellr()", "Starting PublishPostIntentService intent ...");
 
-        Toast.makeText(getActivity(), "Sending post ...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.frag_post_toast_sending_post, Toast.LENGTH_SHORT).show();
 
         // launch intent service
         getActivity().startService(postIntent);
 
         // reset display
         postText.setText("");
-        assignmentQuestion.setText(R.string.fragment_post_assignment_title);
-        assignmentDescription.setText(R.string.fragment_post_assignment_description);
+        assignmentQuestion.setText(getString(R.string.frag_post_assignment_title));
+        assignmentDescription.setText(getString(R.string.frag_post_assignment_description));
 
         // go back to home screen
         Intent homeIntent = new Intent(getActivity(), HomeActivity.class);

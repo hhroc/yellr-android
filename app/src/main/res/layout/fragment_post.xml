@@ -12,7 +12,7 @@
         android:id="@+id/frag_post_assignment_question"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/fragment_post_assignment_title"
+        android:text="@string/frag_post_assignment_title"
         android:textColor="@color/black"
         android:textSize="24sp"/>
 
@@ -21,22 +21,37 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/frag_post_assignment_question"
-        android:text="@string/fragment_post_assignment_description"/>
+        android:text="@string/frag_post_assignment_description"
+        android:textSize="18sp"/>
 
     <EditText
-        android:id="@+id/frag_post_edittext"
+        android:id="@+id/frag_post_edit_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/frag_post_assignment_description"
         android:textCursorDrawable="@null"
         android:layout_marginTop="32dp"
-        android:hint="@string/frag_post_edittext"/>
+        android:hint="@string/frag_post_default_text"/>
+
+    <Button
+        android:id="@+id/frag_post_submit_button"
+        android:text="@string/frag_post_submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/yellr_button"
+        android:layout_below="@+id/frag_post_edit_text"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@color/black"
+        android:layout_marginTop="4dp"
+        />
 
     <TextView
         android:id="@+id/frag_post_media_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/frag_post_edittext"
+        android:layout_below="@id/frag_post_submit_button"
         android:text="@string/frag_post_media_text"
         android:paddingTop="16dp"/>
 

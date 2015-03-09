@@ -145,9 +145,9 @@ public class StoriesFragment extends Fragment {
                     storiesArrayAdapter.add(story);
                     stories[i] = story;
                 }
-                swipeRefreshLayout.setRefreshing(false);
             }
 
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -194,10 +194,10 @@ public class StoriesFragment extends Fragment {
             textViewPublishAuthor.setTypeface(font);
             textViewPublishDateTime.setTypeface(font);
 
-            textViewPublishAuthor.setText(getString(R.string.fa_user) + " " + stories.get(position).author_first_name + " " + stories.get(position).author_last_name);
+            textViewPublishAuthor.setText(getString(R.string.fa_user) + "   " + stories.get(position).author_first_name + " " + stories.get(position).author_last_name);
             textViewTitle.setText(this.stories.get(position).title);
 
-            Date pubDateStr = YellrUtils.PrettifyDateTime(this.stories.get(position).publish_datetime);
+            Date pubDateStr = YellrUtils.prettifyDateTime(this.stories.get(position).publish_datetime);
             String pubAgo = YellrUtils.calcTimeBetween(pubDateStr, new Date());
 
             textViewPublishDateTime.setText(getString(R.string.fa_pencil) + " " + pubAgo + " ago.");

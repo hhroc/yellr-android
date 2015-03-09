@@ -41,7 +41,7 @@ public class NotificationsIntentService extends IntentService {
         //Log.d("NotificationsIntentService.onHandleIntent()","Decoding intent action ...");
 
         //String cuid = intent.getStringExtra(PARAM_CUID);
-        if (YellrUtils.isHomeLocationSet(getApplicationContext()))
+        //if (YellrUtils.isHomeLocationSet(getApplicationContext()))
             handleActionGetNotifications(); //cuid);
     }
 
@@ -54,7 +54,12 @@ public class NotificationsIntentService extends IntentService {
 
         String baseUrl = BuildConfig.BASE_URL + "/get_notifications.json";
 
+        // get the location, but if the user has turned off location services,
+        // it will come back null.  If it's null, just dump out.
+        // TODO: pop-up a dialog maybe??
         double latLng[] = YellrUtils.getLocation(getApplicationContext());
+        if (latLng == null )
+            return;
         String lat = String.valueOf(latLng[0]);
         String lng = String.valueOf(latLng[1]);
 
