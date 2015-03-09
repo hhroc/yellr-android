@@ -82,7 +82,7 @@ public class CheckHttpAssignmentsReceiver extends BroadcastReceiver {
                     int assignmentNotificationId = 2;
                     NotificationManager mNotificationMgr =
                             (NotificationManager)  context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    mNotificationMgr.notify(assignmentNotificationId, mBuilder .build());
+                    mNotificationMgr.notify(assignmentNotificationId, mBuilder.build());
                 }
                 Log.d("CheckHttpAssignmentsReceiver.onReceive()", "New Assignments!");
             }

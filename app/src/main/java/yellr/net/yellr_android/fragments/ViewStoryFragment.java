@@ -88,12 +88,12 @@ public class ViewStoryFragment extends Fragment {
                 storyContentsRendered.setVisibility(View.VISIBLE);
             }
         });
-        storyContentsRendered.loadData(generateStoryHtml(bannerMediaFilename, topText, contentsRendered), "text/html", null);
+        storyContentsRendered.loadData(generateStoryHtml(contentsRendered), "text/html", null);
 
         return view;
     }
 
-    private String generateStoryHtml(String bannerMediaFilename, String topText, String renderedMarkdown) {
+    private String generateStoryHtml(String renderedMarkdown) {
 
         String htmlTemplate = ""
                 + "<html>"
@@ -123,9 +123,9 @@ public class ViewStoryFragment extends Fragment {
 
         Log.d("generateStoryHtml()", "HTML: \n" + htmlTemplate);
 
-        String banner = BuildConfig.BASE_URL + "/media/" + bannerMediaFilename;
+        //String banner = BuildConfig.BASE_URL + "/media/" + bannerMediaFilename;
 
-        String renderedHtml = htmlTemplate.replace("<banner />",banner).replace("<topText />",topText).replace("<renderedMarkdown />",renderedMarkdown);
+        String renderedHtml = htmlTemplate.replace("<renderedMarkdown />",renderedMarkdown);
 
         return renderedHtml;
 

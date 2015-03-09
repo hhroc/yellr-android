@@ -163,8 +163,8 @@ public class StoriesFragment extends Fragment {
             intent.putExtra(ViewStoryFragment.ARG_STORY_TITLE,stories[position].title);
             intent.putExtra(ViewStoryFragment.ARG_STORY_AUTHOR,stories[position].author_first_name + " " + stories[position].author_last_name);
             intent.putExtra(ViewStoryFragment.ARG_STORY_PUBLISHED_DATETIME,stories[position].publish_datetime);
-            intent.putExtra(ViewStoryFragment.ARG_STORY_BANNER_MEDIA_FILE_NAME,stories[position].banner_media_file_name);
-            intent.putExtra(ViewStoryFragment.ARG_STORY_TOP_TEXT,stories[position].top_text);
+            //intent.putExtra(ViewStoryFragment.ARG_STORY_BANNER_MEDIA_FILE_NAME,stories[position].banner_media_file_name);
+            //intent.putExtra(ViewStoryFragment.ARG_STORY_TOP_TEXT,stories[position].top_text);
             //intent.putExtra(ViewStoryFragment.ARG_STORY_CONTENTS,stories[position].contents);
             intent.putExtra(ViewStoryFragment.ARG_STORY_CONTENTS_RENDERED,stories[position].contents_rendered);
 

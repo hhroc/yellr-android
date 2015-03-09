@@ -74,8 +74,8 @@ public class CheckHttpStoriesReceiver extends BroadcastReceiver {
                     storyIntent.putExtra(ViewStoryFragment.ARG_STORY_TITLE, response.stories[sIndex].title);
                     storyIntent.putExtra(ViewStoryFragment.ARG_STORY_AUTHOR, response.stories[sIndex].author_first_name + " " + response.stories[sIndex].author_last_name);
                     storyIntent.putExtra(ViewStoryFragment.ARG_STORY_PUBLISHED_DATETIME, response.stories[sIndex].publish_datetime);
-                    storyIntent.putExtra(ViewStoryFragment.ARG_STORY_BANNER_MEDIA_FILE_NAME, response.stories[sIndex].banner_media_file_name);
-                    storyIntent.putExtra(ViewStoryFragment.ARG_STORY_TOP_TEXT, response.stories[sIndex].top_text);
+                    //storyIntent.putExtra(ViewStoryFragment.ARG_STORY_BANNER_MEDIA_FILE_NAME, response.stories[sIndex].banner_media_file_name);
+                    //storyIntent.putExtra(ViewStoryFragment.ARG_STORY_TOP_TEXT, response.stories[sIndex].top_text);
                     //intent.putExtra(ViewStoryFragment.ARG_STORY_CONTENTS,response.stories[position].contents);
                     storyIntent.putExtra(ViewStoryFragment.ARG_STORY_CONTENTS_RENDERED, response.stories[sIndex].contents_rendered);
 
