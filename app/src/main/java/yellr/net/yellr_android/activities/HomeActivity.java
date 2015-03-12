@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
@@ -53,7 +54,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
 
-    static int CHECK_FOR_NEW_DATA_INTERVAL = 10000; // - testing, every 10 seconds    //5 * 60 * 1000; // Check every 5 minutes ( 288 times a day  )
+    static int CHECK_FOR_NEW_DATA_INTERVAL = 60 * 1000; // - testing, every 10 seconds    //5 * 60 * 1000; // Check every 5 minutes ( 288 times a day  )
 
     private PendingIntent checkHttpPendingIntent;
     private AlarmManager checkHttpManager;
@@ -104,6 +105,12 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+        //ListView postListView = (ListView)this.findViewById(R.id.frag_home_local_posts_list);
+        //LocalPostsFragment.LocalPostsArrayAdapter imageAdapter = new LocalPostsFragment.LocalPostsArrayAdapter(this, R.layout.frag_home_local_post_image, imageURLArray);
+        //listView.setAdapter(imageAdapter);
+
+
 
         Log.d("HomeActivity.onCreate()","Setting up AlarmManager for CheckHttpReceiver, delay: " + String.valueOf(CHECK_FOR_NEW_DATA_INTERVAL));
 

@@ -178,7 +178,7 @@ public class AssignmentsFragment extends Fragment {
         private ArrayList<Assignment> assignments;
 
         public AssignmentsArrayAdapter(Context context, ArrayList<Assignment> assignments) {
-            super(context, R.layout.fragment_assignment_row, R.id.frag_home_assignment_question_text, assignments);
+            super(context, R.layout.fragment_assignment_row , R.id.frag_home_assignment_question_text, assignments);
             this.assignments = assignments;
         }
 

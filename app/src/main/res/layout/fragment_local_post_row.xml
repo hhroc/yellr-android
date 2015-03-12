@@ -110,12 +110,17 @@
                 android:paddingRight="10dp"
                 />
 
-            <ImageView
+            <!--<ImageView-->
+
+            <!--<yellr.net.yellr_android.fragments.LocalPostsFragment.PostImageView-->
+            <yellr.net.yellr_android.utils.PostImageView
                 android:id="@+id/frag_home_local_post_image"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:gravity="center_vertical"
+                android:scaleType="fitCenter"
                 android:layout_marginTop="5dp"
+                android:paddingRight="10dp"
                 android:layout_below="@id/frag_home_local_post_text"/>
 
         </LinearLayout>

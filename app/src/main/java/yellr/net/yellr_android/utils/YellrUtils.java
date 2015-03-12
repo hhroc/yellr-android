@@ -3,11 +3,20 @@ package yellr.net.yellr_android.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -245,6 +254,67 @@ public class YellrUtils {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("cuid", cuid);
         editor.commit();
+    }
+
+    public static String getPreviewImageName(String filename) {
+
+        //String[] filenameParts = filename.split(".");
+
+        StringTokenizer st = new StringTokenizer(filename, ".");
+        String baseFilename = st.nextToken();
+        String fileExtention = st.nextToken();
+
+        Log.d("YellrUtils.getPreviewImageName()","baseFilename: " + baseFilename);
+        Log.d("YellrUtils.getPreviewImageName()","fileExtention: " + fileExtention);
+
+        String previewFileName = baseFilename + "p." + fileExtention;
+
+        return previewFileName;
+    }
+
+    //
+    // This function modified from here:
+    //    http://android-developers.blogspot.com/2010/07/multithreading-for-performance.html
+    ///
+    public static Bitmap downloadBitmap(String url) {
+        final AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
+        final HttpGet getRequest = new HttpGet(url);
+
+        Bitmap bitmap = null;
+
+        try {
+            HttpResponse response = client.execute(getRequest);
+            final int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != HttpStatus.SC_OK) {
+                Log.w("ImageDownloader", "Error " + statusCode + " while retrieving bitmap from " + url);
+                return null;
+            }
+
+            final HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream inputStream = null;
+                try {
+                    inputStream = entity.getContent();
+                    //final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    bitmap = BitmapFactory.decodeStream(inputStream);
+                    //return bitmap;
+                } finally {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                    entity.consumeContent();
+                }
+            }
+        } catch (Exception e) {
+            // Could provide a more explicit error message for IOException or IllegalStateException
+            getRequest.abort();
+            Log.d("YellrUtils.downloadBitmap()", "Error while retrieving bitmap from " + url + ": " + e.toString());
+        } finally {
+            if (client != null) {
+                client.close();
+            }
+        }
+        return bitmap;
     }
 
     public static void setCurrentAssignmentIds(Context context, String[] currentAssignmentIds) {

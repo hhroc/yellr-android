@@ -1,14 +1,18 @@
 package yellr.net.yellr_android.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +26,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +37,7 @@ import yellr.net.yellr_android.activities.PostActivity;
 import yellr.net.yellr_android.intent_services.local_posts.LocalPost;
 import yellr.net.yellr_android.intent_services.local_posts.LocalPostsIntentService;
 import yellr.net.yellr_android.intent_services.local_posts.LocalPostsResponse;
+import yellr.net.yellr_android.utils.PostImageView;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
@@ -93,7 +99,7 @@ public class LocalPostsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_local_posts, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.frag_home_local_post_swipe_refresh_layout);
-        listView = (ListView)view.findViewById(R.id.localPostsList);
+        listView = (ListView)view.findViewById(R.id.frag_home_local_posts_list);
 
         listView.setAdapter(localPostsArrayAdapter);
         listView.setOnItemClickListener(new LocalPostListOnClickListener());
@@ -190,18 +196,52 @@ public class LocalPostsFragment extends Fragment {
 
     }
 
-    class LocalPostsArrayAdapter extends ArrayAdapter<LocalPost> {
+
+
+    public class LocalPostsArrayAdapter extends ArrayAdapter<LocalPost> {
 
         private ArrayList<LocalPost> localPosts;
 
+        private LayoutInflater inflater;
+
         public LocalPostsArrayAdapter(Context context, ArrayList<LocalPost> localPosts) {
-            super(context, R.layout.fragment_local_post_row, R.id.frag_home_local_post_text, localPosts);
+            super(context, R.layout.fragment_local_post_row, R.id.frag_home_local_post_user, localPosts);
             this.localPosts = localPosts;
+
+            this.inflater = LayoutInflater.from(getContext());
+
+        }
+
+        @Override
+        public int getCount() {
+            return super.getCount();
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View row = super.getView(position, convertView, parent);
+
+            Log.d("LocalPostsArrayAdapter.getView()", "Position: " + String.valueOf(position) + ", Media Type: " + this.localPosts.get(position).media_objects[0].media_type_name + ", " );
+
+            View row = null;
+            //if( null == convertView ) {
+                //row = super.getView(position, convertView, parent);
+
+                // TODO: Figure out how to re-use convertView
+                //       This causes the images to be re-drawn every time
+                //       this function is called.
+                //
+                //       If I do not do this, and I just use the convertView,
+                //       the images jump around as I scroll.  I suspect this
+                //       is because Android re-uses the view as convertView.
+                //
+
+                row = LayoutInflater.from(getContext()).inflate(R.layout.fragment_local_post_row, parent, false);
+
+            //} else {
+            //    row = convertView;
+            //}
+
+            //View row = convertView;
 
             Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
 
@@ -276,27 +316,41 @@ public class LocalPostsFragment extends Fragment {
             // Image View (optional)
             //
 
-            ImageView imageViewPostImage = (ImageView) row.findViewById(R.id.frag_home_local_post_image);
+            PostImageView imageViewPostImage = (PostImageView) row.findViewById(R.id.frag_home_local_post_image);
 
-            if ( mediaType.equals("image") )  {
-                try {
+            //String mediaType = this.localPosts.get(position).media_objects[0].media_type_name;
 
-                    //
-                    // TODO: This needs to be moved to a background task.
-                    //       Unsure how to do this with respect to the list ..
-                    //       I suspect it has something to do with
-                    //       position, however I'm not sure.
+            //if ( !imageViewPostImage.imageSet ) {
 
-                    URL url = new URL(BuildConfig.BASE_URL + this.localPosts.get(position).media_objects[0].file_name);
-                    InputStream content = (InputStream) url.getContent();
-                    Drawable drawable = Drawable.createFromStream(content, "src");
-                    imageViewPostImage.setImageDrawable(drawable);
+                if (mediaType.equals("image")) {
+                    try {
 
-                } catch (Exception e) {
-                    Log.d("LocalPostsArrayAdapter.getView()","ERROR: " + e.toString());
+                        //
+                        // TODO: This needs to be moved to a background task.
+                        //       Unsure how to do this with respect to the list ..
+                        //       I suspect it has something to do with
+                        //       position, however I'm not sure.
+
+                        //URL url = new URL(BuildConfig.BASE_URL + this.localPosts.get(position).media_objects[0].file_name);
+                        //InputStream content = (InputStream) url.getContent();
+                        //Drawable drawable = Drawable.createFromStream(content, "src");
+                        //imageViewPostImage.setImageDrawable(drawable);
+
+                        Log.d("LocalPostArrayAdapter.getView()","Position: " + String.valueOf(position));
+                        Log.d("LocalPostArrayAdapter.getView()","    Media Text: " + mediaText);
+                        Log.d("LocalPostArrayAdapter.getView()","    Media Caption: " + mediaCaption);
+
+                        String url = BuildConfig.BASE_URL + "/media/" + YellrUtils.getPreviewImageName(this.localPosts.get(position).media_objects[0].file_name);
+                        imageViewPostImage.setImage(url, position);
+
+                    } catch (Exception e) {
+                        Log.d("LocalPostsArrayAdapter.getView()", "ERROR: " + e.toString());
+                    }
+                } else if (mediaType.equals("text")) {
+                    imageViewPostImage.setVisibility(View.GONE);
                 }
-            }
 
+            //}
 
 
             //
@@ -326,4 +380,6 @@ public class LocalPostsFragment extends Fragment {
             return row;
         }
     }
+
+
 }
