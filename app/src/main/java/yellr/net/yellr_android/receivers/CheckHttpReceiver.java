@@ -22,7 +22,7 @@ public class CheckHttpReceiver extends BroadcastReceiver {
 
         try{
 
-            Log.d("CheckHttpReceiver.onReceive()", "Calling all intent services to update HTTP data ...");
+            //Log.d("CheckHttpReceiver.onReceive()", "Calling all intent services to update HTTP data ...");
 
             String cuid = YellrUtils.getCUID(context);
 

@@ -75,6 +75,11 @@
         </activity>
 
         <service
+            android:name=".intent_services.local_posts.LocalPostsIntentService"
+            android:exported="false" >
+        </service>
+
+        <service
             android:name=".intent_services.assignments.AssignmentsIntentService"
             android:exported="false" >
         </service>

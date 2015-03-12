@@ -67,7 +67,7 @@ public class AssignmentsFragment extends Fragment {
         }
 
         // get the cuid
-        this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
+        //this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
 
         // init new assignments receiver
         Context context = getActivity().getApplicationContext();
@@ -196,7 +196,7 @@ public class AssignmentsFragment extends Fragment {
 
             textViewQuestionText.setText(this.assignments.get(position).question_text);
             textViewOrganization.setText(getString(R.string.fa_user) + "   " + YellrUtils.shortenString(this.assignments.get(position).organization));
-            textViewPostCount.setText(getString(R.string.fa_comments) + " " + String.valueOf(this.assignments.get(position).post_count));
+            textViewPostCount.setText(getString(R.string.fa_comments) + "  " + String.valueOf(this.assignments.get(position).post_count));
 
             return row;
         }
