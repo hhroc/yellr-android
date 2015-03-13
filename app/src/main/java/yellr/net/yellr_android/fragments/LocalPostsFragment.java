@@ -271,7 +271,7 @@ public class LocalPostsFragment extends Fragment {
             //
 
             TextView textViewPostUser = (TextView) row.findViewById(R.id.frag_home_local_post_user);
-            textViewPostUser.setTypeface(font); //, Typeface.BOLD_ITALIC);
+            textViewPostUser.setTypeface(font, Typeface.BOLD);
 
             boolean verifiedUser = this.localPosts.get(position).verified_user;
             String firstName = this.localPosts.get(position).first_name;

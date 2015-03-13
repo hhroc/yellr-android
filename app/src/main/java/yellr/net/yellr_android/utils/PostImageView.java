@@ -50,7 +50,29 @@ public class PostImageView extends ImageView {
 
             Log.d("BitmapDownloaderTask.onPostExecute()","Setting Image URL: " + url);
 
-            setImageBitmap(bitmap);
+            Bitmap retBitmap = null;
+
+            // test to see if the image is in portrait view, and if so, generate
+            // a new image to display.
+            // Note: we usually would want to use exif data to make this
+            //       decision, however the server strips all exif data
+            //       on upload to protect anonymity
+
+
+
+            int newWidth = (int)((float)bitmap.getWidth() * 0.75); //(int)((float)bitmap.getWidth()*0.33);
+            int newHeight = (int)((float)bitmap.getHeight());
+
+            Log.d("PostImageView.onPostExecute()", "W: " + String.valueOf(bitmap.getWidth()) + ", H: " + String.valueOf(bitmap.getHeight()) + "new H: " + String.valueOf(newHeight) + ", new W: " + String.valueOf(newWidth));
+
+            if ( bitmap.getWidth() > bitmap.getHeight() ) {
+                retBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), newHeight);
+            } else {
+                retBitmap = bitmap;
+            }
+
+
+            setImageBitmap(retBitmap);
         }
     }
 }
