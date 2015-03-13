@@ -32,10 +32,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BASE_URL", "\"https://yellr.net\""
+            buildConfigField "String", "SPOOF_LOCATION", "0"
         }
         debug {
             buildConfigField "String", "BASE_URL", "\"http://yellr.mycodespace.net\""
             debuggable true
+            buildConfigField "String", "SPOOF_LOCATION", "\"1\""
         }
     }
 

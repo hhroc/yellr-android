@@ -24,6 +24,8 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import yellr.net.yellr_android.BuildConfig;
+
 /**
  * Created by TDuffy on 2/7/2015.
  */
@@ -164,6 +166,12 @@ public class YellrUtils {
             latLng[0] = latitude;
             latLng[1] = longitude;
         }
+        else if (BuildConfig.SPOOF_LOCATION.equals("1")) {
+            latLng =  new double[2];
+            latLng[0] = 43.1656;
+            latLng[1] = -77.6114;
+        }
+
         //} else {
         //    Log.d("YellrUtils.getLocation()", "No location available, defaulting to Home Location");
         //    Float[] latLng = YellrUtils.getHomeLocation(context);
