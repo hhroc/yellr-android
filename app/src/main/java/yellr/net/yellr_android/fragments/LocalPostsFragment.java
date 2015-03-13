@@ -1,18 +1,15 @@
 package yellr.net.yellr_android.fragments;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,19 +22,17 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.R;
-import yellr.net.yellr_android.activities.PostActivity;
 import yellr.net.yellr_android.intent_services.local_posts.LocalPost;
 import yellr.net.yellr_android.intent_services.local_posts.LocalPostsIntentService;
 import yellr.net.yellr_android.intent_services.local_posts.LocalPostsResponse;
-import yellr.net.yellr_android.utils.PostImageView;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
@@ -46,6 +41,8 @@ import yellr.net.yellr_android.utils.YellrUtils;
  * create an instance of this fragment.
  */
 public class LocalPostsFragment extends Fragment {
+
+    private Map<String, Bitmap> bitmapDictionary;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
@@ -78,6 +75,8 @@ public class LocalPostsFragment extends Fragment {
         if (getArguments() != null) {
         }
 
+        bitmapDictionary = new HashMap();
+
         // get the cuid
         //this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
 
@@ -90,7 +89,7 @@ public class LocalPostsFragment extends Fragment {
 
         Log.d("LocalPostsFragment.onCreate()","LocalPostsReciever registered.");
 
-        localPostsArrayAdapter = new LocalPostsArrayAdapter(getActivity(), new ArrayList<LocalPost>());
+        localPostsArrayAdapter = new LocalPostsArrayAdapter(getActivity(), R.layout.fragment_local_post_row, new ArrayList<LocalPost>());
     }
 
     @Override
@@ -171,6 +170,10 @@ public class LocalPostsFragment extends Fragment {
                     LocalPost local_post = response.posts[i];
                     localPostsArrayAdapter.add(local_post);
                     localPosts[i] = local_post;
+                    //if ( localPosts[i].media_objects[0].media_type_name.equals("image") &&
+                    //        localPosts[i].media_objects[0].displayImage != null ) {
+                    //    localPosts[i].media_objects[0].downloadDisplayImage();
+                    //}
                 }
             }
 
@@ -196,20 +199,50 @@ public class LocalPostsFragment extends Fragment {
 
     }
 
+    public class LocalPostViewHolder {
 
+        public int position;
+
+        public final TextView textViewPostQuestion;
+        public final TextView textViewPostUser;
+        public final TextView textViewPostDateTime;
+        public final TextView textViewPostText;
+        public final ImageView imageViewPostImage;
+        public final TextView textViewPostUpVote;
+        public final TextView textViewPostVoteCount;
+
+        LocalPostViewHolder(int position, View row) {
+
+            this.position = position;
+
+            Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
+
+            this.textViewPostQuestion = (TextView) row.findViewById(R.id.frag_home_local_post_question);
+            this.textViewPostQuestion.setTypeface(font, Typeface.ITALIC);
+
+            this.textViewPostUser = (TextView) row.findViewById(R.id.frag_home_local_post_user);
+            this.textViewPostUser.setTypeface(font, Typeface.BOLD);
+
+            this.textViewPostDateTime = (TextView) row.findViewById(R.id.frag_home_local_post_datetime);
+
+            this.textViewPostDateTime.setTypeface(font);
+
+            this.textViewPostText = (TextView) row.findViewById(R.id.frag_home_local_post_text);
+            this.imageViewPostImage = (ImageView) row.findViewById(R.id.frag_home_local_post_image);
+            this.textViewPostUpVote = (TextView) row.findViewById(R.id.frag_home_local_post_up_vote);
+
+            this.textViewPostVoteCount = (TextView) row.findViewById(R.id.frag_home_local_post_vote_count);
+            this.textViewPostUpVote.setTypeface(font);
+        }
+    }
 
     public class LocalPostsArrayAdapter extends ArrayAdapter<LocalPost> {
 
         private ArrayList<LocalPost> localPosts;
 
-        private LayoutInflater inflater;
-
-        public LocalPostsArrayAdapter(Context context, ArrayList<LocalPost> localPosts) {
-            super(context, R.layout.fragment_local_post_row, R.id.frag_home_local_post_user, localPosts);
+        public LocalPostsArrayAdapter(Context context, int listViewId, ArrayList<LocalPost> localPosts) {
+            super(context, listViewId, localPosts);
             this.localPosts = localPosts;
-
-            this.inflater = LayoutInflater.from(getContext());
-
         }
 
         @Override
@@ -220,49 +253,44 @@ public class LocalPostsFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            Log.d("LocalPostsArrayAdapter.getView()", "Position: " + String.valueOf(position) + ", Media Type: " + this.localPosts.get(position).media_objects[0].media_type_name + ", " );
+            LocalPostViewHolder localPostViewHolder;
 
-            View row = null;
-            //if( null == convertView ) {
-                //row = super.getView(position, convertView, parent);
+            if ( convertView == null ) {
 
-                // TODO: Figure out how to re-use convertView
-                //       This causes the images to be re-drawn every time
-                //       this function is called.
-                //
-                //       If I do not do this, and I just use the convertView,
-                //       the images jump around as I scroll.  I suspect this
-                //       is because Android re-uses the view as convertView.
-                //
+                // get the convertView (reused between getView() calls)
+                LayoutInflater vi = LayoutInflater.from(getContext()); //getLayoutInflater(); //(LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = vi.inflate(R.layout.fragment_local_post_row, null);
 
-                row = LayoutInflater.from(getContext()).inflate(R.layout.fragment_local_post_row, parent, false);
+                // create our view holder, and set it as the tag of the convertView.
+                localPostViewHolder = new LocalPostViewHolder(position, convertView);
+                convertView.setTag(localPostViewHolder);
 
-            //} else {
-            //    row = convertView;
-            //}
+            } else {
 
-            //View row = convertView;
+                // ge tour view holder from the convertView
+                localPostViewHolder = (LocalPostViewHolder)convertView.getTag();
 
-            Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
+                // remove any previous image on reuse
+                localPostViewHolder.imageViewPostImage.setImageBitmap(null);
+
+                // re hide the view if there is no image, so we need to default it to showing
+                localPostViewHolder.imageViewPostImage.setVisibility(View.VISIBLE);
+
+            }
+
+            LocalPost localPost = localPosts.get(position);
 
             //
             // Question Text
             //
 
-            TextView textViewPostQuestion = (TextView) row.findViewById(R.id.frag_home_local_post_question);
-            textViewPostQuestion.setTypeface(font);
-
-            String questionText = this.localPosts.get(position).question_text;
+            String questionText = localPost.question_text;
             boolean assignmentResponse = questionText == null || questionText.equals(null) || questionText.equals("") ? false : true;
 
             if ( assignmentResponse ) {
-                textViewPostQuestion.setText(getString(R.string.fa_question_circle) + "  " + questionText);
+                localPostViewHolder.textViewPostQuestion.setText(getString(R.string.fa_question_circle) + "  " + questionText);
             } else {
-                //textViewPostQuestion.setTypeface(null, Typeface.ITALIC);
-                //textViewPostQuestion.setText("Free Post");
-                //textViewPostQuestion.setVisibility(View.GONE);
-                textViewPostQuestion.setText(getString(R.string.fa_question_circle) + "  " + "Free Post");
-                textViewPostQuestion.setTypeface(font, Typeface.ITALIC);
+                localPostViewHolder.textViewPostQuestion.setText(getString(R.string.fa_question_circle) + "  " + "Free Post");
             }
 
 
@@ -270,17 +298,14 @@ public class LocalPostsFragment extends Fragment {
             // User Text
             //
 
-            TextView textViewPostUser = (TextView) row.findViewById(R.id.frag_home_local_post_user);
-            textViewPostUser.setTypeface(font, Typeface.BOLD);
-
-            boolean verifiedUser = this.localPosts.get(position).verified_user;
-            String firstName = this.localPosts.get(position).first_name;
-            String lastName = this.localPosts.get(position).last_name;
+            boolean verifiedUser = localPost.verified_user;
+            String firstName = localPost.first_name;
+            String lastName = localPost.last_name;
 
             if ( verifiedUser ) {
-                textViewPostUser.setText(getString(R.string.fa_user) + "  " + firstName + " " + lastName);
+                localPostViewHolder.textViewPostUser.setText(getString(R.string.fa_user) + "  " + firstName + " " + lastName);
             } else {
-                textViewPostUser.setText(getString(R.string.fa_user) + "  " + getString(R.string.anonymous_user));
+                localPostViewHolder.textViewPostUser.setText(getString(R.string.fa_user) + "  " + getString(R.string.anonymous_user));
             }
 
 
@@ -288,98 +313,98 @@ public class LocalPostsFragment extends Fragment {
             // Post DateTime
             //
 
-            TextView textViewPostDateTime = (TextView) row.findViewById(R.id.frag_home_local_post_datetime);
-            textViewPostDateTime.setTypeface(font);
-
-            Date postDateTime = YellrUtils.prettifyDateTime(this.localPosts.get(position).post_datetime);
+            Date postDateTime = YellrUtils.prettifyDateTime(localPost.post_datetime);
             String postAuthoredAgo = YellrUtils.calcTimeBetween(postDateTime, new Date()) + getString(R.string.time_ago) + ".";
 
-            textViewPostDateTime.setText(getString(R.string.fa_pencil) + "  " + postAuthoredAgo);
+            localPostViewHolder.textViewPostDateTime.setText(getString(R.string.fa_pencil) + "  " + postAuthoredAgo);
+
 
             //
             // Post Text
             //
 
-            TextView textViewPostText = (TextView) row.findViewById(R.id.frag_home_local_post_text);
-
-            String mediaType = this.localPosts.get(position).media_objects[0].media_type_name;
-            String mediaText = this.localPosts.get(position).media_objects[0].media_text;
-            String mediaCaption = this.localPosts.get(position).media_objects[0].caption;
+            String mediaType = localPost.media_objects[0].media_type_name;
+            String mediaText = localPost.media_objects[0].media_text;
+            String mediaCaption = localPost.media_objects[0].caption;
 
             if ( mediaType.equals("text") ) {
-                textViewPostText.setText(mediaText);
+                localPostViewHolder.textViewPostText.setText(mediaText);
             } else {
-                textViewPostText.setText(mediaCaption);
+                localPostViewHolder.textViewPostText.setText(mediaCaption);
             }
 
             //
             // Image View (optional)
             //
 
-            PostImageView imageViewPostImage = (PostImageView) row.findViewById(R.id.frag_home_local_post_image);
+            if (mediaType.equals("image")) {
+                try {
 
-            //String mediaType = this.localPosts.get(position).media_objects[0].media_type_name;
+                    // note: if image is already downloaded, the BitmapDownloaderTask will just pull
+                    //       the image from the HashMap rather than re-downloading it.
+                    String url = BuildConfig.BASE_URL + "/media/" + YellrUtils.getPreviewImageName(localPost.media_objects[0].file_name);
+                    BitmapDownloaderTask bitmapDownloaderTask = new BitmapDownloaderTask(localPostViewHolder.imageViewPostImage, url);
+                    bitmapDownloaderTask.execute();
 
-            //if ( !imageViewPostImage.imageSet ) {
-
-                if (mediaType.equals("image")) {
-                    try {
-
-                        //
-                        // TODO: This needs to be moved to a background task.
-                        //       Unsure how to do this with respect to the list ..
-                        //       I suspect it has something to do with
-                        //       position, however I'm not sure.
-
-                        //URL url = new URL(BuildConfig.BASE_URL + this.localPosts.get(position).media_objects[0].file_name);
-                        //InputStream content = (InputStream) url.getContent();
-                        //Drawable drawable = Drawable.createFromStream(content, "src");
-                        //imageViewPostImage.setImageDrawable(drawable);
-
-                        Log.d("LocalPostArrayAdapter.getView()","Position: " + String.valueOf(position));
-                        Log.d("LocalPostArrayAdapter.getView()","    Media Text: " + mediaText);
-                        Log.d("LocalPostArrayAdapter.getView()","    Media Caption: " + mediaCaption);
-
-                        String url = BuildConfig.BASE_URL + "/media/" + YellrUtils.getPreviewImageName(this.localPosts.get(position).media_objects[0].file_name);
-                        imageViewPostImage.setImage(url, position);
-
-                    } catch (Exception e) {
-                        Log.d("LocalPostsArrayAdapter.getView()", "ERROR: " + e.toString());
-                    }
-                } else if (mediaType.equals("text")) {
-                    imageViewPostImage.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    Log.d("LocalPostsArrayAdapter.getView()", "ERROR: " + e.toString());
                 }
-
-            //}
+            } else if (mediaType.equals("text")) {
+                localPostViewHolder.imageViewPostImage.setVisibility(View.GONE);
+            }
 
 
             //
-            // User Actions (up vote, down vote, favorite)
+            // Voting (up vote, vote count)
             //
 
-            TextView textViewPostUpVote = (TextView) row.findViewById(R.id.frag_home_local_post_up_vote);
-            textViewPostUpVote.setTypeface(font);
-            //TextView textViewPostDownVote = (TextView) row.findViewById(R.id.frag_home_local_post_down_vote);
-            //textViewPostDownVote.setTypeface(font);
-            //TextView textViewPostFavorite = (TextView) row.findViewById(R.id.frag_home_local_post_favorite);
-            //textViewPostFavorite.setTypeface(font);
 
 
-            //TextView textViewQuestionText = (TextView) row.findViewById(R.id.frag_home_local_post_question_text);
-            //TextView textViewOrganization = (TextView) row.findViewById(R.id.frag_home_local_post_organization);
-            //TextView textViewPostCount = (TextView) row.findViewById(R.id.frag_home_local_post_post_count);
-
-            //
-            //textViewOrganization.setTypeface(font);
-            //textViewPostCount.setTypeface(font);
-
-            //textViewQuestionText.setText(this.localPosts.get(position).question_text);
-            //textViewOrganization.setText(getString(R.string.fa_user) + "   " + YellrUtils.shortenString(this.localPosts.get(position).organization));
-            //textViewPostCount.setText(getString(R.string.fa_comments) + " " + String.valueOf(this.localPosts.get(position).post_count));
-
-            return row;
+            return convertView;
         }
     }
 
+    class BitmapDownloaderTask extends AsyncTask<Void, Void, Bitmap> {
+
+        private WeakReference<ImageView> imageViewWeakReference;
+        private String url;
+
+        public BitmapDownloaderTask(ImageView imageView, String url) {
+            imageView.setTag(url);
+            imageViewWeakReference = new WeakReference<ImageView>(imageView);
+            this.url = url;
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            Bitmap retBitmap = null;
+            ImageView imageView = imageViewWeakReference.get();
+            if (imageView == null || !url.equals(imageView.getTag())) {
+                // not us, returns null
+            } else {
+
+                // see if we have already downloaded the bitmap, and
+                // if we haven't download it.
+                retBitmap = bitmapDictionary.get(this.url);
+                if ( retBitmap == null ) {
+                    retBitmap = YellrUtils.downloadBitmap(this.url);
+                    bitmapDictionary.put(this.url, retBitmap);
+                }
+
+            }
+            return retBitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            ImageView imageView = this.imageViewWeakReference.get();
+            if (imageView == null || bitmap == null || !this.url.equals(imageView.getTag())) {
+                // something went wrong ...
+            } else {
+                // success!
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+    }
 
 }

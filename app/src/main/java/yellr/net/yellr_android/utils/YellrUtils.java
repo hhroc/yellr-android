@@ -272,8 +272,8 @@ public class YellrUtils {
         String baseFilename = st.nextToken();
         String fileExtention = st.nextToken();
 
-        Log.d("YellrUtils.getPreviewImageName()","baseFilename: " + baseFilename);
-        Log.d("YellrUtils.getPreviewImageName()","fileExtention: " + fileExtention);
+        //Log.d("YellrUtils.getPreviewImageName()","baseFilename: " + baseFilename);
+        //Log.d("YellrUtils.getPreviewImageName()","fileExtention: " + fileExtention);
 
         String previewFileName = baseFilename + "p." + fileExtention;
 
