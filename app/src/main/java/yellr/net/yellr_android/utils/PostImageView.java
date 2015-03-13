@@ -59,18 +59,14 @@ public class PostImageView extends ImageView {
             //       on upload to protect anonymity
 
 
-
-            int newWidth = (int)((float)bitmap.getWidth() * 0.75); //(int)((float)bitmap.getWidth()*0.33);
-            int newHeight = (int)((float)bitmap.getHeight());
-
-            Log.d("PostImageView.onPostExecute()", "W: " + String.valueOf(bitmap.getWidth()) + ", H: " + String.valueOf(bitmap.getHeight()) + "new H: " + String.valueOf(newHeight) + ", new W: " + String.valueOf(newWidth));
-
-            if ( bitmap.getWidth() > bitmap.getHeight() ) {
-                retBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), newHeight);
+            // note: yea, this math is probably way wrong.
+            int newWidth = bitmap.getWidth();
+            int newHeight = (int)((float)bitmap.getHeight()* 0.5);
+            if ( bitmap.getWidth() < bitmap.getHeight() ) {
+                retBitmap = Bitmap.createBitmap(bitmap, 0, (int)((float)bitmap.getHeight()* (0.25)), newWidth, newHeight);
             } else {
                 retBitmap = bitmap;
             }
-
 
             setImageBitmap(retBitmap);
         }
