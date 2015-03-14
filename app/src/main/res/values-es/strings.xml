@@ -33,59 +33,59 @@
     <string name="time_ago">ago</string>
 
     <!-- Home Action Buttons -->
-    <string name="action_notification">Notifications</string>
-    <string name="action_messages">Messages</string>
-    <string name="action_profile">Profile</string>
-    <string name="action_new_post">New Post</string>
+    <string name="action_notification">Notificaciones</string>
+    <string name="action_messages">Mensajes</string>
+    <string name="action_profile">Perfil</string>
+    <string name="action_new_post">Publicar</string>
 
     <!-- Splash -->
     <string name="activity_splash_title">Yellr</string>
-    <string name="activity_splash_tag_line">Report for your community</string>
+    <string name="activity_splash_tag_line">Tu voz en el communidad</string>
 
     <!-- Local Posts -->
     <string name="fragment_local_posts_title">Local</string>
-    <string name="anonymous_user">Anonymous User</string>
+    <string name="anonymous_user">User Anonimo</string>
 
     <!-- Assignments -->
-    <string name="fragment_assignments_title">Assignments</string>
+    <string name="fragment_assignments_title">Asignaciones</string>
 
     <!-- Stories -->
-    <string name="fragment_stories_title">Stories</string>
+    <string name="fragment_stories_title">Estorias</string>
 
     <!-- View Story -->
     <string name="title_activity_view_story">Yellr</string>
 
     <!-- View Assignment -->
-    <string name="organization_label">Organization: </string>
-    <string name="title_activity_view_assignment">Assignment</string>
-    <string name="view_assignment_contribute">Contribute</string>
+    <string name="organization_label">Organizacion: </string>
+    <string name="title_activity_view_assignment">Asignacion</string>
+    <string name="view_assignment_contribute">Contribte</string>
 
     <!-- Notifications -->
-    <string name="title_activity_notifications">Notifications</string>
+    <string name="title_activity_notifications">Notificaciones</string>
 
     <!-- Post -->
-    <string name="activity_post_title">New Post</string>
-    <string name="frag_post_default_text">Tell us about your community</string>
-    <string name="frag_post_media_text">Add media:</string>
-    <string name="frag_post_submit_button">Submit</string>
-    <string name="frag_post_assignment_title">Free Post</string>
-    <string name="frag_post_assignment_description">You can tell us what you think on any topic!</string>
-    <string name="frag_post_toast_sending_post">Sending post ...</string>
+    <string name="activity_post_title">Neuvo Reportaje</string>
+    <string name="frag_post_default_text">¿Qué estás pensando en tu communidad?</string>
+    <string name="frag_post_media_text">Agregar media:</string>
+    <string name="frag_post_submit_button">Someter</string>
+    <string name="frag_post_assignment_title">Publicacion Libre</string>
+    <string name="frag_post_assignment_description">¡Puedes hablar de qual qier cosa!</string>
+    <string name="frag_post_toast_sending_post">En viaje ...</string>
 
     <!-- Profile -->
-    <string name="activity_profile_title">ProfileActivity</string>
-    <string name="frag_profile_posts_description">Posts</string>
-    <string name="frag_profile_viewed_posts_description">Posts Viewed</string>
-    <string name="frag_profile_used_posts_description">Posts Used</string>
-    <string name="frag_profile_action_signup">SignUp</string>
-    <string name="frag_profile_action_new_uuid">New UUID</string>
+    <string name="activity_profile_title">Perfil</string>
+    <string name="frag_profile_posts_description">Publicaciones</string>
+    <string name="frag_profile_viewed_posts_description">Publicaciones Visto</string>
+    <string name="frag_profile_used_posts_description">Publicaciones Usado</string>
+    <string name="frag_profile_action_signup">Regístrate</string>
+    <string name="frag_profile_action_new_uuid">Genera nuevo ID</string>
 
     <!-- location -->
-    <string name="activity_location_title">Set A Location</string>
-    <string name="frag_location_info_text">Yellr uses location to send you assignments and stories.  Enter the zipcode you would like to set as your home location.</string>
+    <string name="activity_location_title">Escoje tu locacion</string>
+    <string name="frag_location_info_text">Yellr usa tu locacion para mandar asignaciones y noticias. Mete tu código postal para cambiar to locacion.</string>
 
     <!-- <string name="action_settings">Settings</string> -->
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hola que tal fragment</string>
 
 </resources>

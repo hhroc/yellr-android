@@ -73,11 +73,11 @@
     <string name="frag_post_toast_sending_post">Sending post ...</string>
 
     <!-- Profile -->
-    <string name="activity_profile_title">ProfileActivity</string>
+    <string name="activity_profile_title">Profile</string>
     <string name="frag_profile_posts_description">Posts</string>
     <string name="frag_profile_viewed_posts_description">Posts Viewed</string>
     <string name="frag_profile_used_posts_description">Posts Used</string>
-    <string name="frag_profile_action_signup">SignUp</string>
+    <string name="frag_profile_action_signup">Sign Up</string>
     <string name="frag_profile_action_new_uuid">New UUID</string>
 
     <!-- location -->
