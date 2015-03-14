@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ import yellr.net.yellr_android.utils.YellrUtils;
  */
 public class LocalPostsFragment extends Fragment {
 
-    private Map<String, Bitmap> bitmapDictionary;
+    //private Map<String, Bitmap> bitmapDictionary;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
@@ -75,11 +76,6 @@ public class LocalPostsFragment extends Fragment {
         if (getArguments() != null) {
         }
 
-        bitmapDictionary = new HashMap();
-
-        // get the cuid
-        //this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
-
         // init new localPosts receiver
         Context context = getActivity().getApplicationContext();
         IntentFilter localPostsFilter = new IntentFilter(LocalPostsIntentService.ACTION_NEW_LOCAL_POSTS);
@@ -102,8 +98,6 @@ public class LocalPostsFragment extends Fragment {
 
         listView.setAdapter(localPostsArrayAdapter);
         listView.setOnItemClickListener(new LocalPostListOnClickListener());
-
-
 
         // This appear to be a linting error the Android Docs call for a Color Resource to be used here...
         // https://developer.android.com/reference/android/support/v4/widget/SwipeRefreshLayout.html#setProgressBackgroundColor(int)
@@ -140,7 +134,6 @@ public class LocalPostsFragment extends Fragment {
         Log.d("LocalPostsFragment.onResume()", "LocalPosts intent service dispatched.");
     }
 
-
     public class LocalPostsReceiver extends BroadcastReceiver {
         //public static final String ACTION_NEW_LOCAL_POSTS =
         //        "yellr.net.yellr_android.action.NEW_LOCAL_POSTS";
@@ -170,10 +163,6 @@ public class LocalPostsFragment extends Fragment {
                     LocalPost local_post = response.posts[i];
                     localPostsArrayAdapter.add(local_post);
                     localPosts[i] = local_post;
-                    //if ( localPosts[i].media_objects[0].media_type_name.equals("image") &&
-                    //        localPosts[i].media_objects[0].displayImage != null ) {
-                    //    localPosts[i].media_objects[0].downloadDisplayImage();
-                    //}
                 }
             }
 
@@ -270,12 +259,6 @@ public class LocalPostsFragment extends Fragment {
                 // ge tour view holder from the convertView
                 localPostViewHolder = (LocalPostViewHolder)convertView.getTag();
 
-                // remove any previous image on reuse
-                localPostViewHolder.imageViewPostImage.setImageBitmap(null);
-
-                // re hide the view if there is no image, so we need to default it to showing
-                localPostViewHolder.imageViewPostImage.setVisibility(View.VISIBLE);
-
             }
 
             LocalPost localPost = localPosts.get(position);
@@ -340,11 +323,12 @@ public class LocalPostsFragment extends Fragment {
             if (mediaType.equals("image")) {
                 try {
 
-                    // note: if image is already downloaded, the BitmapDownloaderTask will just pull
-                    //       the image from the HashMap rather than re-downloading it.
                     String url = BuildConfig.BASE_URL + "/media/" + YellrUtils.getPreviewImageName(localPost.media_objects[0].file_name);
-                    BitmapDownloaderTask bitmapDownloaderTask = new BitmapDownloaderTask(localPostViewHolder.imageViewPostImage, url);
-                    bitmapDownloaderTask.execute();
+
+                    localPostViewHolder.imageViewPostImage.setVisibility(View.VISIBLE);
+                    Picasso.with(getContext())
+                            .load(url)
+                            .into(localPostViewHolder.imageViewPostImage);
 
                 } catch (Exception e) {
                     Log.d("LocalPostsArrayAdapter.getView()", "ERROR: " + e.toString());
@@ -361,49 +345,6 @@ public class LocalPostsFragment extends Fragment {
 
 
             return convertView;
-        }
-    }
-
-    class BitmapDownloaderTask extends AsyncTask<Void, Void, Bitmap> {
-
-        private WeakReference<ImageView> imageViewWeakReference;
-        private String url;
-
-        public BitmapDownloaderTask(ImageView imageView, String url) {
-            imageView.setTag(url);
-            imageViewWeakReference = new WeakReference<ImageView>(imageView);
-            this.url = url;
-        }
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            Bitmap retBitmap = null;
-            ImageView imageView = imageViewWeakReference.get();
-            if (imageView == null || !url.equals(imageView.getTag())) {
-                // not us, returns null
-            } else {
-
-                // see if we have already downloaded the bitmap, and
-                // if we haven't download it.
-                retBitmap = bitmapDictionary.get(this.url);
-                if ( retBitmap == null ) {
-                    retBitmap = YellrUtils.downloadBitmap(this.url);
-                    bitmapDictionary.put(this.url, retBitmap);
-                }
-
-            }
-            return retBitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            ImageView imageView = this.imageViewWeakReference.get();
-            if (imageView == null || bitmap == null || !this.url.equals(imageView.getTag())) {
-                // something went wrong ...
-            } else {
-                // success!
-                imageView.setImageBitmap(bitmap);
-            }
         }
     }
 

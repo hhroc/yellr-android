@@ -57,7 +57,7 @@
                 android:textSize="14sp"
                 android:text="Response: Tell us about your community ..."
                 android:textColor="@color/black"
-                android:paddingBottom="5dp"
+                android:paddingBottom="2dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 />
@@ -75,8 +75,8 @@
                     android:textSize="12sp"
                     android:text="Anonymous User"
                     android:textColor="@color/grey"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="4dp"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="2dp"
                     />
 
                 <TextView
@@ -88,6 +88,7 @@
                     android:text="14 das ago"
                     android:textColor="@color/grey"
                     android:paddingRight="10dp"
+                    android:paddingTop="0dp"
                     android:paddingBottom="2dp"
                     />
 
@@ -102,21 +103,21 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
                 android:layout_marginBottom="3dp"
-
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 />
 
             <ImageView
                 android:id="@+id/frag_home_local_post_image"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="120dp"
                 android:gravity="center_vertical"
-                android:layout_marginTop="5dp"
+                android:scaleType="fitXY"
+                android:layout_marginTop="0dp"
                 android:paddingRight="10dp"
-                android:layout_below="@id/frag_home_local_post_text"/>
+                />
 
         </LinearLayout>
 

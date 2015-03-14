@@ -305,7 +305,15 @@ public class YellrUtils {
                     inputStream = entity.getContent();
                     //final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                     bitmap = BitmapFactory.decodeStream(inputStream);
-                    //return bitmap;
+
+                    // resize image if it is the incorrect orientation
+
+                    if (bitmap.getHeight() > bitmap.getWidth() ) {
+                        int newHeight = (int)((7.0/16.0) * (double)bitmap.getHeight());
+                        int newWidth = bitmap.getWidth();
+                        bitmap = Bitmap.createBitmap(bitmap,0, (int)((3.0/16.0)*(double)bitmap.getHeight()),newWidth,newHeight);
+                    }
+
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();

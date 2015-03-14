@@ -146,6 +146,8 @@ public class PostFragment extends Fragment {
 
         postText = (EditText)view.findViewById(R.id.frag_post_edit_text);
 
+        postText.setBackground(null);
+
         imageButton = (Button)view.findViewById(R.id.frag_post_photo_button);
         videoButton = (Button)view.findViewById(R.id.frag_post_video_button);
         videoButton.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +165,7 @@ public class PostFragment extends Fragment {
                 toast.show();
             }
         });
-        imagePreview = (ImageView)view.findViewById(R.id.frag_post_imagepreview);
+        imagePreview = (ImageView)view.findViewById(R.id.frag_post_image_preview);
 
         assignmentQuestion = (TextView)view.findViewById(R.id.frag_post_assignment_question);
         assignmentDescription = (TextView)view.findViewById(R.id.frag_post_assignment_description);
@@ -313,16 +315,13 @@ public class PostFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_post, menu);
         if(this.isAdded()){
-            /*
+            menu.findItem(R.id.action_post_submit).setTitle("POST");
+                    //.setIcon(
+                    //new IconDrawable(getActivity(), Iconify.IconValue.fa_upload)
+                    //        .colorRes(R.color.black)
+                    //        .actionBarSize()
+            //);
 
-            TD: removed since we have a submit button
-
-            menu.findItem(R.id.action_post_upload).setIcon(
-                    new IconDrawable(getActivity(), Iconify.IconValue.fa_upload)
-                            .colorRes(R.color.black)
-                            .actionBarSize()
-            );
-            */
         } else {
             Log.d("onCreateOptionsMenu()", "Fragment not added to Activity");
         }
@@ -332,10 +331,7 @@ public class PostFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
-            //
-            // TD: removed since we have a submit button
-            //
-            //case R.id.action_post_upload:
+            //case R.id.action_post_submit:
             //    SubmitPostToYellr();
             //    break;
             default:
