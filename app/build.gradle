@@ -32,10 +32,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BASE_URL", "\"https://yellr.net\""
+            buildConfigField "String", "SPOOF_LOCATION", "\"0\""
         }
         debug {
             buildConfigField "String", "BASE_URL", "\"http://yellr.mycodespace.net\""
             debuggable true
+            buildConfigField "String", "SPOOF_LOCATION", "\"1\""
         }
     }
 
@@ -60,6 +62,7 @@ dependencies {
     compile files('libs/httpclient-cache-4.3.6.jar')
     compile files('libs/httpcore-4.3.3.jar')
     compile files('libs/httpmime-4.3.6.jar')
+    compile files('libs/picasso-2.5.0.jar')
     //compile 'com.google.android.gms:play-services:6.5.87'
     //compile 'com.google.android.gms:play-services-maps:6.5.87'
 }

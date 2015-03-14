@@ -45,10 +45,7 @@
             android:name=".activities.PostActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/activity_post_title"
-            android:parentActivityName=".activities.HomeActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.HomeActivity" />
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name=".activities.ViewStoryActivity"
@@ -73,6 +70,11 @@
             android:parentActivityName=".activities.SplashActivity" >
             android:noHistory="true">
         </activity>
+
+        <service
+            android:name=".intent_services.local_posts.LocalPostsIntentService"
+            android:exported="false" >
+        </service>
 
         <service
             android:name=".intent_services.assignments.AssignmentsIntentService"

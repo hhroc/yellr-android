@@ -3,17 +3,28 @@ package yellr.net.yellr_android.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.UUID;
+
+import yellr.net.yellr_android.BuildConfig;
 
 /**
  * Created by TDuffy on 2/7/2015.
@@ -155,6 +166,12 @@ public class YellrUtils {
             latLng[0] = latitude;
             latLng[1] = longitude;
         }
+        else if (BuildConfig.SPOOF_LOCATION.equals("1")) {
+            latLng =  new double[2];
+            latLng[0] = 43.1656;
+            latLng[1] = -77.6114;
+        }
+
         //} else {
         //    Log.d("YellrUtils.getLocation()", "No location available, defaulting to Home Location");
         //    Float[] latLng = YellrUtils.getHomeLocation(context);
@@ -245,6 +262,75 @@ public class YellrUtils {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("cuid", cuid);
         editor.commit();
+    }
+
+    public static String getPreviewImageName(String filename) {
+
+        //String[] filenameParts = filename.split(".");
+
+        StringTokenizer st = new StringTokenizer(filename, ".");
+        String baseFilename = st.nextToken();
+        String fileExtention = st.nextToken();
+
+        //Log.d("YellrUtils.getPreviewImageName()","baseFilename: " + baseFilename);
+        //Log.d("YellrUtils.getPreviewImageName()","fileExtention: " + fileExtention);
+
+        String previewFileName = baseFilename + "p." + fileExtention;
+
+        return previewFileName;
+    }
+
+    //
+    // This function modified from here:
+    //    http://android-developers.blogspot.com/2010/07/multithreading-for-performance.html
+    ///
+    public static Bitmap downloadBitmap(String url) {
+        final AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
+        final HttpGet getRequest = new HttpGet(url);
+
+        Bitmap bitmap = null;
+
+        try {
+            HttpResponse response = client.execute(getRequest);
+            final int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != HttpStatus.SC_OK) {
+                Log.w("ImageDownloader", "Error " + statusCode + " while retrieving bitmap from " + url);
+                return null;
+            }
+
+            final HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream inputStream = null;
+                try {
+                    inputStream = entity.getContent();
+                    //final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    bitmap = BitmapFactory.decodeStream(inputStream);
+
+                    // resize image if it is the incorrect orientation
+
+                    if (bitmap.getHeight() > bitmap.getWidth() ) {
+                        int newHeight = (int)((7.0/16.0) * (double)bitmap.getHeight());
+                        int newWidth = bitmap.getWidth();
+                        bitmap = Bitmap.createBitmap(bitmap,0, (int)((3.0/16.0)*(double)bitmap.getHeight()),newWidth,newHeight);
+                    }
+
+                } finally {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                    entity.consumeContent();
+                }
+            }
+        } catch (Exception e) {
+            // Could provide a more explicit error message for IOException or IllegalStateException
+            getRequest.abort();
+            Log.d("YellrUtils.downloadBitmap()", "Error while retrieving bitmap from " + url + ": " + e.toString());
+        } finally {
+            if (client != null) {
+                client.close();
+            }
+        }
+        return bitmap;
     }
 
     public static void setCurrentAssignmentIds(Context context, String[] currentAssignmentIds) {

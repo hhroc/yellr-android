@@ -91,110 +91,116 @@ ADDED from AndroidManifest.xml:38:9
 		ADDED from AndroidManifest.xml:39:13
 activity#yellr.net.yellr_android.activities.PostActivity
 ADDED from AndroidManifest.xml:44:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:48:13
 	android:label
 		ADDED from AndroidManifest.xml:47:13
 	android:configChanges
 		ADDED from AndroidManifest.xml:46:13
-	android:parentActivityName
-		ADDED from AndroidManifest.xml:48:13
 	android:name
 		ADDED from AndroidManifest.xml:45:13
-meta-data#android.support.PARENT_ACTIVITY
-ADDED from AndroidManifest.xml:49:13
-	android:name
-		ADDED from AndroidManifest.xml:50:17
-	android:value
-		ADDED from AndroidManifest.xml:51:17
 activity#yellr.net.yellr_android.activities.ViewStoryActivity
-ADDED from AndroidManifest.xml:53:9
+ADDED from AndroidManifest.xml:50:9
 	android:label
-		ADDED from AndroidManifest.xml:56:13
+		ADDED from AndroidManifest.xml:53:13
 	android:configChanges
-		ADDED from AndroidManifest.xml:55:13
+		ADDED from AndroidManifest.xml:52:13
 	android:parentActivityName
-		ADDED from AndroidManifest.xml:57:13
-	android:name
 		ADDED from AndroidManifest.xml:54:13
+	android:name
+		ADDED from AndroidManifest.xml:51:13
+meta-data#android.support.PARENT_ACTIVITY
+ADDED from AndroidManifest.xml:55:13
+	android:name
+		ADDED from AndroidManifest.xml:56:17
+	android:value
+		ADDED from AndroidManifest.xml:57:17
 activity#yellr.net.yellr_android.activities.ProfileActivity
-ADDED from AndroidManifest.xml:62:9
+ADDED from AndroidManifest.xml:59:9
 	android:label
-		ADDED from AndroidManifest.xml:64:13
+		ADDED from AndroidManifest.xml:61:13
 	android:parentActivityName
-		ADDED from AndroidManifest.xml:65:13
+		ADDED from AndroidManifest.xml:62:13
 	android:name
-		ADDED from AndroidManifest.xml:63:13
+		ADDED from AndroidManifest.xml:60:13
 activity#yellr.net.yellr_android.activities.LocationActivity
-ADDED from AndroidManifest.xml:70:9
+ADDED from AndroidManifest.xml:67:9
 	android:label
-		ADDED from AndroidManifest.xml:72:13
+		ADDED from AndroidManifest.xml:69:13
 	android:parentActivityName
-		ADDED from AndroidManifest.xml:73:13
+		ADDED from AndroidManifest.xml:70:13
 	android:name
-		ADDED from AndroidManifest.xml:71:13
+		ADDED from AndroidManifest.xml:68:13
+service#yellr.net.yellr_android.intent_services.local_posts.LocalPostsIntentService
+ADDED from AndroidManifest.xml:74:9
+	android:exported
+		ADDED from AndroidManifest.xml:76:13
+	android:name
+		ADDED from AndroidManifest.xml:75:13
 service#yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService
-ADDED from AndroidManifest.xml:77:9
+ADDED from AndroidManifest.xml:79:9
 	android:exported
-		ADDED from AndroidManifest.xml:79:13
+		ADDED from AndroidManifest.xml:81:13
 	android:name
-		ADDED from AndroidManifest.xml:78:13
+		ADDED from AndroidManifest.xml:80:13
 service#yellr.net.yellr_android.intent_services.stories.StoriesIntentService
-ADDED from AndroidManifest.xml:82:9
+ADDED from AndroidManifest.xml:84:9
 	android:exported
-		ADDED from AndroidManifest.xml:84:13
+		ADDED from AndroidManifest.xml:86:13
 	android:name
-		ADDED from AndroidManifest.xml:83:13
+		ADDED from AndroidManifest.xml:85:13
 service#yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService
-ADDED from AndroidManifest.xml:87:9
+ADDED from AndroidManifest.xml:89:9
 	android:exported
-		ADDED from AndroidManifest.xml:89:13
+		ADDED from AndroidManifest.xml:91:13
 	android:name
-		ADDED from AndroidManifest.xml:88:13
+		ADDED from AndroidManifest.xml:90:13
 activity#yellr.net.yellr_android.activities.NotificationsActivity
-ADDED from AndroidManifest.xml:92:9
+ADDED from AndroidManifest.xml:94:9
 	android:label
-		ADDED from AndroidManifest.xml:94:13
+		ADDED from AndroidManifest.xml:96:13
 	android:name
-		ADDED from AndroidManifest.xml:93:13
+		ADDED from AndroidManifest.xml:95:13
 service#yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService
-ADDED from AndroidManifest.xml:97:9
+ADDED from AndroidManifest.xml:99:9
 	android:exported
-		ADDED from AndroidManifest.xml:99:13
+		ADDED from AndroidManifest.xml:101:13
 	android:name
-		ADDED from AndroidManifest.xml:98:13
+		ADDED from AndroidManifest.xml:100:13
 service#yellr.net.yellr_android.intent_services.messages.MessagesIntentService
-ADDED from AndroidManifest.xml:102:9
+ADDED from AndroidManifest.xml:104:9
 	android:exported
-		ADDED from AndroidManifest.xml:104:13
+		ADDED from AndroidManifest.xml:106:13
 	android:name
-		ADDED from AndroidManifest.xml:103:13
+		ADDED from AndroidManifest.xml:105:13
 service#yellr.net.yellr_android.intent_services.profile.ProfileIntentService
-ADDED from AndroidManifest.xml:107:9
+ADDED from AndroidManifest.xml:109:9
 	android:exported
-		ADDED from AndroidManifest.xml:109:13
+		ADDED from AndroidManifest.xml:111:13
 	android:name
-		ADDED from AndroidManifest.xml:108:13
+		ADDED from AndroidManifest.xml:110:13
 service#yellr.net.yellr_android.intent_services.verify_user.VerifyUserIntentService
-ADDED from AndroidManifest.xml:112:9
+ADDED from AndroidManifest.xml:114:9
 	android:exported
-		ADDED from AndroidManifest.xml:114:13
+		ADDED from AndroidManifest.xml:116:13
 	android:name
-		ADDED from AndroidManifest.xml:113:13
+		ADDED from AndroidManifest.xml:115:13
 receiver#yellr.net.yellr_android.receivers.CheckHttpReceiver
-ADDED from AndroidManifest.xml:117:9
+ADDED from AndroidManifest.xml:119:9
 	android:name
-		ADDED from AndroidManifest.xml:117:19
+		ADDED from AndroidManifest.xml:119:19
 service#yellr.net.yellr_android.intent_services.data.DataIntentService
-ADDED from AndroidManifest.xml:120:9
+ADDED from AndroidManifest.xml:122:9
 	android:exported
-		ADDED from AndroidManifest.xml:122:13
+		ADDED from AndroidManifest.xml:124:13
 	android:name
-		ADDED from AndroidManifest.xml:121:13
+		ADDED from AndroidManifest.xml:123:13
 service#yellr.net.yellr_android.intent_services.zipcode.ZipcodeIntentService
-ADDED from AndroidManifest.xml:125:9
+ADDED from AndroidManifest.xml:127:9
 	android:exported
-		ADDED from AndroidManifest.xml:127:13
+		ADDED from AndroidManifest.xml:129:13
 	android:name
-		ADDED from AndroidManifest.xml:126:13
+		ADDED from AndroidManifest.xml:128:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5

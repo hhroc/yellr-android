@@ -31,7 +31,7 @@ public class CheckHttpAssignmentsReceiver extends BroadcastReceiver {
 
         String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
 
-        Log.d("CheckHttpAssignmentsReceiver.onReceiver()","Assignments JSON: " + assignmentsJson);
+        //Log.d("CheckHttpAssignmentsReceiver.onReceiver()","Assignments JSON: " + assignmentsJson);
 
         Gson gson = new Gson();
         AssignmentsResponse response = new AssignmentsResponse();
@@ -44,7 +44,19 @@ public class CheckHttpAssignmentsReceiver extends BroadcastReceiver {
 
         if (response.success) {
 
+            //Log.d("CheckHttpAssignmentsReceiver.onReceive","Response success = True");
+
             String[] currentAssignmentIds = YellrUtils.getCurrentAssignmentIds(context);
+
+            /*
+            Log.d("CheckHttpAssignmentsReceiver.onReceive", "Current IDs: ");
+            for(int i =0; i<currentAssignmentIds.length;i++)
+                Log.d("CheckHttpAssignmentsReceiver.onReceive", "    ID: " + currentAssignmentIds[i]);
+
+            Log.d("CheckHttpAssignmentsReceiver.onReceive", "New Assignments: ");
+            for(int i=0;i<response.assignments.length;i++)
+                Log.d("CheckHttpAssignmentsReceiver.onReceive", "    ID: " + response.assignments[i].assignment_id);
+            */
 
             //for(int i = 0; i< currentAssignmentIds.length; i++) {
             //    Log.d("CheckHttpAssignmentsReceiver.onReceive()","currentAssigmentIds[" + String.valueOf(i) + "]: " + currentAssignmentIds[i]);

@@ -6,7 +6,7 @@
     <item name="yellow" type="color">#FFD40C</item>
     <item name="dark_yellow" type="color">#F2BF00</item>
     <item name="light_yellow" type="color">#FFF22A</item>
-    <item name="white" type="color">#ebebeb</item>
+    <item name="white" type="color">#ffffff</item>
     <item name="black" type="color">#2f2f2f</item>
     <item name="red" type="color">#ff6347</item>
     <item name="green" type="color">#1abc9c</item>

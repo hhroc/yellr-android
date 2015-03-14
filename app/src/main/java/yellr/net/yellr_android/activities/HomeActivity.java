@@ -19,12 +19,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
+import yellr.net.yellr_android.fragments.LocalPostsFragment;
 import yellr.net.yellr_android.fragments.PostFragment;
 import yellr.net.yellr_android.fragments.StoriesFragment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
@@ -52,7 +54,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
 
-    static int CHECK_FOR_NEW_DATA_INTERVAL = 5 * 60 * 1000; // Check every 5 minutes ( 288 times a day  )
+    static int CHECK_FOR_NEW_DATA_INTERVAL = 60 * 1000; // - testing, every 10 seconds    //5 * 60 * 1000; // Check every 5 minutes ( 288 times a day  )
 
     private PendingIntent checkHttpPendingIntent;
     private AlarmManager checkHttpManager;
@@ -103,6 +105,12 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+        //ListView postListView = (ListView)this.findViewById(R.id.frag_home_local_posts_list);
+        //LocalPostsFragment.LocalPostsArrayAdapter imageAdapter = new LocalPostsFragment.LocalPostsArrayAdapter(this, R.layout.frag_home_local_post_image, imageURLArray);
+        //listView.setAdapter(imageAdapter);
+
+
 
         Log.d("HomeActivity.onCreate()","Setting up AlarmManager for CheckHttpReceiver, delay: " + String.valueOf(CHECK_FOR_NEW_DATA_INTERVAL));
 
@@ -230,8 +238,10 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
 
             switch(position){
                 case 0:
-                    return new AssignmentsFragment();
+                    return new LocalPostsFragment();
                 case 1:
+                    return new AssignmentsFragment();
+                case 2:
                     return new StoriesFragment();
             }
             return null;
@@ -240,7 +250,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
@@ -248,8 +258,10 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.fragment_assignments_title).toUpperCase(l);
+                    return getString(R.string.fragment_local_posts_title).toUpperCase(l);
                 case 1:
+                    return getString(R.string.fragment_assignments_title).toUpperCase(l);
+                case 2:
                     return getString(R.string.fragment_stories_title).toUpperCase(l);
             }
             return null;

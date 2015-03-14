@@ -1,4 +1,4 @@
-package yellr.net.yellr_android.intent_services.assignments;
+package yellr.net.yellr_android.intent_services.local_posts;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -22,39 +22,40 @@ import java.util.Locale;
 import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.utils.YellrUtils;
 
-public class AssignmentsIntentService extends IntentService {
-    public static final String ACTION_GET_ASSIGNMENTS =
-            "yellr.net.yellr_android.action.GET_ASSIGNMENTS";
-    public static final String ACTION_NEW_ASSIGNMENTS =
-            "yellr.net.yellr_android.action.NEW_ASSIGNMENTS";
+public class LocalPostsIntentService extends IntentService {
+    public static final String ACTION_GET_LOCAL_POSTS =
+            "yellr.net.yellr_android.action.GET_LOCAL_POSTS";
+    public static final String ACTION_NEW_LOCAL_POSTS =
+            "yellr.net.yellr_android.action.NEW_LOCAL_POSTS";
 
     //public static final String PARAM_CUID = "cuid";
-    public static final String PARAM_ASSIGNMENTS_JSON = "assignmentsJson";
+    public static final String PARAM_LOCAL_POSTS_JSON =
+            "yellr.net.yellr_android.params.LOCAL_POSTS_JSON";
 
-    public AssignmentsIntentService() {
-        super("AssignmentsIntentService");
-        //Log.d("AssignmentsIntentService()","Constructor.");
+    public LocalPostsIntentService() {
+        super("LocalPostsIntentService");
+        Log.d("LocalPostsIntentService()","Constructor.");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        //Log.d("AssignmentsIntentService.onHandleIntent()","Decoding intent action ...");
+        Log.d("LocalPostsIntentService.onHandleIntent()","Decoding intent action ...");
 
         //String cuid = intent.getStringExtra(PARAM_CUID);
-        handleActionGetAssignments(); //cuid);
+        handleActionGetLocalPosts(); //cuid);
     }
 
     /**
-     * Handles get assignments
+     * Handles get localPosts
      */
-    private void handleActionGetAssignments() {
+    private void handleActionGetLocalPosts() {
 
+        Log.d("LocalPostsIntentService.handleActionGetLocalPosts()","Attempting to get local posts ...");
 
+        String localPostsJson = "[]";
 
-        String assignmentsJson = "[]";
-
-        String baseUrl = BuildConfig.BASE_URL + "/get_assignments.json";
+        String baseUrl = BuildConfig.BASE_URL + "/get_local_posts.json";
         String url = YellrUtils.buildUrl(getApplicationContext(),baseUrl);
         if (url != null) {
 
@@ -80,21 +81,21 @@ public class AssignmentsIntentService extends IntentService {
                     builder.append(line);
                 }
 
-                assignmentsJson = builder.toString();
+                localPostsJson = builder.toString();
 
-                Log.d("AssignmentsIntentService.handleActionGetAssignments()", "Successfully got new assignments list from server.");
+                Log.d("LocalPostsIntentService.handleActionGetLocalPosts()", "Successfully got new local posts list from server.");
 
             } catch (Exception e) {
-                Log.d("AssignmentsIntentService.handleActionGetAssignments()", "Error: " + e.toString());
+                Log.d("LocalPostsIntentService.handleActionGetLocalPosts()", "Error: " + e.toString());
             }
         }
 
-        //Log.d("AssignmentsIntentService.handleActionGetAssignments()", "JSON: " + assignmentsJson);
+        Log.d("LocalPostsIntentService.handleActionGetLocalPosts()", "JSON: " + localPostsJson);
 
         Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(ACTION_NEW_ASSIGNMENTS);
+        broadcastIntent.setAction(LocalPostsIntentService.ACTION_NEW_LOCAL_POSTS);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.putExtra(PARAM_ASSIGNMENTS_JSON, assignmentsJson);
+        broadcastIntent.putExtra(LocalPostsIntentService.PARAM_LOCAL_POSTS_JSON, localPostsJson);
         sendBroadcast(broadcastIntent);
     }
 }

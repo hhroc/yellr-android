@@ -107,7 +107,7 @@ public class StoriesIntentService extends IntentService {
             }
         }
 
-        Log.d("StoriesIntentService.publishPost()", "JSON: " + storiesJson);
+        //Log.d("StoriesIntentService.publishPost()", "JSON: " + storiesJson);
 
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(StoriesIntentService.ACTION_NEW_STORIES);
