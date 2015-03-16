@@ -57,24 +57,24 @@ public class YellrUtils {
 
         if (milliSeconds > DAY) {
             t = Math.round(milliSeconds / DAY);
-            retString = String.format("%d day", t);
-            if (t > 1) {
-                retString += "s";
-            }
+            retString = String.format("%dd", t);
+            //if (t > 1) {
+            //    retString += "s";
+            //}
             //return retString;
         } else if (milliSeconds < DAY && milliSeconds > HOUR) {
             t = Math.round(milliSeconds / HOUR);
-            retString = String.format("%d hour", t);
-            if (t > 1) {
-                retString += "s";
-            }
+            retString = String.format("%dh", t);
+            //if (t > 1) {
+            //    retString += "s";
+            //}
             //return retString;
         } else if (milliSeconds < HOUR && milliSeconds > 15 * MINUTE) {
             t = Math.round(milliSeconds / MINUTE);
-            retString = String.format("%d minute", t);
-            if (t > 1) {
-                retString += "s";
-            }
+            retString = String.format("%dm", t);
+            //if (t > 1) {
+            //    retString += "s";
+            //}
             //return retString;
         } else if (milliSeconds < 15 * MINUTE) {
             retString = "Moments";
@@ -82,6 +82,48 @@ public class YellrUtils {
             //Throw an exception instead?
         }
         return retString;
+    }
+
+    public static String booleanToString(boolean val) {
+        String retVal = "0";
+        if (val)
+            retVal = "1";
+        return retVal;
+    }
+
+    public static boolean intToBoolean(int val) {
+        boolean retVal = false;
+        if (val == 1)
+            retVal = true;
+        return retVal;
+    }
+
+    public static String lessDownVote(String countString) {
+
+        // since we can't be negative (that is, we can't ever have a number that
+        // is less than zero down votes), we know that if we want to subtract
+        // the first char is always going to be '-'.
+
+        int downCountInt = Integer.valueOf(countString.substring(1));
+        String retCount = "0";
+        if (downCountInt > 1)
+            retCount = "-" + String.valueOf(downCountInt - 1);
+
+        return retCount;
+    }
+
+    public static String moreDownVote(String countString) {
+
+        // since we could be zero, we need to check for the first char
+        // to see if it is negative or not.
+
+        String retCount = "-1";
+        if (countString.substring(0,1).equals("-")) {
+            int downCountInt = Integer.valueOf(countString.substring(1));
+            retCount = "-" + String.valueOf(downCountInt+1);
+        }
+
+        return retCount;
     }
 
     public static String shortenString(String str) {

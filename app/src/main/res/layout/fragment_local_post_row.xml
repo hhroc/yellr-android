@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="8dp"
         >
 
         <LinearLayout
@@ -18,30 +19,64 @@
             >
 
             <Button
-                android:id="@+id/frag_home_local_post_up_vote"
+                android:id="@+id/frag_home_local_post_button_up_vote"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="0dp"
                 android:gravity="center"
                 android:layout_weight="1"
-                android:textSize="26sp"
-                android:text="@string/fa_up_arrow"
+                android:textSize="32sp"
+                android:text="@string/fa_up_vote"
                 android:textColor="@color/light_grey"
-                style="?android:attr/borderlessButtonStyle"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:background="?android:attr/selectableItemBackground"
                 />
 
             <TextView
-                android:id="@+id/frag_home_local_post_vote_count"
+                android:id="@+id/frag_home_local_post_up_vote_count"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_weight="1"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:text="17"
-                android:textColor="@color/black"
-                android:layout_marginBottom="10dp"
-                android:layout_below="@id/frag_home_local_post_up_vote"
+                android:textColor="@color/up_vote_green"
+                android:paddingTop="0dp"
+                android:paddingBottom="2dp"
                 />
 
+            <TextView
+                android:id="@+id/frag_home_local_post_down_vote_count"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:text="-5"
+                android:textColor="@color/down_vote_red"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                />
+
+            <Button
+                android:id="@+id/frag_home_local_post_button_down_vote"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="32sp"
+                android:text="@string/fa_down_vote"
+                android:textColor="@color/light_grey"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:background="?android:attr/selectableItemBackground"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -49,18 +84,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginBottom="10dp">
-
-            <TextView
-                android:id="@+id/frag_home_local_post_question"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="Response: Tell us about your community ..."
-                android:textColor="@color/black"
-                android:paddingBottom="2dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -75,7 +98,8 @@
                     android:textSize="12sp"
                     android:text="Anonymous User"
                     android:textColor="@color/grey"
-                    android:paddingTop="0dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     />
 
@@ -85,14 +109,27 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:textSize="12sp"
-                    android:text="14 das ago"
+                    android:text="14d"
                     android:textColor="@color/grey"
+                    android:layout_marginTop="5dp"
                     android:paddingRight="10dp"
-                    android:paddingTop="0dp"
+                    android:paddingTop="2dp"
                     android:paddingBottom="2dp"
                     />
 
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/frag_home_local_post_question"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="Response: Tell us about your community ..."
+                android:textColor="@color/black"
+                android:paddingBottom="2dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                />
 
             <TextView
                 android:id="@+id/frag_home_local_post_text"
@@ -104,10 +141,12 @@
                 android:textColor="@color/black"
                 android:layout_marginBottom="3dp"
                 android:paddingRight="10dp"
-                android:paddingLeft="10dp"
+
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 />
+
+
 
             <ImageView
                 android:id="@+id/frag_home_local_post_image"

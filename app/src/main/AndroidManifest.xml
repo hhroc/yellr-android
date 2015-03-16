@@ -77,6 +77,11 @@
         </service>
 
         <service
+            android:name=".intent_services.post_vote.VoteIntentService"
+            android:exported="false" >
+        </service>
+
+        <service
             android:name=".intent_services.assignments.AssignmentsIntentService"
             android:exported="false" >
         </service>
