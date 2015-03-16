@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!--Yellr Core Palette-->
     <item name="blue" type="color">#2980b9</item>
     <item name="dark_blue" type="color">#2c3e50</item>
@@ -9,9 +10,12 @@
     <item name="white" type="color">#ffffff</item>
     <item name="black" type="color">#2f2f2f</item>
     <item name="red" type="color">#ff6347</item>
+    <item name="down_vote_red" type="color">#ff6347</item>
     <item name="green" type="color">#1abc9c</item>
+    <item name="up_vote_green" type="color">#1abc9c</item>
     <item name="grey" type="color">#444</item>
 
     <!--Additional Colors-->
-    <item name="light_grey" type="color">#ccc</item>
+    <item name="light_grey" type="color">#bbb</item>
+
 </resources>

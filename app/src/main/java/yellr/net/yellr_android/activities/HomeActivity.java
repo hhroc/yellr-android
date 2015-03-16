@@ -70,7 +70,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
         //}
 
         // get the cuid for the device
-        String cuid = YellrUtils.getCUID(this);
+        //String cuid = YellrUtils.getCUID(this);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();

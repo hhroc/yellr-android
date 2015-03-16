@@ -25,8 +25,8 @@
     <string name="fa_random"></string>
     <string name="fa_eye"></string>
     <string name="fa_chevron_left_circle"></string>
-    <string name="fa_up_arrow"></string>
-    <string name="fa_down_arrow"></string>
+    <string name="fa_up_vote"></string>
+    <string name="fa_down_vote"></string>
     <string name="fa_star"></string>
 
     <!-- General -->

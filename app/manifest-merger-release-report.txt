@@ -137,70 +137,76 @@ ADDED from AndroidManifest.xml:74:9
 		ADDED from AndroidManifest.xml:76:13
 	android:name
 		ADDED from AndroidManifest.xml:75:13
-service#yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService
+service#yellr.net.yellr_android.intent_services.post_vote.VoteIntentService
 ADDED from AndroidManifest.xml:79:9
 	android:exported
 		ADDED from AndroidManifest.xml:81:13
 	android:name
 		ADDED from AndroidManifest.xml:80:13
-service#yellr.net.yellr_android.intent_services.stories.StoriesIntentService
+service#yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService
 ADDED from AndroidManifest.xml:84:9
 	android:exported
 		ADDED from AndroidManifest.xml:86:13
 	android:name
 		ADDED from AndroidManifest.xml:85:13
-service#yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService
+service#yellr.net.yellr_android.intent_services.stories.StoriesIntentService
 ADDED from AndroidManifest.xml:89:9
 	android:exported
 		ADDED from AndroidManifest.xml:91:13
 	android:name
 		ADDED from AndroidManifest.xml:90:13
-activity#yellr.net.yellr_android.activities.NotificationsActivity
+service#yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService
 ADDED from AndroidManifest.xml:94:9
-	android:label
+	android:exported
 		ADDED from AndroidManifest.xml:96:13
 	android:name
 		ADDED from AndroidManifest.xml:95:13
-service#yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService
+activity#yellr.net.yellr_android.activities.NotificationsActivity
 ADDED from AndroidManifest.xml:99:9
-	android:exported
+	android:label
 		ADDED from AndroidManifest.xml:101:13
 	android:name
 		ADDED from AndroidManifest.xml:100:13
-service#yellr.net.yellr_android.intent_services.messages.MessagesIntentService
+service#yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService
 ADDED from AndroidManifest.xml:104:9
 	android:exported
 		ADDED from AndroidManifest.xml:106:13
 	android:name
 		ADDED from AndroidManifest.xml:105:13
-service#yellr.net.yellr_android.intent_services.profile.ProfileIntentService
+service#yellr.net.yellr_android.intent_services.messages.MessagesIntentService
 ADDED from AndroidManifest.xml:109:9
 	android:exported
 		ADDED from AndroidManifest.xml:111:13
 	android:name
 		ADDED from AndroidManifest.xml:110:13
-service#yellr.net.yellr_android.intent_services.verify_user.VerifyUserIntentService
+service#yellr.net.yellr_android.intent_services.profile.ProfileIntentService
 ADDED from AndroidManifest.xml:114:9
 	android:exported
 		ADDED from AndroidManifest.xml:116:13
 	android:name
 		ADDED from AndroidManifest.xml:115:13
-receiver#yellr.net.yellr_android.receivers.CheckHttpReceiver
+service#yellr.net.yellr_android.intent_services.verify_user.VerifyUserIntentService
 ADDED from AndroidManifest.xml:119:9
-	android:name
-		ADDED from AndroidManifest.xml:119:19
-service#yellr.net.yellr_android.intent_services.data.DataIntentService
-ADDED from AndroidManifest.xml:122:9
 	android:exported
-		ADDED from AndroidManifest.xml:124:13
+		ADDED from AndroidManifest.xml:121:13
 	android:name
-		ADDED from AndroidManifest.xml:123:13
-service#yellr.net.yellr_android.intent_services.zipcode.ZipcodeIntentService
+		ADDED from AndroidManifest.xml:120:13
+receiver#yellr.net.yellr_android.receivers.CheckHttpReceiver
+ADDED from AndroidManifest.xml:124:9
+	android:name
+		ADDED from AndroidManifest.xml:124:19
+service#yellr.net.yellr_android.intent_services.data.DataIntentService
 ADDED from AndroidManifest.xml:127:9
 	android:exported
 		ADDED from AndroidManifest.xml:129:13
 	android:name
 		ADDED from AndroidManifest.xml:128:13
+service#yellr.net.yellr_android.intent_services.zipcode.ZipcodeIntentService
+ADDED from AndroidManifest.xml:132:9
+	android:exported
+		ADDED from AndroidManifest.xml:134:13
+	android:name
+		ADDED from AndroidManifest.xml:133:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5

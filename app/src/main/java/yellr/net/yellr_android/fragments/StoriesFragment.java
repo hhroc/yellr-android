@@ -200,7 +200,7 @@ public class StoriesFragment extends Fragment {
             Date pubDateStr = YellrUtils.prettifyDateTime(this.stories.get(position).publish_datetime);
             String pubAgo = YellrUtils.calcTimeBetween(pubDateStr, new Date());
 
-            textViewPublishDateTime.setText(getString(R.string.fa_pencil) + "  " + pubAgo + " " + getString(R.string.time_ago) + ".");
+            textViewPublishDateTime.setText(getString(R.string.fa_pencil) + "  " + pubAgo);
 
             return row;
         }
