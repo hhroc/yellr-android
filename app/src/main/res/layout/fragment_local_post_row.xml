@@ -127,6 +127,7 @@
                 android:text="Response: Tell us about your community ..."
                 android:textColor="@color/black"
                 android:paddingBottom="2dp"
+                android:paddingRight="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 />

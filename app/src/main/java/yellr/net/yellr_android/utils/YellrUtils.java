@@ -162,19 +162,32 @@ public class YellrUtils {
         // to see if it is negative or not.
 
         String retCount = "-1";
-        if (countString.substring(0,1).equals("-")) {
-            int downCountInt = Integer.valueOf(countString.substring(1));
-            retCount = "-" + String.valueOf(downCountInt+1);
+
+        try {
+            if (countString.substring(0, 1).equals("-")) {
+                int downCountInt = Integer.valueOf(countString.substring(1));
+                retCount = "-" + String.valueOf(downCountInt + 1);
+            }
+
+        } catch (Exception e) {
+          retCount = "0";
         }
 
         return retCount;
     }
 
     public static String shortenString(String str) {
+
         String retString = str;
-        if (str.length() > 20) {
-            retString = str.substring(0, 20) + " ...";
+
+        try {
+            if (str.length() > 20) {
+                retString = str.substring(0, 20) + " ...";
+            }
+        }catch (Exception e) {
+            retString = "";
         }
+
         return retString;
     }
 
@@ -251,11 +264,14 @@ public class YellrUtils {
             latLng =  new double[2];
             latLng[0] = latitude;
             latLng[1] = longitude;
+
         }
         else if (BuildConfig.SPOOF_LOCATION.equals("1")) {
+
             latLng =  new double[2];
             latLng[0] = 43.1656;
             latLng[1] = -77.6114;
+
         }
 
         //} else {
@@ -280,9 +296,6 @@ public class YellrUtils {
             Log.v("get location values", Double.toString(latitude) + ", " + Double.toString(longitude));
         }
         */
-
-
-
 
         return latLng;
     }

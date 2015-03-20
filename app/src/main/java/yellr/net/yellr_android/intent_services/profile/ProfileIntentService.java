@@ -52,6 +52,7 @@ public class ProfileIntentService extends IntentService {
 
         Log.d("ProfileIntentService.handleActionGetProfile()", "Getting profile data ...");
 
+        /*
         String baseUrl = BuildConfig.BASE_URL + "/get_profile.json";
 
         double latLng[] = YellrUtils.getLocation(getApplicationContext());
@@ -65,45 +66,52 @@ public class ProfileIntentService extends IntentService {
                 + "&language_code=" + languageCode
                 + "&lat=" + lat
                 + "&lng=" + lng;
-        //
-        // TODO: need to check for exceptions better, this bombs out sometimes
-        //
-        try {
+        */
+
+        String baseUrl = BuildConfig.BASE_URL + "/get_profile.json";
+        String url = YellrUtils.buildUrl(getApplicationContext(),baseUrl);
+        if (url != null) {
 
             //
-            HttpClient client = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(url);
-            HttpResponse response = client.execute(httpGet);
-            HttpEntity entity = response.getEntity();
-
+            // TODO: need to check for exceptions better, this bombs out sometimes
             //
-            InputStream content = entity.getContent();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+            try {
 
-            //
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
+                //
+                HttpClient client = new DefaultHttpClient();
+                HttpGet httpGet = new HttpGet(url);
+                HttpResponse response = client.execute(httpGet);
+                HttpEntity entity = response.getEntity();
+
+                //
+                InputStream content = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+
+                //
+                StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+
+                String profileJson = builder.toString();
+
+                //Log.d("ProfileIntentService.UpdateData()","Broadcasting result ...");
+
+                Log.d("ProfileIntentService.UpdateData()", "JSON: " + profileJson);
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(ProfileFragment.ProfileReceiver.ACTION_NEW_PROFILE);
+                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                broadcastIntent.putExtra(PARAM_PROFILE_JSON, profileJson);
+                sendBroadcast(broadcastIntent);
+
+            } catch (Exception e) {
+
+                Log.d("ProfileIntentService.UpdateData()", "Error: " + e.toString());
+
+                //e.printStackTrace();
             }
-
-            String profileJson = builder.toString();
-
-            //Log.d("ProfileIntentService.UpdateData()","Broadcasting result ...");
-
-            Log.d("ProfileIntentService.UpdateData()","JSON: " + profileJson);
-
-            Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(ProfileFragment.ProfileReceiver.ACTION_NEW_PROFILE);
-            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            broadcastIntent.putExtra(PARAM_PROFILE_JSON, profileJson);
-            sendBroadcast(broadcastIntent);
-
-        } catch( Exception e) {
-
-            Log.d("ProfileIntentService.UpdateData()","Error: " + e.toString());
-
-            //e.printStackTrace();
         }
     }
 }

@@ -45,7 +45,7 @@
             android:name=".activities.PostActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/activity_post_title"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".activities.ViewStoryActivity"
