@@ -43,6 +43,22 @@
         Vote on local posts to show those in your community what is really important to you!
     </string>
 
+    <string name="about_post_first">
+        About posting ...
+    </string>
+
+    <string name="about_post_second">
+        Your post will be approved by a moderator shortly.
+    </string>
+
+    <string name="about_post_third">
+        Once approved, others will be able to see it in their local feed!
+    </string>
+
+    <string name="about_post_fourth">
+        Your post will be licenced under the Creative Commons CC BY-SA license.
+    </string>
+
     <!-- General -->
     <string name="time_ago">ago</string>
 
@@ -79,6 +95,7 @@
 
     <!-- Post -->
     <string name="activity_post_title">New Post</string>
+    <string name="frag_post_anonymous">All posts are anonymous.</string>
     <string name="frag_post_default_text">Tell us about your community</string>
     <string name="frag_post_media_text">Add media:</string>
     <string name="frag_post_submit_button">Submit</string>

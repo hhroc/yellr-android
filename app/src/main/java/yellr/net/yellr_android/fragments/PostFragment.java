@@ -1,7 +1,9 @@
 package yellr.net.yellr_android.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -348,6 +350,33 @@ public class PostFragment extends Fragment {
             return;
         }
 
+        // pop-up informing user about yellr
+        if ( YellrUtils.isFirstPost(getActivity()) ) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            String aboutMessage = ""
+                    + getString(R.string.about_post_second) + "\n\n"
+                    + getString(R.string.about_post_third) + "\n\n";
+
+            builder.setTitle(getString(R.string.about_post_first))
+                    .setMessage(aboutMessage)
+                    .setPositiveButton("Okay!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            performPost();
+                        }
+                    });
+
+            builder.show();
+
+        } else {
+            performPost();
+        }
+    }
+
+    private void performPost() {
+
         Intent postIntent = new Intent(getActivity(), PublishPostIntentService.class);
         //postIntent.putExtra(PublishPostIntentService.PARAM_CUID, cuid);
         postIntent.putExtra(PublishPostIntentService.PARAM_ASSIGNMENT_ID, assignmentId);
@@ -377,4 +406,5 @@ public class PostFragment extends Fragment {
         // remove from history stack
         this.getActivity().finish();
     }
+
 }

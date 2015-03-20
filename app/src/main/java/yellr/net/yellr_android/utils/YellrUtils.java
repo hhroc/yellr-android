@@ -53,6 +53,28 @@ public class YellrUtils {
         return firstBoot;
     }
 
+    public static boolean isFirstPost(Context context) {
+
+        boolean firstBoot = false;
+
+        SharedPreferences sharedPref = context.getSharedPreferences("isFirstPostAppVersion", Context.MODE_PRIVATE);
+        String isFirstBootAppVersion = sharedPref.getString("isFirstPostAppVersion", "");
+
+        if ( !isFirstBootAppVersion.equals(BuildConfig.VERSION_NAME) ) {
+
+            // set our return var
+            firstBoot = true;
+
+            // record our app version to the shared pref, so we return
+            // false next time.
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("isFirstPostAppVersion", BuildConfig.VERSION_NAME);
+            editor.commit();
+        }
+
+        return firstBoot;
+    }
+
     public static Date prettifyDateTime(String rawDateTime) {
 
         Date date = new Date();

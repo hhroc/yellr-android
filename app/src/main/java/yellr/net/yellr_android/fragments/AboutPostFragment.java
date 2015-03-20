@@ -20,14 +20,14 @@ import yellr.net.yellr_android.utils.YellrUtils;
 /**
  * Created by TDuffy on 3/18/2015.
  */
-public class AboutMainFragment extends DialogFragment {
+public class AboutPostFragment extends DialogFragment {
 
-    public static final String DIALOG_SHOW_ABOUT_MAIN = "yellr.net.yellr_android.dialog.SHOW_ABOUT_MAIN";
+    public static final String DIALOG_SHOW_ABOUT_POST = "yellr.net.yellr_android.dialog.SHOW_ABOUT_POST";
 
     //private String city;
     //private String stateCode;
 
-    public AboutMainFragment(){
+    public AboutPostFragment(){
 
     }
 
@@ -43,11 +43,11 @@ public class AboutMainFragment extends DialogFragment {
         //final Float lng = getArguments().getFloat("lng");
 
         String aboutMessage = ""
-                + getString(R.string.about_yellr_second) + "\n\n"
-                + getString(R.string.about_yellr_third) + "\n\n"
-                + getString(R.string.about_yellr_fourth) + "\n\n";
+                + getString(R.string.about_post_second) + "\n\n"
+                + getString(R.string.about_post_third) + "\n\n"
+                + getString(R.string.about_post_fourth) + "\n\n";
 
-        builder.setTitle(getString(R.string.about_yellr_first) + " " + BuildConfig.VERSION_NAME + "!")
+        builder.setTitle(getString(R.string.about_post_first))
                 .setMessage(aboutMessage)
                 .setPositiveButton("Get Started!", new DialogInterface.OnClickListener() {
                     @Override

@@ -37,12 +37,20 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/frag_post_anonymous_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/frag_post_anonymous"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@+id/frag_post_top_container"/>
+
     <LinearLayout
         android:id="@+id/frag_post_media_wrapper"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@+id/frag_post_top_container">
+        android:layout_below="@+id/frag_post_anonymous_text">
 
         <!--
         <View
