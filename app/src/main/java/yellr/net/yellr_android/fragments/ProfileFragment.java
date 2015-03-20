@@ -75,6 +75,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void refreshProfileData() {
+
+        Log.d("ProfileFragment.refreshProfileData()", "Launching profile intent service ...");
+
         // init service
         Context context = getActivity().getApplicationContext();
         Intent profileWebIntent = new Intent(context, ProfileIntentService.class);

@@ -41,8 +41,8 @@ public class ProfileIntentService extends IntentService {
         //Log.d("ProfileIntentService.onHandleIntent()","Decoding intent action ...");
 
         //String cuid = intent.getStringExtra(PARAM_CUID);
-        if ( YellrUtils.isHomeLocationSet(getApplicationContext()) )
-            handleActionGetProfile(); //cuid);
+        //if ( YellrUtils.isHomeLocationSet(getApplicationContext()) )
+        handleActionGetProfile(); //cuid);
     }
 
     /**
@@ -50,6 +50,7 @@ public class ProfileIntentService extends IntentService {
      */
     private void handleActionGetProfile() {
 
+        Log.d("ProfileIntentService.handleActionGetProfile()", "Getting profile data ...");
 
         String baseUrl = BuildConfig.BASE_URL + "/get_profile.json";
 

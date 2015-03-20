@@ -25,6 +25,7 @@ import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.fragments.AboutMainFragment;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
 import yellr.net.yellr_android.fragments.LocalPostsFragment;
 import yellr.net.yellr_android.fragments.PostFragment;

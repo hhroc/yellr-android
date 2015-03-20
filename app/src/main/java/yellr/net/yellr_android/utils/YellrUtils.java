@@ -31,6 +31,28 @@ import yellr.net.yellr_android.BuildConfig;
  */
 public class YellrUtils {
 
+    public static boolean isFirstBoot(Context context) {
+
+        boolean firstBoot = false;
+
+        SharedPreferences sharedPref = context.getSharedPreferences("isFirstBootAppVersion", Context.MODE_PRIVATE);
+        String isFirstBootAppVersion = sharedPref.getString("isFirstBootAppVersion", "");
+
+        if ( !isFirstBootAppVersion.equals(BuildConfig.VERSION_NAME) ) {
+
+            // set our return var
+            firstBoot = true;
+
+            // record our app version to the shared pref, so we return
+            // false next time.
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("isFirstBootAppVersion", BuildConfig.VERSION_NAME);
+            editor.commit();
+        }
+
+        return firstBoot;
+    }
+
     public static Date prettifyDateTime(String rawDateTime) {
 
         Date date = new Date();
