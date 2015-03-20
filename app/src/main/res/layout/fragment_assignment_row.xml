@@ -11,7 +11,7 @@
         >
 
         <RelativeLayout
-            android:id="@+id/frag_home_assignment_wrapper"
+            android:id="@+id/frag_home_assignment_top_wrapper"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

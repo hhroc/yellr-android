@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
-import yellr.net.yellr_android.intent_services.data.DataIntentService;
-import yellr.net.yellr_android.intent_services.notifications.NotificationsIntentService;
-import yellr.net.yellr_android.intent_services.profile.ProfileIntentService;
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
 import yellr.net.yellr_android.utils.YellrUtils;
 

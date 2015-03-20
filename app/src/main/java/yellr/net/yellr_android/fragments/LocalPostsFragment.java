@@ -113,6 +113,11 @@ public class LocalPostsFragment extends Fragment {
             }
         });
 
+        // display pin wheel until there is something to show.
+        //if ( this.localPosts == null || this.localPosts.length == 0 ) {
+        //    swipeRefreshLayout.setRefreshing(true);
+        //}
+
         return view;
     }
 

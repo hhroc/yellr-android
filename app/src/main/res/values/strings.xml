@@ -29,6 +29,36 @@
     <string name="fa_down_vote"></string>
     <string name="fa_star"></string>
 
+    <!-- Dialogs -->
+    <string name="about_yellr_first">
+        Welcome to Yellr
+    </string>
+    <string name="about_yellr_second">
+        Yellr is a community engagement platform that allows anyone to post whats on their mind, securely, and truly anonymously - not even Yellr knows who you are.
+    </string>
+    <string name="about_yellr_third">
+        See what others in your community are saying, and whats important to them.  View the current questions that community leaders are asking, and post your thoughts!
+    </string>
+    <string name="about_yellr_fourth">
+        Vote on local posts to show those in your community what is really important to you!
+    </string>
+
+    <string name="about_post_first">
+        About posting ...
+    </string>
+
+    <string name="about_post_second">
+        Your post will be approved by a moderator shortly.
+    </string>
+
+    <string name="about_post_third">
+        Once approved, others will be able to see it in their local feed!
+    </string>
+
+    <string name="about_post_fourth">
+        Your post will be licenced under the Creative Commons CC BY-SA license.
+    </string>
+
     <!-- General -->
     <string name="time_ago">ago</string>
 
@@ -65,6 +95,7 @@
 
     <!-- Post -->
     <string name="activity_post_title">New Post</string>
+    <string name="frag_post_anonymous">All posts are anonymous.</string>
     <string name="frag_post_default_text">Tell us about your community</string>
     <string name="frag_post_media_text">Add media:</string>
     <string name="frag_post_submit_button">Submit</string>

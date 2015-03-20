@@ -17,5 +17,8 @@
 
     <!--Additional Colors-->
     <item name="light_grey" type="color">#bbb</item>
+    <item name="assignment_response_grey" type="color">#e0e0e0</item>
+
+    <item name="background" type="color">#eee</item>
 
 </resources>

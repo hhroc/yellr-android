@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,7 +38,7 @@ public class AssignmentsFragment extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
-    private String cuid;
+    //private String cuid;
     private AssignmentsArrayAdapter assignmentsArrayAdapter;
 
     private Assignment[] assignments;
@@ -101,6 +102,11 @@ public class AssignmentsFragment extends Fragment {
             }
         });
 
+        // display pin wheel until there is something to show
+        //if ( this.assignments == null || this.assignments.length == 0 ) {
+        //    swipeRefreshLayout.setRefreshing(true);
+        //}
+
         return view;
     }
 
@@ -108,6 +114,13 @@ public class AssignmentsFragment extends Fragment {
     public void onResume() {
         Log.d("AssignmentsFragment.onResume()", "Starting assignments intent service ...");
         refreshAssignmentData();
+
+        // pop-up informing user about yellr
+        if ( YellrUtils.isFirstBoot(getActivity()) ) {
+            AboutMainFragment aboutMainFragment = new AboutMainFragment();
+            aboutMainFragment.show(getFragmentManager(), AboutMainFragment.DIALOG_SHOW_ABOUT_MAIN);
+        }
+
         super.onResume();
     }
 
@@ -151,6 +164,7 @@ public class AssignmentsFragment extends Fragment {
                 }
             }
 
+            // remove the refreshing pin wheel.
             swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -185,6 +199,13 @@ public class AssignmentsFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = super.getView(position, convertView, parent);
+
+            //LinearLayout linearLayoutWrapper = (LinearLayout)row.findViewById(R.id.frag_home_assignment_wrapper);
+            if (this.assignments.get(position).has_responded) {
+                row.setBackgroundColor(getResources().getColor(R.color.assignment_response_grey));
+            } else {
+                row.setBackgroundColor(getResources().getColor(R.color.background));
+            }
 
             TextView textViewQuestionText = (TextView) row.findViewById(R.id.frag_home_assignment_question_text);
             TextView textViewOrganization = (TextView) row.findViewById(R.id.frag_home_assignment_organization);

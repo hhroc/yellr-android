@@ -32,6 +32,7 @@ public class Assignment {
     public double bottom_right_lng;
 
     public int post_count;
+    public boolean has_responded;
 
     public String publish_datetime;
 

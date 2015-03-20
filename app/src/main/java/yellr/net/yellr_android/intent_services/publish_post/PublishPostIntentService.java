@@ -70,7 +70,7 @@ public class PublishPostIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        //Log.d("PublishPostIntentService.onHandleIntent()","Decoding intent action ...");
+        Log.d("PublishPostIntentService.onHandleIntent()","Decoding intent action ...");
 
         //String cuid = intent.getStringExtra(PARAM_CUID);
         int assignmentId = intent.getIntExtra(PARAM_ASSIGNMENT_ID, 0);
@@ -170,6 +170,8 @@ public class PublishPostIntentService extends IntentService {
                                String mediaId) {
         //String mediaObjects){
 
+        /*
+
         String baseUrl = BuildConfig.BASE_URL + "/publish_post.json";
 
         // get the location, but if the user has turned off location services,
@@ -189,76 +191,86 @@ public class PublishPostIntentService extends IntentService {
                 + "&lat=" + lat
                 + "&lng=" + lng;
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-
-        //params.add(new BasicNameValuePair("cuid", cuid));
-        params.add(new BasicNameValuePair("assignment_id", String.valueOf(assignmentId)));
-        //params.add(new BasicNameValuePair("language_code", languageCode));
-        //params.add(new BasicNameValuePair("title", title));
-        //params.add(new BasicNameValuePair("lat", String.valueOf(lat)));
-        //params.add(new BasicNameValuePair("lng", String.valueOf(lng)));
-        params.add(new BasicNameValuePair("media_objects", "[\"" + mediaId + "\"]"));
-
-        //
-        // derived from
-        //  http://stackoverflow.com/a/2937140
-        //
-
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpContext localContext = new BasicHttpContext();
-        HttpPost httpPost = new HttpPost(url);
+        */
 
         String publishPostJson = "{}";
 
-        try {
+        String baseUrl = BuildConfig.BASE_URL + "/publish_post.json";
+        String url = YellrUtils.buildUrl(getApplicationContext(),baseUrl);
+        if (url != null) {
 
-            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-            entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-            for (int index = 0; index < params.size(); index++) {
+            //params.add(new BasicNameValuePair("cuid", cuid));
+            params.add(new BasicNameValuePair("assignment_id", String.valueOf(assignmentId)));
+            //params.add(new BasicNameValuePair("language_code", languageCode));
+            //params.add(new BasicNameValuePair("title", title));
+            //params.add(new BasicNameValuePair("lat", String.valueOf(lat)));
+            //params.add(new BasicNameValuePair("lng", String.valueOf(lng)));
+            params.add(new BasicNameValuePair("media_objects", "[\"" + mediaId + "\"]"));
 
-                entityBuilder.addPart(params.get(index).getName(),
-                        new StringBody(params.get(index).getValue(), ContentType.TEXT_PLAIN));
+            //
+            // derived from
+            //  http://stackoverflow.com/a/2937140
+            //
 
-            }
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpContext localContext = new BasicHttpContext();
+            HttpPost httpPost = new HttpPost(url);
 
-            HttpEntity entity = entityBuilder.build();
-            httpPost.setEntity(entity);
+            try {
 
-            HttpResponse response = httpClient.execute(httpPost, localContext);
-            final String toastMsg;
-            if(response.getStatusLine().getStatusCode() == 200){
-                toastMsg = "Post Successful!";
-            } else {
-                toastMsg = "Problem Submitting Post.";
-            }
+                MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+                entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-            handler.post(new Runnable() {
+                for (int index = 0; index < params.size(); index++) {
 
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT).show();
+                    entityBuilder.addPart(params.get(index).getName(),
+                            new StringBody(params.get(index).getValue(), ContentType.TEXT_PLAIN));
+
                 }
-            });
+
+                HttpEntity entity = entityBuilder.build();
+                httpPost.setEntity(entity);
+
+                HttpResponse response = httpClient.execute(httpPost, localContext);
+                final String toastMsg;
+                if (response.getStatusLine().getStatusCode() == 200) {
+                    toastMsg = "Post Successful!";
+                } else {
+                    toastMsg = "Problem Submitting Post.";
+                }
+
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
-            //
-            InputStream content = response.getEntity().getContent();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                //
+                InputStream content = response.getEntity().getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
 
-            //
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
+                //
+                StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+
+                publishPostJson = builder.toString();
+
+                Log.d("PublishPostIntentService.publishPost()", "JSON: " + publishPostJson);
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            publishPostJson = builder.toString();
-
-            Log.d("PublishPostIntentService.publishPost()", "JSON: " + publishPostJson);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            Log.d("PublishPostIntentService.publishPost()","URL was null!!!");
         }
 
         return publishPostJson;
@@ -272,6 +284,8 @@ public class PublishPostIntentService extends IntentService {
 
         Log.d("uploadMedia()", "media type: " + mediaType);
         //Log.d("uploadMedia()", "param name: " + params.get(index).getName());
+
+        /*
 
         String baseUrl = BuildConfig.BASE_URL + "/upload_media.json";
 
@@ -287,91 +301,98 @@ public class PublishPostIntentService extends IntentService {
                 + "&lat=" + lat
                 + "&lng=" + lng;
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-
-        //params.add(new BasicNameValuePair("cuid", cuid));
-        params.add(new BasicNameValuePair("media_type", mediaType));
-        params.add(new BasicNameValuePair("media_type", mediaType));
-
-        if (!mediaFilename.equals("")) {
-            params.add(new BasicNameValuePair("media_file", mediaFilename));
-        }
-
-        if (!mediaText.equals("")) {
-            params.add(new BasicNameValuePair("media_text", mediaText));
-        }
-
-        if (!mediaCaption.equals("")) {
-            params.add(new BasicNameValuePair("caption", mediaCaption));
-        }
-
-        //
-        // derived from
-        //  http://stackoverflow.com/a/2937140
-        //
-
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpContext localContext = new BasicHttpContext();
-        HttpPost httpPost = new HttpPost(url);
+        */
 
         String uploadMediaJson = "{}";
 
+        String baseUrl = BuildConfig.BASE_URL + "/upload_media.json";
+        String url = YellrUtils.buildUrl(getApplicationContext(),baseUrl);
+        if (url != null) {
 
-        MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-        entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-        for (int index = 0; index < params.size(); index++) {
+            //params.add(new BasicNameValuePair("cuid", cuid));
+            params.add(new BasicNameValuePair("media_type", mediaType));
+            params.add(new BasicNameValuePair("media_type", mediaType));
 
-            Log.d("uploadMedia()", "param name: " + params.get(index).getName());
-
-            if (params.get(index).getName().equalsIgnoreCase("media_file") &&!mediaType.equalsIgnoreCase("text")) {
-                // we only need to add a file if our media object type is not text
-                //if (mediaType != "text") {
-                // If the key equals to "media_file", we use FileBody to transfer the data
-
-                Log.d("uploadMedia()", "adding binary file: " + params.get(index).getValue());
-
-                entityBuilder.addPart(params.get(index).getName(),
-                        new FileBody(new File(params.get(index).getValue())));
-                //}
-            } else {
-
-                Log.d("uploadMedia()", "adding text field: " + params.get(index).getValue());
-
-                // Normal string data
-                entityBuilder.addPart(params.get(index).getName(),
-                        new StringBody(params.get(index).getValue(), ContentType.TEXT_PLAIN));
+            if (!mediaFilename.equals("")) {
+                params.add(new BasicNameValuePair("media_file", mediaFilename));
             }
-        }
 
-        try {
+            if (!mediaText.equals("")) {
+                params.add(new BasicNameValuePair("media_text", mediaText));
+            }
 
-            HttpEntity entity = entityBuilder.build();
-            httpPost.setEntity(entity);
-
-            HttpResponse response = httpClient.execute(httpPost, localContext);
-
-            InputStream content = response.getEntity().getContent();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+            if (!mediaCaption.equals("")) {
+                params.add(new BasicNameValuePair("caption", mediaCaption));
+            }
 
             //
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
+            // derived from
+            //  http://stackoverflow.com/a/2937140
+            //
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpContext localContext = new BasicHttpContext();
+            HttpPost httpPost = new HttpPost(url);
+
+            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+            entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+            for (int index = 0; index < params.size(); index++) {
+
+                Log.d("uploadMedia()", "param name: " + params.get(index).getName());
+
+                if (params.get(index).getName().equalsIgnoreCase("media_file") && !mediaType.equalsIgnoreCase("text")) {
+                    // we only need to add a file if our media object type is not text
+                    //if (mediaType != "text") {
+                    // If the key equals to "media_file", we use FileBody to transfer the data
+
+                    Log.d("uploadMedia()", "adding binary file: " + params.get(index).getValue());
+
+                    entityBuilder.addPart(params.get(index).getName(),
+                            new FileBody(new File(params.get(index).getValue())));
+                    //}
+                } else {
+
+                    Log.d("uploadMedia()", "adding text field: " + params.get(index).getValue());
+
+                    // Normal string data
+                    entityBuilder.addPart(params.get(index).getName(),
+                            new StringBody(params.get(index).getValue(), ContentType.TEXT_PLAIN));
+                }
             }
 
-            uploadMediaJson = builder.toString();
+            try {
 
-            Log.d("PublishPostIntentService.uploadMedia()", "JSON: " + uploadMediaJson);
+                HttpEntity entity = entityBuilder.build();
+                httpPost.setEntity(entity);
 
-        } catch (Exception e) {
-            //Toast.makeText(this, "upload_media: " + e.toString(), Toast.LENGTH_SHORT).show();
+                HttpResponse response = httpClient.execute(httpPost, localContext);
 
-            Log.d("PublishPostIntentService.uploadMedia()", "ERROR: " + e.toString());
-            //e.printStackTrace();
+                InputStream content = response.getEntity().getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
 
+                //
+                StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+
+                uploadMediaJson = builder.toString();
+
+                Log.d("PublishPostIntentService.uploadMedia()", "JSON: " + uploadMediaJson);
+
+            } catch (Exception e) {
+                //Toast.makeText(this, "upload_media: " + e.toString(), Toast.LENGTH_SHORT).show();
+
+                Log.d("PublishPostIntentService.uploadMedia()", "ERROR: " + e.toString());
+                //e.printStackTrace();
+
+            }
         }
+
         return uploadMediaJson;
 
     }
