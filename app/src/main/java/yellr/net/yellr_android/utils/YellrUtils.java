@@ -122,7 +122,7 @@ public class YellrUtils {
             //}
             //return retString;
         } else if (milliSeconds < 15 * MINUTE) {
-            retString = "Moments";
+            retString = "Just now";
         } else {
             //Throw an exception instead?
         }
@@ -229,7 +229,7 @@ public class YellrUtils {
     public static double roundLocation(double d)
     {
         DecimalFormat twoDForm = new DecimalFormat("#.##");
-        double retVal = Double.valueOf(twoDForm.format(d))
+        double retVal = Double.valueOf(twoDForm.format(d));
         return retVal;
     }
 
