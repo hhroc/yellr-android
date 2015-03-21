@@ -17,6 +17,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -223,6 +224,15 @@ public class YellrUtils {
         return url;
     }
 
+    // derived from
+    //     http://stackoverflow.com/a/7472559
+    public static double roundLocation(double d)
+    {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        double retVal = Double.valueOf(twoDForm.format(d))
+        return retVal;
+    }
+
     public static double[] getLocation(Context context) {
 
         /*
@@ -261,9 +271,12 @@ public class YellrUtils {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
 
+            // round the location for obfuscation.  Rounding
+            // to two decimal places provides approximately
+            // half a km of obfuscation.
             latLng =  new double[2];
-            latLng[0] = latitude;
-            latLng[1] = longitude;
+            latLng[0] = roundLocation(latitude);
+            latLng[1] = roundLocation(longitude);
 
         }
         else if (BuildConfig.SPOOF_LOCATION.equals("1")) {
