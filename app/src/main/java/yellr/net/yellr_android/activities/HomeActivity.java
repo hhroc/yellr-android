@@ -55,7 +55,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
 
-    static int CHECK_FOR_NEW_DATA_INTERVAL = 60 * 1000; // - testing, every 10 seconds    //5 * 60 * 1000; // Check every 5 minutes ( 288 times a day  )
+    static int CHECK_FOR_NEW_DATA_INTERVAL = 5 * 60 * 1000; // - testing, every 10 seconds    //5 * 60 * 1000; // Check every 5 minutes ( 288 times a day  )
 
     private PendingIntent checkHttpPendingIntent;
     private AlarmManager checkHttpManager;
