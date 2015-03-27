@@ -147,14 +147,13 @@
                 android:paddingBottom="5dp"
                 />
 
-
-
             <ImageView
                 android:id="@+id/frag_home_local_post_image"
                 android:layout_width="fill_parent"
                 android:layout_height="120dp"
                 android:gravity="center_vertical"
-                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 android:layout_marginTop="0dp"
                 android:paddingRight="10dp"
                 />
