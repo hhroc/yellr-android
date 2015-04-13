@@ -70,6 +70,14 @@
             android:parentActivityName=".activities.SplashActivity" >
             android:noHistory="true">
         </activity>
+        <activity
+            android:name=".activities.MessagesActivity"
+            android:label="@string/title_activity_messages"
+            android:parentActivityName=".activities.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.HomeActivity" />
+        </activity>
 
         <service
             android:name=".intent_services.local_posts.LocalPostsIntentService"
@@ -95,6 +103,8 @@
             android:name=".intent_services.publish_post.PublishPostIntentService"
             android:exported="false" >
         </service>
+
+
 
         <activity
             android:name=".activities.NotificationsActivity"

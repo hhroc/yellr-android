@@ -29,8 +29,8 @@ android {
         // e.g. version 1.0.0 will have versionCode 01.000.000 => 1000000
         // this system allows for 100 major versions and 1000 minor and patch versions
         // and ensures there is no collision.
-        versionCode 1005
-        versionName "0.1.5"
+        versionCode 1006
+        versionName "0.1.6"
     }
     buildTypes {
         release {
@@ -41,8 +41,9 @@ android {
         }
         debug {
             buildConfigField "String", "BASE_URL", "\"http://yellr.mycodespace.net\""
+            // buildConfigField "String", "BASE_URL", "\"https://yellr.net\""
             debuggable true
-            buildConfigField "String", "SPOOF_LOCATION", "\"1\""
+            buildConfigField "String", "SPOOF_LOCATION", "\"0\""
         }
     }
 

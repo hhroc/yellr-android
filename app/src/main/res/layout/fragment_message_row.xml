@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        >
+
+        <RelativeLayout
+            android:id="@+id/frag_messages_message_top_wrapper"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/frag_messages_from_organization"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yellr"
+                android:textSize="16sp"
+                android:textColor="@color/grey"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="16dp"
+                android:paddingBottom="2dp"
+                android:singleLine="true"
+                />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/frag_messages_message_subject"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Let's meet up in person."
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

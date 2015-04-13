@@ -39,7 +39,7 @@ public class YellrUtils {
         SharedPreferences sharedPref = context.getSharedPreferences("isFirstBootAppVersion", Context.MODE_PRIVATE);
         String isFirstBootAppVersion = sharedPref.getString("isFirstBootAppVersion", "");
 
-        if ( !isFirstBootAppVersion.equals(BuildConfig.VERSION_NAME) ) {
+        if (!isFirstBootAppVersion.equals(BuildConfig.VERSION_NAME)) {
 
             // set our return var
             firstBoot = true;
@@ -61,7 +61,7 @@ public class YellrUtils {
         SharedPreferences sharedPref = context.getSharedPreferences("isFirstPostAppVersion", Context.MODE_PRIVATE);
         String isFirstBootAppVersion = sharedPref.getString("isFirstPostAppVersion", "");
 
-        if ( !isFirstBootAppVersion.equals(BuildConfig.VERSION_NAME) ) {
+        if (!isFirstBootAppVersion.equals(BuildConfig.VERSION_NAME)) {
 
             // set our return var
             firstBoot = true;
@@ -171,7 +171,7 @@ public class YellrUtils {
             }
 
         } catch (Exception e) {
-          retCount = "0";
+            retCount = "0";
         }
 
         return retCount;
@@ -185,7 +185,7 @@ public class YellrUtils {
             if (str.length() > 20) {
                 retString = str.substring(0, 20) + " ...";
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             retString = "";
         }
 
@@ -203,7 +203,7 @@ public class YellrUtils {
         return version;
     }
 
-    public static String buildUrl(Context context, String baseUrl ) {
+    public static String buildUrl(Context context, String baseUrl) {
 
         String url = null;
 
@@ -213,12 +213,12 @@ public class YellrUtils {
             String languageCode = Locale.getDefault().getLanguage();
 
             url = baseUrl
-                + "?cuid=" + YellrUtils.getCUID(context)
-                + "&language_code=" + languageCode
-                + "&lat=" + latLng[0]
-                + "&lng=" + latLng[1]
-                + "&platform=" + "Android"
-                + "&app_version=" + YellrUtils.getAppVersion(context);
+                    + "?cuid=" + YellrUtils.getCUID(context)
+                    + "&language_code=" + languageCode
+                    + "&lat=" + latLng[0]
+                    + "&lng=" + latLng[1]
+                    + "&platform=" + "Android"
+                    + "&app_version=" + YellrUtils.getAppVersion(context);
         }
 
         return url;
@@ -226,8 +226,7 @@ public class YellrUtils {
 
     // derived from
     //     http://stackoverflow.com/a/7472559
-    public static double roundLocation(double d)
-    {
+    public static double roundLocation(double d) {
         DecimalFormat twoDForm = new DecimalFormat("#.##");
         double retVal = Double.valueOf(twoDForm.format(d));
         return retVal;
@@ -257,8 +256,8 @@ public class YellrUtils {
                     break;
                 }
             }
-        }catch (Exception ex) {
-            Log.d("YellrUtils.getLocation()","Error: " + ex.toString());
+        } catch (Exception ex) {
+            Log.d("YellrUtils.getLocation()", "Error: " + ex.toString());
         }
 
         // default to invalid lat/lng values
@@ -274,44 +273,62 @@ public class YellrUtils {
             // round the location for obfuscation.  Rounding
             // to two decimal places provides approximately
             // half a km of obfuscation.
-            latLng =  new double[2];
+            latLng = new double[2];
             latLng[0] = roundLocation(latitude);
             latLng[1] = roundLocation(longitude);
 
-        }
-        else if (BuildConfig.SPOOF_LOCATION.equals("1")) {
+            YellrUtils.saveLocation(context, latLng[0], latLng[1]);
 
-            latLng =  new double[2];
+        } else if (BuildConfig.SPOOF_LOCATION.equals("1")) {
+
+            latLng = new double[2];
             latLng[0] = 43.1656;
             latLng[1] = -77.6114;
 
+        } else {
+
+            Log.d("YellrUtils.getLocation()", "Pulling from saved location ...");
+
+            // we may have lost location, let's see if we have one saved.
+            // note: if we don't have a saved location, or that saved
+            //       location is invalid, this will return null.
+            latLng = YellrUtils.getSavedLocation(context);
+
+            if ( latLng == null ) {
+                Log.d("YellrUtils.getLocation()", "WARNING: Pulled location was null.");
+            } else {
+                Log.d("YellrUtils.getLocation()", "Pulled location was valid.");
+            }
         }
-
-        //} else {
-        //    Log.d("YellrUtils.getLocation()", "No location available, defaulting to Home Location");
-        //    Float[] latLng = YellrUtils.getHomeLocation(context);
-        //    latitude = latLng[0];
-        //    longitude = latLng[1];
-        //}
-
-        /*
-        LocationDetector myloc = new LocationDetector(
-                context);
-        //double myLat = 0;
-        //double myLong = 0;
-        double latitude = 43.1656;
-        double longitude = -77.6114;
-        if (myloc.canGetLocation) {
-
-            latitude = myloc.getLatitude();
-            longitude = myloc.getLongitude();
-
-            Log.v("get location values", Double.toString(latitude) + ", " + Double.toString(longitude));
-        }
-        */
 
         return latLng;
     }
+
+    public static void saveLocation(Context context, double lat, double lng) {
+        SharedPreferences sharedPref = context.getSharedPreferences("lastLocation", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("lastLat", String.valueOf(lat));
+        editor.putString("lastLng", String.valueOf(lng));
+        editor.commit();
+    }
+
+    public static double[] getSavedLocation(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("lastLocation", Context.MODE_PRIVATE);
+        String lastLatStr = sharedPref.getString("lastLat", null);
+        String lastLngStr = sharedPref.getString("lastLng", null);
+        double [] latLng = null;
+        if ( lastLatStr != null && !lastLatStr.equals(null) && lastLngStr != null && !lastLngStr.equals(null)) {
+            latLng = new double[2];
+            try {
+                latLng[0] = Double.parseDouble(lastLatStr);
+                latLng[1] = Double.parseDouble(lastLngStr);
+            } catch (NumberFormatException e) {
+                latLng = null;
+            }
+        }
+        return latLng;
+    }
+
 
     public static void resetHomeLocation(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("homeLocationSet", Context.MODE_PRIVATE);

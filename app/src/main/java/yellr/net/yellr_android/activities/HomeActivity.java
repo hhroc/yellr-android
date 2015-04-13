@@ -165,14 +165,14 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                     .colorRes(R.color.black)
                     .actionBarSize()
         );
-
-        *//*Messages Icon*//*
+*/
+/*        //Messages Icon
         menu.findItem(R.id.action_messages).setIcon(
                 new IconDrawable(this, Iconify.IconValue.fa_envelope_o)
                     .colorRes(R.color.black)
                     .actionBarSize()
-        );*/
-
+        );
+*/
         /*Profile Icon*/
         menu.findItem(R.id.action_profile).setIcon(
                 new IconDrawable(this, Iconify.IconValue.fa_user)
@@ -192,9 +192,14 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                 startActivity(postIntent);
                 break;
 
-/*            case R.id.action_notification:
+            /*case R.id.action_notification:
                 Intent notificationsIntent = new Intent(this, NotificationsActivity.class);
                 startActivity(notificationsIntent);
+                break;*/
+
+            /*case R.id.action_messages:
+                Intent messagesIntent = new Intent(this, MessagesActivity.class);
+                startActivity(messagesIntent);
                 break;*/
 
             case R.id.action_profile:

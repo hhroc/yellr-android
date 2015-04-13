@@ -17,8 +17,8 @@ public class ResetCUIDFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle("Reset Unique Identifier?")
-                .setMessage("This action is permanent")
+        builder.setTitle("Forget all Post activity?")
+                .setMessage("This action is permanent, and will erase any way to connect this device to posts you've made.")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -26,7 +26,7 @@ public class ResetCUIDFragment extends DialogFragment {
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
                     }
                 })
-                .setNegativeButton("Keep my UUID", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 

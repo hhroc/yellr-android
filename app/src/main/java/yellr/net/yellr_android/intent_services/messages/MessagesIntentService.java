@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.util.Locale;
 
 import yellr.net.yellr_android.BuildConfig;
+import yellr.net.yellr_android.fragments.MessagesFragment;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 public class MessagesIntentService extends IntentService {
@@ -49,65 +50,52 @@ public class MessagesIntentService extends IntentService {
      */
     private void handleActionGetMessages() {
 
-        //Log.d("MessagesIntentService.UpdateData()", "Starting UpdateData() ...");
+        Log.d("MessagesIntentService.handleActionGetMessages()", "Attempting to get local posts ...");
 
-        String baseUrl = BuildConfig.BASE_URL + "/get_messages.json";
+        String localPostsJson = "[]";
 
-        // get the location, but if the user has turned off location services,
-        // it will come back null.  If it's null, just dump out.
-        // TODO: pop-up a dialog maybe??
-        double latLng[] = YellrUtils.getLocation(getApplicationContext());
-        if (latLng == null )
-            return;
-        String lat = String.valueOf(latLng[0]);
-        String lng = String.valueOf(latLng[1]);
+        String baseUrl = BuildConfig.BASE_URL + "/get_local_posts.json";
+        String url = YellrUtils.buildUrl(getApplicationContext(), baseUrl);
+        if (url != null) {
+            try {
 
-        String languageCode = Locale.getDefault().getLanguage();
+                //
+                HttpClient client = new DefaultHttpClient();
+                HttpGet httpGet = new HttpGet(url);
+                HttpResponse response = client.execute(httpGet);
+                HttpEntity entity = response.getEntity();
 
-        String url =  baseUrl
-                + "?cuid=" + YellrUtils.getCUID(getApplicationContext()) //cuid
-                + "&language_code=" + languageCode
-                + "&lat=" + lat
-                + "&lng=" + lng;
+                //
+                InputStream content = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
 
-        try {
+                //
+                StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
 
-            //
-            HttpClient client = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(url);
-            HttpResponse response = client.execute(httpGet);
-            HttpEntity entity = response.getEntity();
+                String messagesJson = builder.toString();
 
-            //
-            InputStream content = entity.getContent();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                //Log.d("MessagesIntentService.UpdateData()","Broadcasting result ...");
 
-            //
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
+                Log.d("MessagesIntentService.handleActionGetMessages()", "JSON: " + messagesJson);
+
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(MessagesFragment.MessagesReceiver.ACTION_NEW_MESSAGES);
+                broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                broadcastIntent.putExtra(PARAM_MESSAGES_JSON, messagesJson);
+                sendBroadcast(broadcastIntent);
+
+
+            } catch (Exception e) {
+
+                Log.d("MessagesIntentService.handleActionGetMessages()", "Error: " + e.toString());
+
+                //e.printStackTrace();
             }
-
-            String messagesJson = builder.toString();
-
-            //Log.d("MessagesIntentService.UpdateData()","Broadcasting result ...");
-
-            Log.d("MessagesIntentService.UpdateData()","JSON: " + messagesJson);
-
-            /*
-            Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(MessagesReceiver.ACTION_NEW_MESSAGES);
-            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            broadcastIntent.putExtra(PARAM_MESSAGES_JSON, messagesJson);
-            sendBroadcast(broadcastIntent);
-            */
-
-        } catch( Exception e) {
-
-            Log.d("MessagesIntentService.UpdateData()","Error: " + e.toString());
-
-            //e.printStackTrace();
         }
     }
 }

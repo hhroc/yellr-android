@@ -28,6 +28,7 @@
     <string name="fa_up_vote"></string>
     <string name="fa_down_vote"></string>
     <string name="fa_star"></string>
+    <string name="fa_envelope_o"></string>
 
     <!-- Dialogs -->
     <string name="about_yellr_first">
@@ -92,6 +93,9 @@
 
     <!-- Notifications -->
     <string name="title_activity_notifications">Notifications</string>
+
+    <!-- Messages -->
+    <string name="title_activity_messages">Messages</string>
 
     <!-- Post -->
     <string name="activity_post_title">New Post</string>
