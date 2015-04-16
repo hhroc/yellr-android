@@ -134,6 +134,22 @@
         <receiver android:name=".receivers.CheckHttpReceiver" >
         </receiver>
 
+        <!-- checks to see if there are new assignments, and displays a notification -->
+        <service android:name=".intent_services.assignments.CheckAssignmentsIntentService"
+                 android:exported="false">
+        </service>
+
+        <!--
+        <receiver android:name=".receivers.CheckHttpAssignmentsReceiver" >
+            <intent-filter>
+                <action android:name="yellr.net.yellr_android.action.NEW_ASSIGNMENTS" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receivers.CheckHttpStoriesReceiver" >
+        </receiver>
+        -->
+
         <service
             android:name=".intent_services.data.DataIntentService"
             android:exported="false" >

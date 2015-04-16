@@ -1,6 +1,9 @@
 package yellr.net.yellr_android.utils;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
@@ -9,14 +12,21 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.http.AndroidHttpClient;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,6 +36,11 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 
 import yellr.net.yellr_android.BuildConfig;
+import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.activities.PostActivity;
+import yellr.net.yellr_android.fragments.PostFragment;
+import yellr.net.yellr_android.intent_services.assignments.Assignment;
+import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
 
 /**
  * Created by TDuffy on 2/7/2015.
@@ -301,6 +316,8 @@ public class YellrUtils {
             }
         }
 
+        //Log.d("YellrUtils.getLocation()", "Location: " + String.valueOf(latLng));
+
         return latLng;
     }
 
@@ -462,7 +479,96 @@ public class YellrUtils {
         return bitmap;
     }
 
-    public static void setCurrentAssignmentIds(Context context, String[] currentAssignmentIds) {
+    public static String downloadJson(Context context, String url){
+
+        String jsonString = "{}";
+
+        try {
+
+            //
+            HttpClient client = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = client.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+
+            //
+            InputStream content = entity.getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+
+            //
+            StringBuilder builder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+            }
+
+            jsonString = builder.toString();
+
+            Log.d("YellrUtils.downloadJson()", "Successfully downloaded JSON from server");
+
+        } catch (Exception e) {
+            Log.d("YellrUtils.downloadJson()", "Error: " + e.toString());
+        }
+
+        return jsonString;
+    }
+
+    public static Assignment[] decodeAssignmentJson(Context context, String assignmentsJson) {
+        Gson gson = new Gson();
+        AssignmentsResponse response = new AssignmentsResponse();
+        try{
+            response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
+        } catch(Exception e){
+            Log.d("YellrUtils.decodeAssignmentJson()", "ERROR: GSON puked.");
+        }
+
+        Assignment[] assignments = null;
+        if (response.success && response.assignments != null) {
+            //assignmentsArrayAdapter.clear();
+            assignments = new Assignment[response.assignments.length];
+            for (int i = 0; i < response.assignments.length; i++) {
+                Assignment assignment = response.assignments[i];
+                //assignmentsArrayAdapter.add(assignment);
+                assignments[i] = assignment;
+            }
+        }
+
+        return assignments;
+    }
+
+    public static void buildNewAssignmentNotification(Context context, Assignment assignment) {
+        Intent assignmentIntent;
+        assignmentIntent = new Intent(context, PostActivity.class);
+        assignmentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.icon)
+                        .setContentTitle(assignment.question_text)
+                        .setContentText(assignment.description);
+
+        assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_QUESTION, assignment.question_text);
+        assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_DESCRIPTION, assignment.description);
+        assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, assignment.assignment_id);
+
+        PendingIntent pendingAssignmentIntent = PendingIntent.getActivity(context, 0, assignmentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(pendingAssignmentIntent);
+        mBuilder.setAutoCancel(true); // clear notification after click
+        int assignmentNotificationId = 2;
+        NotificationManager mNotificationMgr =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationMgr.notify(assignmentNotificationId, mBuilder.build());
+    }
+
+    public static void setCurrentAssignmentIds(Context context, Assignment[] assignments) { //String[] currentAssignmentIds) {
+
+        String[] currentAssignmentIds = new String[assignments.length];
+        for (int i = 0; i < assignments.length; i++) {
+            currentAssignmentIds[i] = String.valueOf(assignments[i].assignment_id);
+        }
+        //YellrUtils.setCurrentAssignmentIds(context, currentAssignmentIds);
+
         SharedPreferences currentAssignmentIdsCountPref = context.getSharedPreferences("current_assignment_ids_count", Context.MODE_PRIVATE);
         SharedPreferences currentAssignmentIdsPref = context.getSharedPreferences("current_assignment_ids", Context.MODE_PRIVATE);
 

@@ -29,24 +29,26 @@ public class CheckHttpAssignmentsReceiver extends BroadcastReceiver {
 
         Log.d("CheckHttpAssignmentsReceiver.onReceive()","Handling new assignments ...");
 
-        String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
+        try {
 
-        //Log.d("CheckHttpAssignmentsReceiver.onReceiver()","Assignments JSON: " + assignmentsJson);
+            String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
 
-        Gson gson = new Gson();
-        AssignmentsResponse response = new AssignmentsResponse();
-        try{
-            response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
-        } catch (Exception e){
-            Log.d("CheckHttpAssignmentsReceiver.onReceive", "GSON puked");
-        }
-        boolean newAssignments = false;
+            //Log.d("CheckHttpAssignmentsReceiver.onReceiver()","Assignments JSON: " + assignmentsJson);
 
-        if (response.success) {
+            Gson gson = new Gson();
+            AssignmentsResponse response = new AssignmentsResponse();
+            try {
+                response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
+            } catch (Exception e) {
+                Log.d("CheckHttpAssignmentsReceiver.onReceive", "GSON puked");
+            }
+            boolean newAssignments = false;
 
-            //Log.d("CheckHttpAssignmentsReceiver.onReceive","Response success = True");
+            if (response.success) {
 
-            String[] currentAssignmentIds = YellrUtils.getCurrentAssignmentIds(context);
+                Log.d("CheckHttpAssignmentsReceiver.onReceive", "Response success = True");
+
+                String[] currentAssignmentIds = YellrUtils.getCurrentAssignmentIds(context);
 
             /*
             Log.d("CheckHttpAssignmentsReceiver.onReceive", "Current IDs: ");
@@ -58,56 +60,62 @@ public class CheckHttpAssignmentsReceiver extends BroadcastReceiver {
                 Log.d("CheckHttpAssignmentsReceiver.onReceive", "    ID: " + response.assignments[i].assignment_id);
             */
 
-            //for(int i = 0; i< currentAssignmentIds.length; i++) {
-            //    Log.d("CheckHttpAssignmentsReceiver.onReceive()","currentAssigmentIds[" + String.valueOf(i) + "]: " + currentAssignmentIds[i]);
-            //}
+                //for(int i = 0; i< currentAssignmentIds.length; i++) {
+                //    Log.d("CheckHttpAssignmentsReceiver.onReceive()","currentAssigmentIds[" + String.valueOf(i) + "]: " + currentAssignmentIds[i]);
+                //}
 
-            for (int i = 0; i < response.assignments.length; i++) {
-                //Log.d("CheckHttpAssignmentsReceiver.onReceive()","assignment_id: " + String.valueOf(response.assignments[i].assignment_id));
-                if (!Arrays.asList(currentAssignmentIds).contains(String.valueOf(response.assignments[i].assignment_id))) {
-                    newAssignments = true;
-                    break;
+                for (int i = 0; i < response.assignments.length; i++) {
+                    //Log.d("CheckHttpAssignmentsReceiver.onReceive()","assignment_id: " + String.valueOf(response.assignments[i].assignment_id));
+                    if (!Arrays.asList(currentAssignmentIds).contains(String.valueOf(response.assignments[i].assignment_id))) {
+
+                        Log.d("CheckHttpAssignmentsReceiver.onReceive", "New Assignment(s)!");
+
+                        newAssignments = true;
+                        break;
+                    }
                 }
-            }
 
-            if (newAssignments) {
-                Intent assignmentIntent;
-                assignmentIntent = new Intent(context, PostActivity.class);
-                assignmentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (newAssignments) {
+                    Intent assignmentIntent;
+                    assignmentIntent = new Intent(context, PostActivity.class);
+                    assignmentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                if(response.assignments.length >0) {
-                    int aIndex = 0;
-                    NotificationCompat.Builder mBuilder =
-                            new NotificationCompat.Builder(context)
-                                    .setSmallIcon(R.drawable.icon)
-                                    .setContentTitle(response.assignments[aIndex].question_text)
-                                    .setContentText(response.assignments[aIndex].description);
+                    if (response.assignments.length > 0) {
+                        int aIndex = 0;
+                        NotificationCompat.Builder mBuilder =
+                                new NotificationCompat.Builder(context)
+                                        .setSmallIcon(R.drawable.icon)
+                                        .setContentTitle(response.assignments[aIndex].question_text)
+                                        .setContentText(response.assignments[aIndex].description);
 
-                    assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_QUESTION, response.assignments[aIndex].question_text);
-                    assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_DESCRIPTION, response.assignments[aIndex].description);
-                    assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, response.assignments[aIndex].assignment_id);
+                        assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_QUESTION, response.assignments[aIndex].question_text);
+                        assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_DESCRIPTION, response.assignments[aIndex].description);
+                        assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, response.assignments[aIndex].assignment_id);
 
-                    PendingIntent pendingAssignmentIntent = PendingIntent.getActivity(context, 0, assignmentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent pendingAssignmentIntent = PendingIntent.getActivity(context, 0, assignmentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    mBuilder.setContentIntent(pendingAssignmentIntent);
-                    mBuilder.setAutoCancel(true); // clear notification after click
-                    int assignmentNotificationId = 2;
-                    NotificationManager mNotificationMgr =
-                            (NotificationManager)  context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    mNotificationMgr.notify(assignmentNotificationId, mBuilder.build());
+                        mBuilder.setContentIntent(pendingAssignmentIntent);
+                        mBuilder.setAutoCancel(true); // clear notification after click
+                        int assignmentNotificationId = 2;
+                        NotificationManager mNotificationMgr =
+                                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationMgr.notify(assignmentNotificationId, mBuilder.build());
+                    }
+                    Log.d("CheckHttpAssignmentsReceiver.onReceive()", "New Assignments!");
                 }
-                Log.d("CheckHttpAssignmentsReceiver.onReceive()", "New Assignments!");
+
+                // update current Ids list
+                currentAssignmentIds = new String[response.assignments.length];
+                for (int i = 0; i < response.assignments.length; i++) {
+                    currentAssignmentIds[i] = String.valueOf(response.assignments[i].assignment_id);
+                }
+                //YellrUtils.setCurrentAssignmentIds(context, currentAssignmentIds);
+            } else {
+                Log.d("CheckHttpAssignmentsReceiver.onReceive()", "ERROR: Success was false");
             }
 
-            // update current Ids list
-            currentAssignmentIds = new String[response.assignments.length];
-            for(int i = 0; i < response.assignments.length; i++) {
-                currentAssignmentIds[i] = String.valueOf(response.assignments[i].assignment_id);
-            }
-            YellrUtils.setCurrentAssignmentIds(context, currentAssignmentIds);
-        }
-        else {
-            Log.d("CheckHttpAssignmentsReceiver.onReceive()","ERROR: Success was false");
+        } catch (Exception ex) {
+            Log.d("CheckHttpAssignmentsReceiver.onReceive()", "ERROR: " + ex.toString());
         }
     }
 }
