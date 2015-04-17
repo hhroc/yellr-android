@@ -170,7 +170,7 @@ public class VoteIntentService extends IntentService {
 
                 voteJson = builder.toString();
 
-                Log.d("VoteIntentService.vote()", "JSON: " + voteJson);
+                //Log.d("VoteIntentService.vote()", "JSON: " + voteJson);
 
             } catch (IOException e) {
                 e.printStackTrace();

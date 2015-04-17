@@ -71,6 +71,15 @@
             android:noHistory="true">
         </activity>
         <activity
+            android:name=".activities.ViewPostActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/activity_view_post_title"
+            android:parentActivityName=".activities.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.HomeActivity" />
+        </activity>
+        <activity
             android:name=".activities.MessagesActivity"
             android:label="@string/title_activity_messages"
             android:parentActivityName=".activities.HomeActivity" >

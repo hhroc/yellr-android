@@ -203,18 +203,24 @@ receiver#yellr.net.yellr_android.receivers.CheckHttpReceiver
 ADDED from AndroidManifest.xml:134:9
 	android:name
 		ADDED from AndroidManifest.xml:134:19
+service#yellr.net.yellr_android.intent_services.assignments.CheckAssignmentsIntentService
+ADDED from AndroidManifest.xml:138:9
+	android:exported
+		ADDED from AndroidManifest.xml:139:18
+	android:name
+		ADDED from AndroidManifest.xml:138:18
 service#yellr.net.yellr_android.intent_services.data.DataIntentService
-ADDED from AndroidManifest.xml:137:9
+ADDED from AndroidManifest.xml:153:9
 	android:exported
-		ADDED from AndroidManifest.xml:139:13
+		ADDED from AndroidManifest.xml:155:13
 	android:name
-		ADDED from AndroidManifest.xml:138:13
+		ADDED from AndroidManifest.xml:154:13
 service#yellr.net.yellr_android.intent_services.zipcode.ZipcodeIntentService
-ADDED from AndroidManifest.xml:142:9
+ADDED from AndroidManifest.xml:158:9
 	android:exported
-		ADDED from AndroidManifest.xml:144:13
+		ADDED from AndroidManifest.xml:160:13
 	android:name
-		ADDED from AndroidManifest.xml:143:13
+		ADDED from AndroidManifest.xml:159:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5

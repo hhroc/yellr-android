@@ -153,30 +153,15 @@ public class AssignmentsFragment extends Fragment {
 
             String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
 
-            /*
-            Gson gson = new Gson();
-            AssignmentsResponse response = new AssignmentsResponse();
-            try{
-                response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
-            } catch(Exception e){
-                Log.d("AssignmentsFragment.onReceive", "GSON puked");
-            }
-
-            if (response.success && response.assignments != null) {
-                assignmentsArrayAdapter.clear();
-                assignments = new Assignment[response.assignments.length];
-                for (int i = 0; i < response.assignments.length; i++) {
-                    Assignment assignment = response.assignments[i];
-                    assignmentsArrayAdapter.add(assignment);
-                    assignments[i] = assignment;
-                }
-            }
-            */
-
             assignments = YellrUtils.decodeAssignmentJson(context, assignmentsJson);
+
             assignmentsArrayAdapter.clear();
-            for(int i=0;i<assignments.length;i++){
-                assignmentsArrayAdapter.add(assignments[i]);
+
+            // make sure that there are actually assignments to populate
+            if ( assignments != null ) {
+                for (int i = 0; i < assignments.length; i++) {
+                    assignmentsArrayAdapter.add(assignments[i]);
+                }
             }
 
             // remove the refreshing pin wheel.
