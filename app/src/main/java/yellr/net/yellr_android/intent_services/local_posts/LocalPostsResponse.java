@@ -5,7 +5,7 @@ package yellr.net.yellr_android.intent_services.local_posts;
  */
 public class LocalPostsResponse {
 
-    public LocalPost[] posts;
+    public Post[] posts;
 
     public boolean success;
 

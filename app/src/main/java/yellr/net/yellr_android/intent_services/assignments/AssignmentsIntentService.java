@@ -39,9 +39,6 @@ public class AssignmentsIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        //Log.d("AssignmentsIntentService.onHandleIntent()","Decoding intent action ...");
-
-        //String cuid = intent.getStringExtra(PARAM_CUID);
         handleActionGetAssignments(); //cuid);
     }
 
@@ -50,51 +47,22 @@ public class AssignmentsIntentService extends IntentService {
      */
     private void handleActionGetAssignments() {
 
+        String assignmentsJson = "{}";
 
-
-        String assignmentsJson = "[]";
-
-        String baseUrl = BuildConfig.BASE_URL + "/get_assignments.json";
-        String url = YellrUtils.buildUrl(getApplicationContext(),baseUrl);
+        String basicUrl = BuildConfig.BASE_URL + "/get_assignments.json";
+        String url = YellrUtils.buildUrl(getApplicationContext(), basicUrl);
         if (url != null) {
 
-            //
-            // TODO: need to check for exceptions better, this bombs out sometimes
-            //
-            try {
+            assignmentsJson = YellrUtils.downloadJson(getApplicationContext(),url);
 
-                //
-                HttpClient client = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet(url);
-                HttpResponse response = client.execute(httpGet);
-                HttpEntity entity = response.getEntity();
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction(AssignmentsIntentService.ACTION_NEW_ASSIGNMENTS);
+            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            broadcastIntent.putExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON, assignmentsJson);
+            sendBroadcast(broadcastIntent);
 
-                //
-                InputStream content = entity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-
-                //
-                StringBuilder builder = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    builder.append(line);
-                }
-
-                assignmentsJson = builder.toString();
-
-                Log.d("AssignmentsIntentService.handleActionGetAssignments()", "Successfully got new assignments list from server.");
-
-            } catch (Exception e) {
-                Log.d("AssignmentsIntentService.handleActionGetAssignments()", "Error: " + e.toString());
-            }
         }
 
-        //Log.d("AssignmentsIntentService.handleActionGetAssignments()", "JSON: " + assignmentsJson);
 
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(ACTION_NEW_ASSIGNMENTS);
-        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.putExtra(PARAM_ASSIGNMENTS_JSON, assignmentsJson);
-        sendBroadcast(broadcastIntent);
     }
 }

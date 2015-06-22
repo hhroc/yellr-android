@@ -27,18 +27,4 @@ public class MediaObject {
     public String displayImageUrl;
     public Bitmap displayImage;
 
-    /*
-    public void downloadDisplayImage() {
-        //try {
-            BitmapDownloaderTask task = new BitmapDownloaderTask();
-            String url = BuildConfig.BASE_URL + "/media/" + YellrUtils.getPreviewImageName(this.file_name);
-            //Log.d("MediaObject.downloadDisplayImage()","url: " + url);
-            task.execute(url);
-        //} catch (Exception e) {
-        //    // TODO: do something with exception
-        //}
-    }
-    */
-
-
 }

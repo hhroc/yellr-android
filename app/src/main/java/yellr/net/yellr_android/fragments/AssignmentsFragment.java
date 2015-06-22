@@ -27,6 +27,7 @@ import yellr.net.yellr_android.activities.PostActivity;
 import yellr.net.yellr_android.intent_services.assignments.Assignment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
+import yellr.net.yellr_android.receivers.CheckHttpAssignmentsReceiver;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
@@ -76,6 +77,12 @@ public class AssignmentsFragment extends Fragment {
         assignmentsFilter.addCategory(Intent.CATEGORY_DEFAULT);
         AssignmentsReceiver assignmentsReceiver = new AssignmentsReceiver();
         context.registerReceiver(assignmentsReceiver, assignmentsFilter);
+
+        // init background service stories reciever
+        //IntentFilter checkHttpAssignmentsFilter = new IntentFilter(AssignmentsIntentService.ACTION_NEW_ASSIGNMENTS);
+        //checkHttpAssignmentsFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        //CheckHttpAssignmentsReceiver checkHttpAssignmentsReceiver = new CheckHttpAssignmentsReceiver();
+        //context.registerReceiver(checkHttpAssignmentsReceiver, checkHttpAssignmentsFilter);
 
         assignmentsArrayAdapter = new AssignmentsArrayAdapter(getActivity(), new ArrayList<Assignment>());
     }
@@ -146,21 +153,14 @@ public class AssignmentsFragment extends Fragment {
 
             String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
 
-            Gson gson = new Gson();
-            AssignmentsResponse response = new AssignmentsResponse();
-            try{
-                response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
-            } catch(Exception e){
-                Log.d("AssignmentsFragment.onReceive", "GSON puked");
-            }
+            assignments = YellrUtils.decodeAssignmentJson(context, assignmentsJson);
 
-            if (response.success && response.assignments != null) {
-                assignmentsArrayAdapter.clear();
-                assignments = new Assignment[response.assignments.length];
-                for (int i = 0; i < response.assignments.length; i++) {
-                    Assignment assignment = response.assignments[i];
-                    assignmentsArrayAdapter.add(assignment);
-                    assignments[i] = assignment;
+            assignmentsArrayAdapter.clear();
+
+            // make sure that there are actually assignments to populate
+            if ( assignments != null ) {
+                for (int i = 0; i < assignments.length; i++) {
+                    assignmentsArrayAdapter.add(assignments[i]);
                 }
             }
 

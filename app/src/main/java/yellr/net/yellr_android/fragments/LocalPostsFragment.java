@@ -32,11 +32,13 @@ import java.util.Map;
 
 import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.R;
-import yellr.net.yellr_android.intent_services.local_posts.LocalPost;
+import yellr.net.yellr_android.activities.ViewPostActivity;
 import yellr.net.yellr_android.intent_services.local_posts.LocalPostsIntentService;
 import yellr.net.yellr_android.intent_services.local_posts.LocalPostsResponse;
+import yellr.net.yellr_android.intent_services.local_posts.Post;
 import yellr.net.yellr_android.intent_services.post_vote.VoteIntentService;
 import yellr.net.yellr_android.intent_services.publish_post.PublishPostIntentService;
+import yellr.net.yellr_android.utils.LocalPostViewHolder;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
@@ -53,7 +55,7 @@ public class LocalPostsFragment extends Fragment {
     private String cuid;
     private LocalPostsArrayAdapter localPostsArrayAdapter;
 
-    private LocalPost[] localPosts;
+    private Post[] localPosts;
     //private LocalPostsArrayAdapter localPostsArrayAdapter;
 
     /**
@@ -88,7 +90,7 @@ public class LocalPostsFragment extends Fragment {
 
         Log.d("LocalPostsFragment.onCreate()","LocalPostsReciever registered.");
 
-        localPostsArrayAdapter = new LocalPostsArrayAdapter(getActivity(), R.layout.fragment_local_post_row, new ArrayList<LocalPost>());
+        localPostsArrayAdapter = new LocalPostsArrayAdapter(getActivity(), R.layout.fragment_local_post_row, new ArrayList<Post>());
     }
 
     @Override
@@ -166,11 +168,11 @@ public class LocalPostsFragment extends Fragment {
 
             if (response.success && response.posts != null) {
                 localPostsArrayAdapter.clear();
-                localPosts = new LocalPost[response.posts.length];
+                localPosts = new Post[response.posts.length];
                 for (int i = 0; i < response.posts.length; i++) {
-                    LocalPost local_post = response.posts[i];
-                    localPostsArrayAdapter.add(local_post);
-                    localPosts[i] = local_post;
+                    Post localPost = response.posts[i];
+                    localPostsArrayAdapter.add(localPost);
+                    localPosts[i] = localPost;
                 }
             }
 
@@ -178,74 +180,51 @@ public class LocalPostsFragment extends Fragment {
         }
     }
 
+
+
     class LocalPostListOnClickListener implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            Log.d("LocalPostListOnClickListener.onItemClick()", "Click!");
 
-            //Intent intent;
-            //intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent;
+            intent = new Intent(getActivity().getApplicationContext(), ViewPostActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            //intent.putExtra(PostFragment.ARG_ASSIGNMENT_QUESTION, localPosts[position].question_text);
-            //intent.putExtra(PostFragment.ARG_ASSIGNMENT_DESCRIPTION, localPosts[position].description);
-            //intent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, localPosts[position].local_post_id);
+            Post post = localPosts[position];
 
-            //startActivity(intent);
+            intent.putExtra(ViewPostFragment.ARG_POST_LIST_POSITION, position);
+
+            intent.putExtra(ViewPostFragment.ARG_POST_DATETIME, localPosts[position].post_datetime);
+            intent.putExtra(ViewPostFragment.ARG_POST_QUESTION_TEXT, localPosts[position].question_text);
+            intent.putExtra(ViewPostFragment.ARG_POST_UP_VOTE_COUNT, localPosts[position].up_vote_count);
+            intent.putExtra(ViewPostFragment.ARG_POST_DOWN_VOTE_COUNT, localPosts[position].down_vote_count);
+            intent.putExtra(ViewPostFragment.ARG_POST_HAS_VOTED, localPosts[position].has_voted);
+            intent.putExtra(ViewPostFragment.ARG_POST_IS_UP_VOTE, localPosts[position].is_up_vote);
+
+            String text = localPosts[position].media_objects[0].media_text;
+            if (localPosts[position].media_objects[0].media_type_name.toLowerCase().equals("image"))
+                text = localPosts[position].media_objects[0].caption;
+            intent.putExtra(ViewPostFragment.ARG_POST_MEDIA_OBJECT_TEXT, text);
+            intent.putExtra(ViewPostFragment.ARG_POST_MEDIA_OBJECT_FILENAME, localPosts[position].media_objects[0].file_name);
+            intent.putExtra(ViewPostFragment.ARG_POST_MEDIA_OBJECT_MEDIA_TYPE, localPosts[position].media_objects[0].media_type_name);
+
+
+            startActivity(intent);
+
+
         }
 
     }
 
-    public class LocalPostViewHolder {
 
-        public int position;
 
-        public final TextView textViewPostQuestion;
-        public final TextView textViewPostUser;
-        public final TextView textViewPostDateTime;
-        public final TextView textViewPostText;
-        public final ImageView imageViewPostImage;
-        public final Button buttonPostUpVote;
-        public final TextView textViewPostUpVoteCount;
-        public final TextView textViewPostDownVoteCount;
-        public final Button buttonPostDownVote;
+    public class LocalPostsArrayAdapter extends ArrayAdapter<Post> {
 
-        LocalPostViewHolder(int position, View row) {
+        private ArrayList<Post> localPosts;
 
-            this.position = position;
-
-            Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fontawesome-webfont.ttf");
-
-            this.textViewPostQuestion = (TextView) row.findViewById(R.id.frag_home_local_post_question);
-            this.textViewPostQuestion.setTypeface(font, Typeface.ITALIC);
-
-            this.textViewPostUser = (TextView) row.findViewById(R.id.frag_home_local_post_user);
-            this.textViewPostUser.setTypeface(font, Typeface.BOLD);
-
-            this.textViewPostDateTime = (TextView) row.findViewById(R.id.frag_home_local_post_datetime);
-
-            this.textViewPostDateTime.setTypeface(font);
-
-            this.textViewPostText = (TextView) row.findViewById(R.id.frag_home_local_post_text);
-            this.imageViewPostImage = (ImageView) row.findViewById(R.id.frag_home_local_post_image);
-
-            this.buttonPostUpVote = (Button) row.findViewById(R.id.frag_home_local_post_button_up_vote);
-            this.buttonPostUpVote.setTypeface(font);
-
-            this.textViewPostUpVoteCount = (TextView) row.findViewById(R.id.frag_home_local_post_up_vote_count);
-
-            this.textViewPostDownVoteCount = (TextView) row.findViewById(R.id.frag_home_local_post_down_vote_count);
-
-            this.buttonPostDownVote = (Button) row.findViewById(R.id.frag_home_local_post_button_down_vote);
-            this.buttonPostDownVote.setTypeface(font);
-        }
-    }
-
-    public class LocalPostsArrayAdapter extends ArrayAdapter<LocalPost> {
-
-        private ArrayList<LocalPost> localPosts;
-
-        public LocalPostsArrayAdapter(Context context, int listViewId, ArrayList<LocalPost> localPosts) {
+        public LocalPostsArrayAdapter(Context context, int listViewId, ArrayList<Post> localPosts) {
             super(context, listViewId, localPosts);
             this.localPosts = localPosts;
         }
@@ -267,247 +246,24 @@ public class LocalPostsFragment extends Fragment {
                 convertView = vi.inflate(R.layout.fragment_local_post_row, null);
 
                 // create our view holder, and set it as the tag of the convertView.
-                localPostViewHolder = new LocalPostViewHolder(position, convertView);
+                localPostViewHolder = new LocalPostViewHolder(getContext(), position, convertView, false);
                 convertView.setTag(localPostViewHolder);
 
             } else {
 
                 // get our view holder from the convertView
-                localPostViewHolder = (LocalPostViewHolder)convertView.getTag();
+                localPostViewHolder = (LocalPostViewHolder) convertView.getTag();
 
             }
 
-            final LocalPost localPost = localPosts.get(position);
+            final Post localPost = localPosts.get(position);
 
-            //
-            // Question Text
-            //
-
-            String questionText = localPost.question_text;
-            boolean assignmentResponse = questionText == null || questionText.equals(null) || questionText.equals("") ? false : true;
-
-            if ( assignmentResponse ) {
-                localPostViewHolder.textViewPostQuestion.setVisibility(View.VISIBLE);
-                localPostViewHolder.textViewPostQuestion.setText(getString(R.string.fa_question_circle) + "  " + questionText);
-            } else {
-                //localPostViewHolder.textViewPostQuestion.setText(getString(R.string.fa_question_circle) + "  " + "Free Post");
-                localPostViewHolder.textViewPostQuestion.setVisibility(View.GONE);
-            }
-
-
-            //
-            // User Text
-            //
-
-            boolean verifiedUser = localPost.verified_user;
-            String firstName = localPost.first_name;
-            String lastName = localPost.last_name;
-
-            if ( verifiedUser ) {
-                localPostViewHolder.textViewPostUser.setText(getString(R.string.fa_user) + "  " + firstName + " " + lastName);
-            } else {
-                localPostViewHolder.textViewPostUser.setText(getString(R.string.fa_user) + "  " + getString(R.string.anonymous_user));
-            }
-
-
-            //
-            // Post DateTime
-            //
-
-            Date postDateTime = YellrUtils.prettifyDateTime(localPost.post_datetime);
-            String postAuthoredAgo = YellrUtils.calcTimeBetween(postDateTime, new Date());
-
-            localPostViewHolder.textViewPostDateTime.setText(getString(R.string.fa_pencil) + "  " + postAuthoredAgo);
-
-
-            //
-            // Post Text
-            //
-
-            String mediaType = localPost.media_objects[0].media_type_name;
-            String mediaText = localPost.media_objects[0].media_text;
-            String mediaCaption = localPost.media_objects[0].caption;
-
-            if ( mediaType.equals("text") ) {
-                localPostViewHolder.textViewPostText.setText(mediaText);
-            } else {
-                localPostViewHolder.textViewPostText.setText(mediaCaption);
-            }
-
-            //
-            // Image View (optional)
-            //
-
-            if (mediaType.equals("image")) {
-                try {
-
-                    String url = BuildConfig.BASE_URL + "/media/" + YellrUtils.getPreviewImageName(localPost.media_objects[0].file_name);
-
-                    localPostViewHolder.imageViewPostImage.setVisibility(View.VISIBLE);
-                    Picasso.with(getContext())
-                            .load(url)
-                            .into(localPostViewHolder.imageViewPostImage);
-
-                } catch (Exception e) {
-                    Log.d("LocalPostsArrayAdapter.getView()", "ERROR: " + e.toString());
-                }
-            } else if (mediaType.equals("text")) {
-                localPostViewHolder.imageViewPostImage.setVisibility(View.GONE);
-            }
-
-
-            //
-            // Voting (up vote, vote count)
-            //
-
-            localPostViewHolder.textViewPostUpVoteCount.setText(String.valueOf(localPost.up_vote_count));
-
-            String downCount = String.valueOf(localPost.down_vote_count);
-            if ( localPost.down_vote_count != 0 )
-                downCount = "-" + downCount;
-            localPostViewHolder.textViewPostDownVoteCount.setText(downCount);
-
-            if (YellrUtils.intToBoolean(localPost.has_voted)) {
-                if (YellrUtils.intToBoolean(localPost.is_up_vote)) {
-                    localPostViewHolder.buttonPostUpVote.setTextColor(getResources().getColor(R.color.up_vote_green));
-                    localPostViewHolder.buttonPostDownVote.setTextColor(getResources().getColor(R.color.light_grey));
-                } else {
-                    localPostViewHolder.buttonPostUpVote.setTextColor(getResources().getColor(R.color.light_grey));
-                    localPostViewHolder.buttonPostDownVote.setTextColor(getResources().getColor(R.color.down_vote_red));
-                }
-            } else {
-                localPostViewHolder.buttonPostUpVote.setTextColor(getResources().getColor(R.color.light_grey));
-                localPostViewHolder.buttonPostDownVote.setTextColor(getResources().getColor(R.color.light_grey));
-            }
-
-            localPostViewHolder.buttonPostUpVote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Log.d("localPostViewHolder.buttonPostUpVote.setOnClickListener", "Submitting Up Vote ...");
-
-
-                    Intent voteIntent = new Intent(getActivity(), VoteIntentService.class);
-                    voteIntent.putExtra(VoteIntentService.PARAM_POST_ID, localPost.post_id);
-                    voteIntent.putExtra(VoteIntentService.PARAM_IS_UP_VOTE, true); // Up Vote = true
-                    getActivity().startService(voteIntent);
-
-                    Log.d("localPostViewHolder.buttonPostUpVote.setOnClickListener", "has_voted: " + String.valueOf((localPost.has_voted) + ", is_up_vote: " + String.valueOf(localPost.is_up_vote)));
-
-                    if (YellrUtils.intToBoolean(localPost.has_voted)) {
-
-                        if (YellrUtils.intToBoolean(localPost.is_up_vote)) {
-
-                            // the client is removing their up vote
-
-                            localPostViewHolder.buttonPostUpVote.setTextColor(getResources().getColor(R.color.light_grey));
-                            localPostViewHolder.buttonPostDownVote.setTextColor(getResources().getColor(R.color.light_grey));
-
-                            // remove vote
-                            localPost.has_voted = 0;
-
-                            // update up vote count
-                            int count = Integer.valueOf(String.valueOf(localPostViewHolder.textViewPostUpVoteCount.getText()));
-                            localPostViewHolder.textViewPostUpVoteCount.setText(String.valueOf(count - 1));
-
-                        } else {
-
-                            // the client is changing their down vote to an up vote.
-
-                            localPostViewHolder.buttonPostUpVote.setTextColor(getResources().getColor(R.color.up_vote_green));
-                            localPostViewHolder.buttonPostDownVote.setTextColor(getResources().getColor(R.color.light_grey));
-
-                            // register up vote
-                            localPost.is_up_vote = 1;
-
-                            // update up vote count
-                            int upCount = Integer.valueOf(String.valueOf(localPostViewHolder.textViewPostUpVoteCount.getText()));
-                            localPostViewHolder.textViewPostUpVoteCount.setText(String.valueOf(upCount + 1));
-
-                            // update down vote count
-                            String downCountString = String.valueOf(localPostViewHolder.textViewPostDownVoteCount.getText());
-                            localPostViewHolder.textViewPostDownVoteCount.setText(YellrUtils.lessDownVote(downCountString));
-                        }
-                    } else {
-
-                        // the client is casting an up vote, with no previous vote on the post
-
-                        localPostViewHolder.buttonPostUpVote.setTextColor(getResources().getColor(R.color.up_vote_green));
-                        localPostViewHolder.buttonPostDownVote.setTextColor(getResources().getColor(R.color.light_grey));
-                        localPost.has_voted = 1;
-                        localPost.is_up_vote = 1;
-
-                        // update up vote count
-                        int count = Integer.valueOf(String.valueOf(localPostViewHolder.textViewPostUpVoteCount.getText()));
-                        localPostViewHolder.textViewPostUpVoteCount.setText(String.valueOf(count + 1));
-                    }
-
-                }
-            });
-
-            localPostViewHolder.buttonPostDownVote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent voteIntent = new Intent(getActivity(), VoteIntentService.class);
-                    voteIntent.putExtra(VoteIntentService.PARAM_POST_ID, localPost.post_id);
-                    voteIntent.putExtra(VoteIntentService.PARAM_IS_UP_VOTE, false); // Down Vote = false
-                    getActivity().startService(voteIntent);
-
-                    if (YellrUtils.intToBoolean(localPost.has_voted)) {
-                        if (!YellrUtils.intToBoolean(localPost.is_up_vote)) {
-
-                            // the client is removing their down vote
-
-                            localPostViewHolder.buttonPostUpVote.setTextColor(getResources().getColor(R.color.light_grey));
-                            localPostViewHolder.buttonPostDownVote.setTextColor(getResources().getColor(R.color.light_grey));
-
-                            // remove vote
-                            localPost.has_voted = 0;
-
-                            // update down vote count
-                            // update down vote count
-                            String downCountString = String.valueOf(localPostViewHolder.textViewPostDownVoteCount.getText());
-                            localPostViewHolder.textViewPostDownVoteCount.setText(YellrUtils.lessDownVote(downCountString));
-
-                        } else {
-
-                            // the client is changing their up vote to a down vote
-
-                            localPostViewHolder.buttonPostUpVote.setTextColor(getResources().getColor(R.color.light_grey));
-                            localPostViewHolder.buttonPostDownVote.setTextColor(getResources().getColor(R.color.down_vote_red));
-
-                            // register down vote
-                            localPost.is_up_vote = 0;
-
-                            // update up vote count
-                            int upCount = Integer.valueOf(String.valueOf(localPostViewHolder.textViewPostUpVoteCount.getText()));
-                            localPostViewHolder.textViewPostUpVoteCount.setText(String.valueOf(upCount - 1));
-
-                            // update down vote count
-                            String downCountString = String.valueOf(localPostViewHolder.textViewPostDownVoteCount.getText());
-                            localPostViewHolder.textViewPostDownVoteCount.setText(YellrUtils.moreDownVote(downCountString));
-                        }
-                    } else {
-
-                        // the client is casting an up vote, with no previous vote on the post
-
-                        localPostViewHolder.buttonPostUpVote.setTextColor(getResources().getColor(R.color.light_grey));
-                        localPostViewHolder.buttonPostDownVote.setTextColor(getResources().getColor(R.color.down_vote_red));
-                        localPost.has_voted = 1;
-                        localPost.is_up_vote = 0;
-
-                        // update down vote count
-                        String downCountString = String.valueOf(localPostViewHolder.textViewPostDownVoteCount.getText());
-                        localPostViewHolder.textViewPostDownVoteCount.setText(YellrUtils.moreDownVote(downCountString));
-
-                    }
-
-                }
-            });
-
+            localPostViewHolder.build(getContext(), localPost);
 
             return convertView;
+
+
+
         }
     }
 

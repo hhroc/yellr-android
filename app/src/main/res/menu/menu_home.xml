@@ -7,9 +7,12 @@
 <!--    <item android:id="@+id/action_notification"
         android:title="@string/action_notification"
         app:showAsAction="always"/>
+-->
+    <!--
     <item android:id="@+id/action_messages"
         android:title="@string/action_messages"
-        app:showAsAction="always"/>-->
+        app:showAsAction="always"/>
+    -->
     <item android:id="@+id/action_profile"
         android:title="@string/action_profile"
         app:showAsAction="always"
