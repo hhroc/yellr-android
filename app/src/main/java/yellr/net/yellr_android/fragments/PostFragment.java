@@ -25,6 +25,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
@@ -58,6 +60,7 @@ public class PostFragment extends Fragment {
     Button audioButton;
 
     static final int REQUEST_IMAGE_CAPTURE = 1234;
+    static final int SELECT_FILE = 12345;
 
     // Preview
     ImageView imagePreview;
@@ -188,32 +191,85 @@ public class PostFragment extends Fragment {
                     return;
                 }
 
-                // Create an image file name
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String imageFileName = "JPEG_" + timeStamp + "_";
-                File storageDir = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES);
-                File imageFile = null;
-                Log.d("image create","file: " + storageDir + "/" + imageFileName + ".jpg");
-                try {
-                    imageFile = File.createTempFile(
-                            imageFileName,  /* prefix */
-                            ".jpg",         /* suffix */
-                            storageDir      /* directory */
-                    );
-                } catch (IOException e) {
-                    //e.printStackTrace();
-                    Log.d("image create", "ERROR:" + e.toString());
-                }
+//                // Create an image file name
+//                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//                String imageFileName = "JPEG_" + timeStamp + "_";
+//                File storageDir = Environment.getExternalStoragePublicDirectory(
+//                        Environment.DIRECTORY_PICTURES);
+//                File imageFile = null;
+//                Log.d("image create","file: " + storageDir + "/" + imageFileName + ".jpg");
+//                try {
+//                    imageFile = File.createTempFile(
+//                            imageFileName,  /* prefix */
+//                            ".jpg",         /* suffix */
+//                            storageDir      /* directory */
+//                    );
+//                } catch (IOException e) {
+//                    //e.printStackTrace();
+//                    Log.d("image create", "ERROR:" + e.toString());
+//                }
+//
+//                proposedImageFilename = imageFile.getAbsolutePath();
 
-                proposedImageFilename = imageFile.getAbsolutePath();
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+//                            Uri.fromFile(imageFile));//new File(proposedImageFilename)));
+//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//                }
 
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                            Uri.fromFile(imageFile));//new File(proposedImageFilename)));
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
+                final CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Add Photo!");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+
+                        // Create an image file name
+                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                        String imageFileName = "JPEG_" + timeStamp + "_";
+                        File storageDir = Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_PICTURES);
+                        File imageFile = null;
+                        Log.d("image create","file: " + storageDir + "/" + imageFileName + ".jpg");
+                        try {
+                            imageFile = File.createTempFile(
+                                    imageFileName,  /* prefix */
+                                    ".jpg",         /* suffix */
+                                    storageDir      /* directory */
+                            );
+                        } catch (IOException e) {
+                            //e.printStackTrace();
+                            Log.d("image create", "ERROR:" + e.toString());
+                        }
+
+                        proposedImageFilename = imageFile.getAbsolutePath();
+
+                        if (items[item].equals("Take Photo")) {
+                            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                        Uri.fromFile(imageFile));//new File(proposedImageFilename)));
+                                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                            }
+                        } else if (items[item].equals("Choose from Library")) {
+                            Intent takePictureIntent = new Intent(Intent.ACTION_PICK,
+                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            takePictureIntent.setType("image/*");
+//                            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+//                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+//                                        Uri.fromFile(imageFile));//new File(proposedImageFilename)));
+//                                startActivityForResult(Intent.createChooser(takePictureIntent, "Select File"), SELECT_FILE);
+//                            }
+                            startActivityForResult(Intent.createChooser(takePictureIntent, "Select File"), SELECT_FILE);
+                        } else if (items[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+
             }
         });
 
@@ -226,8 +282,11 @@ public class PostFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //Toast.makeText(getActivity(), "We're back from taking a picture", Toast.LENGTH_SHORT).show();
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+        Toast.makeText(getActivity(), "We're back from taking a picture", Toast.LENGTH_SHORT).show();
+        //Log.d("PostFragment.onActivityResult() - %d", requestCode);
+        Log.d(getClass().getName(), String.format("requestCode = %d", requestCode));
+        Log.d(getClass().getName(), String.format("resultCode = %d", resultCode));
+        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == SELECT_FILE) && resultCode == Activity.RESULT_OK) {
 
             try {
                 Bitmap imageBitmap;
