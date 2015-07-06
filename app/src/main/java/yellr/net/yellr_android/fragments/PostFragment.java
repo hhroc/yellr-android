@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.widget.VideoView;
 
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
@@ -60,10 +61,13 @@ public class PostFragment extends Fragment {
     Button audioButton;
 
     static final int REQUEST_IMAGE_CAPTURE = 1234;
-    static final int SELECT_FILE = 12345;
+    static final int SELECT_FILE = 1235;
+    static final int REQUEST_VIDEO_CAPTURE = 1236;
+    static final int SELECT_VIDEO_FILE = 1237;
 
     // Preview
     ImageView imagePreview;
+    VideoView videoPreview;
 
     // Post Details
     String cuid;
@@ -153,13 +157,6 @@ public class PostFragment extends Fragment {
 
         imageButton = (Button)view.findViewById(R.id.frag_post_photo_button);
         videoButton = (Button)view.findViewById(R.id.frag_post_video_button);
-        videoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast toast = Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
         audioButton = (Button)view.findViewById(R.id.frag_post_audio_button);
         audioButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,6 +166,8 @@ public class PostFragment extends Fragment {
             }
         });
         imagePreview = (ImageView)view.findViewById(R.id.frag_post_image_preview);
+        videoPreview = (VideoView)view.findViewById(R.id.frag_post_video_preview);
+        videoPreview.setVisibility(View.INVISIBLE);
 
         assignmentQuestion = (TextView)view.findViewById(R.id.frag_post_assignment_question);
         assignmentDescription = (TextView)view.findViewById(R.id.frag_post_assignment_description);
@@ -180,6 +179,71 @@ public class PostFragment extends Fragment {
             assignmentQuestion.setText(questionText);
             assignmentDescription.setText(questionDescription);
         }
+
+        videoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            if(getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) == false){
+                Toast.makeText(getActivity(), "This device does not have a camera.", Toast.LENGTH_SHORT)
+                        .show();
+                return;
+            }
+
+            final CharSequence[] items = { "Take Video", "Choose from Library", "Cancel" };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Add Video");
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+
+                    if (items[item].equals("Take Video")) {
+
+                        // Create an image file name
+                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                        String imageFileName = "JPEG_" + timeStamp + "_";
+                        File storageDir = Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_PICTURES);
+                        File imageFile = null;
+                        Log.d("video create","file: " + storageDir + "/" + imageFileName + ".jpg");
+                        try {
+                            imageFile = File.createTempFile(
+                                    imageFileName,  /* prefix */
+                                    ".jpg",         /* suffix */
+                                    storageDir      /* directory */
+                            );
+                        } catch (IOException e) {
+                            //e.printStackTrace();
+                            Log.d("video create", "ERROR:" + e.toString());
+                        }
+
+                        proposedImageFilename = imageFile.getAbsolutePath();
+
+                        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                        if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                    Uri.fromFile(imageFile));
+                            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+                        }
+
+                    } else if (items[item].equals("Choose from Library")) {
+
+                        Intent takePictureIntent = new Intent(Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        takePictureIntent.setType("video/*");
+//                            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+//                            }
+                        startActivityForResult(Intent.createChooser(takePictureIntent, "Select File"), SELECT_VIDEO_FILE);
+
+                    } else if (items[item].equals("Cancel")) {
+                        dialog.dismiss();
+                    }
+                }
+            });
+            builder.show();
+            }
+        });
 
         imageButton.setOnClickListener(new View.OnClickListener() {
 
@@ -194,7 +258,7 @@ public class PostFragment extends Fragment {
                 final CharSequence[] items = { "Take Photo", "Choose from Library", "Cancel" };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Add Photo!");
+                builder.setTitle("Add Photo");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
@@ -257,6 +321,9 @@ public class PostFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Toast.makeText(getActivity(), "We're back from taking a picture", Toast.LENGTH_SHORT).show();
+        Log.d("PostFragment.onActivityResult()", String.format("Request %d", requestCode));
+        Log.d("PostFragment.onActivityResult()", String.format("Result %d", resultCode));
+        Log.d("PostFragment.onActivityResult()", String.format("Data %s", data));
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
 
             try {
@@ -268,6 +335,8 @@ public class PostFragment extends Fragment {
                 //}
 
                 imageBitmap = BitmapFactory.decodeFile(this.proposedImageFilename);
+                imagePreview.setVisibility(View.VISIBLE);
+                videoPreview.setVisibility(View.INVISIBLE);
                 imagePreview.setImageBitmap(imageBitmap);
 
                 //getBitmapFromCameraData()
@@ -336,6 +405,8 @@ public class PostFragment extends Fragment {
                 // Do something with the photo based on Uri
                 Bitmap selectedImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
 
+                imagePreview.setVisibility(View.VISIBLE);
+                videoPreview.setVisibility(View.INVISIBLE);
                 imagePreview.setImageBitmap(selectedImage);
 
                 File chosenPhotoFile = new File(photoUri.getPath());
@@ -347,7 +418,51 @@ public class PostFragment extends Fragment {
                 // todo: display error
             }
 
-            Log.d("PostFragment.onActivityResult()", "Attempting to display image thumbnail ...");
+            Log.d("PostFragment.onActivityResult()", "Attempting to display image thumbnail from Gallery ...");
+
+        } else if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK && data != null) {
+
+            try {
+
+                Uri videoUri = data.getData();
+                imagePreview.setVisibility(View.INVISIBLE);
+                videoPreview.setVisibility(View.VISIBLE);
+                videoPreview.setVideoURI(videoUri);
+                videoPreview.start();
+
+                File chosenPhotoFile = new File(videoUri.getPath());
+
+                this.mediaType = "video";
+                this.videoFilename = chosenPhotoFile.getAbsolutePath();
+
+            }catch (Exception e) {
+                // todo: display error
+            }
+
+            Log.d("PostFragment.onActivityResult()", "Attempting to play movie ...");
+
+        } else if (requestCode == SELECT_VIDEO_FILE && resultCode == Activity.RESULT_OK && data != null) {
+
+            try {
+
+                Uri videoUri = data.getData();
+                imagePreview.setVisibility(View.INVISIBLE);
+                videoPreview.setVisibility(View.VISIBLE);
+                videoPreview.setVideoURI(videoUri);
+                videoPreview.start();
+
+                File chosenPhotoFile = new File(videoUri.getPath());
+
+                this.mediaType = "video";
+                this.videoFilename = chosenPhotoFile.getAbsolutePath();
+
+                Log.d("PostFragment.onActivityResult()", "Attempting to play movie from Gallery ..." + videoUri.getPath());
+
+            }catch (Exception e) {
+                // todo: display error
+            }
+
+            Log.d("PostFragment.onActivityResult()", "Attempting to play movie from Gallery ...");
 
         }
     }

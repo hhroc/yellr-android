@@ -68,11 +68,21 @@
         android:layout_centerInParent="true"
         android:layout_below="@+id/frag_post_edit_text"/>
 
+    <VideoView
+        android:id="@+id/frag_post_video_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:paddingTop="20dp"
+        android:adjustViewBounds="true"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/frag_post_edit_text"/>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:id="@+id/linearLayout">
 
         <View
             android:layout_width="match_parent"
