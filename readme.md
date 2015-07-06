@@ -16,6 +16,7 @@ $ git clone https://github.com/hhroc/yellr-android.git
 $ cd yellr-android
 $ gradle sync
 ```
+**(if running Android Studio on Mac, it`s a good idea to use Android Studio to import the project which will prompt to build and sync gradle. This is because when you try to run gradle sync on Mac from the terminal, you might run into weird issues - http://stackoverflow.com/questions/19292526/problems-with-apply-android-plugin) 
 
 ### Server
 
