@@ -78,6 +78,17 @@
         android:layout_below="@+id/frag_post_edit_text"/>
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:paddingTop="20dp"
+        android:orientation="vertical"
+        android:adjustViewBounds="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:id="@+id/frag_post_audio_container">
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -125,7 +136,7 @@
                 android:textSize="24dp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:background="@drawable/yellr_button_deactivated"
+                android:background="@drawable/yellr_button"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:paddingTop="8dp"
@@ -138,7 +149,7 @@
                 android:textSize="24dp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:background="@drawable/yellr_button_deactivated"
+                android:background="@drawable/yellr_button"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:paddingTop="8dp"
