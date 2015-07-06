@@ -188,6 +188,20 @@ public class PostFragment extends Fragment {
         audioContainer = (LinearLayout)view.findViewById(R.id.frag_post_audio_container);
         audioContainer.setVisibility(View.INVISIBLE);
 
+        //add audio record buttons to the audio container
+        mRecordButton = new RecordButton(getActivity());
+        audioContainer.addView(mRecordButton,
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        0));
+        mPlayButton = new PlayButton(getActivity());
+        audioContainer.addView(mPlayButton,
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        0));
+
         assignmentQuestion = (TextView)view.findViewById(R.id.frag_post_assignment_question);
         assignmentDescription = (TextView)view.findViewById(R.id.frag_post_assignment_description);
 
@@ -206,18 +220,8 @@ public class PostFragment extends Fragment {
                 //toast.show();
 
                 audioContainer.setVisibility(View.VISIBLE);
-                mRecordButton = new RecordButton(getActivity());
-                audioContainer.addView(mRecordButton,
-                        new LinearLayout.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                0));
-                mPlayButton = new PlayButton(getActivity());
-                audioContainer.addView(mPlayButton,
-                        new LinearLayout.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                0));
+                videoPreview.setVisibility(View.INVISIBLE);
+                imagePreview.setVisibility(View.INVISIBLE);
 
             }
         });
@@ -225,6 +229,8 @@ public class PostFragment extends Fragment {
         videoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                audioContainer.setVisibility(View.INVISIBLE);
 
             if(getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) == false){
                 Toast.makeText(getActivity(), "This device does not have a camera.", Toast.LENGTH_SHORT)
@@ -275,6 +281,8 @@ public class PostFragment extends Fragment {
         imageButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
+
+                audioContainer.setVisibility(View.INVISIBLE);
 
                 if(getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) == false){
                     Toast.makeText(getActivity(), "This device does not have a camera.", Toast.LENGTH_SHORT)
