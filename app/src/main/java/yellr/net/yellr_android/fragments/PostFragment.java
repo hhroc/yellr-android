@@ -75,7 +75,7 @@ public class PostFragment extends Fragment {
 
     //Audio Record
     private static final String LOG_TAG = "AudioRecordTest";
-    private static String mFileName = null;
+    private static String audioRecordFileName = null;
 
     private RecordButton mRecordButton = null;
     private MediaRecorder mRecorder = null;
@@ -141,10 +141,6 @@ public class PostFragment extends Fragment {
         }
 
         setHasOptionsMenu(true);
-
-        //for audio record
-        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        mFileName += "/audiorecordtest.3gp";
 
         // get the cuid
         //this.cuid = YellrUtils.getCUID(getActivity().getApplicationContext());
@@ -218,6 +214,10 @@ public class PostFragment extends Fragment {
             public void onClick(View v) {
                 //Toast toast = Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT);
                 //toast.show();
+
+                //for audio record
+                audioRecordFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+                audioRecordFileName += "/audiorecordtest.3gp";
 
                 audioContainer.setVisibility(View.VISIBLE);
                 videoPreview.setVisibility(View.INVISIBLE);
@@ -638,7 +638,7 @@ public class PostFragment extends Fragment {
     private void startPlaying() {
         mPlayer = new MediaPlayer();
         try {
-            mPlayer.setDataSource(mFileName);
+            mPlayer.setDataSource(audioRecordFileName);
             mPlayer.prepare();
             mPlayer.start();
         } catch (IOException e) {
@@ -655,7 +655,7 @@ public class PostFragment extends Fragment {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(mFileName);
+        mRecorder.setOutputFile(audioRecordFileName);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
         try {
@@ -671,6 +671,9 @@ public class PostFragment extends Fragment {
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
+        this.mediaType = "audio";
+        this.audioFilename = audioRecordFileName;
+
     }
 
     class RecordButton extends Button {
