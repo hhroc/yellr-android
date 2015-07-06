@@ -55,6 +55,8 @@ public class PostFragment extends Fragment {
     public static final String ARG_ASSIGNMENT_QUESTION = "assignmentQuestion";
     public static final String ARG_ASSIGNMENT_DESCRIPTION = "assignmentDescription";
 
+    private Uri videoFileUri;
+
     // Buttons
     Button imageButton;
     Button videoButton;
@@ -64,6 +66,8 @@ public class PostFragment extends Fragment {
     static final int SELECT_FILE = 1235;
     static final int REQUEST_VIDEO_CAPTURE = 1236;
     static final int SELECT_VIDEO_FILE = 1237;
+    static final int MEDIA_TYPE_IMAGE = 101;
+    static final int MEDIA_TYPE_VIDEO = 102;
 
     // Preview
     ImageView imagePreview;
@@ -200,41 +204,26 @@ public class PostFragment extends Fragment {
 
                     if (items[item].equals("Take Video")) {
 
-                        // Create an image file name
-                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                        String imageFileName = "JPEG_" + timeStamp + "_";
-                        File storageDir = Environment.getExternalStoragePublicDirectory(
-                                Environment.DIRECTORY_PICTURES);
-                        File imageFile = null;
-                        Log.d("video create","file: " + storageDir + "/" + imageFileName + ".jpg");
-                        try {
-                            imageFile = File.createTempFile(
-                                    imageFileName,  /* prefix */
-                                    ".jpg",         /* suffix */
-                                    storageDir      /* directory */
-                            );
-                        } catch (IOException e) {
-                            //e.printStackTrace();
-                            Log.d("video create", "ERROR:" + e.toString());
-                        }
-
-                        proposedImageFilename = imageFile.getAbsolutePath();
+                        //TODO: Set video file here for post
+                        //proposedImageFilename = imageFile.getAbsolutePath();
 
                         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                        if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                    Uri.fromFile(imageFile));
+                        //if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                            videoFileUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);  // create a file to save the video
+                            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoFileUri);  // set the image file name
+
+                            takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
                             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
-                        }
+                        //}
 
                     } else if (items[item].equals("Choose from Library")) {
 
-                        Intent takePictureIntent = new Intent(Intent.ACTION_PICK,
+                        Intent takeMovieIntent = new Intent(Intent.ACTION_PICK,
                                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        takePictureIntent.setType("video/*");
-//                            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-//                            }
-                        startActivityForResult(Intent.createChooser(takePictureIntent, "Select File"), SELECT_VIDEO_FILE);
+                        takeMovieIntent.setType("video/*");
+                        if (takeMovieIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                            startActivityForResult(Intent.createChooser(takeMovieIntent, "Select File"), SELECT_VIDEO_FILE);
+                        }
 
                     } else if (items[item].equals("Cancel")) {
                         dialog.dismiss();
@@ -420,26 +409,26 @@ public class PostFragment extends Fragment {
 
             Log.d("PostFragment.onActivityResult()", "Attempting to display image thumbnail from Gallery ...");
 
-        } else if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK && data != null) {
+        } else if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
 
             try {
 
-                Uri videoUri = data.getData();
                 imagePreview.setVisibility(View.INVISIBLE);
                 videoPreview.setVisibility(View.VISIBLE);
-                videoPreview.setVideoURI(videoUri);
+                videoPreview.setVideoURI(videoFileUri);
                 videoPreview.start();
 
-                File chosenPhotoFile = new File(videoUri.getPath());
+                Log.d("PostFragment.onActivityResult()", "Video saved to:\n" + videoFileUri);
+                Log.d("PostFragment.onActivityResult()", "Video path:\n" + videoFileUri.getPath());
 
                 this.mediaType = "video";
-                this.videoFilename = chosenPhotoFile.getAbsolutePath();
+                this.videoFilename = videoFileUri.getPath();
 
             }catch (Exception e) {
-                // todo: display error
+                Log.d("video capture", "ERROR:" + e.toString());
             }
 
-            Log.d("PostFragment.onActivityResult()", "Attempting to play movie ...");
+            Log.d("PostFragment.onActivityResult()", "Attempting to play recorded movie ...");
 
         } else if (requestCode == SELECT_VIDEO_FILE && resultCode == Activity.RESULT_OK && data != null) {
 
@@ -451,10 +440,10 @@ public class PostFragment extends Fragment {
                 videoPreview.setVideoURI(videoUri);
                 videoPreview.start();
 
-                File chosenPhotoFile = new File(videoUri.getPath());
+                File chosenVideoFile = new File(videoUri.getPath());
 
                 this.mediaType = "video";
-                this.videoFilename = chosenPhotoFile.getAbsolutePath();
+                this.videoFilename = chosenVideoFile.getAbsolutePath();
 
                 Log.d("PostFragment.onActivityResult()", "Attempting to play movie from Gallery ..." + videoUri.getPath());
 
@@ -543,5 +532,44 @@ public class PostFragment extends Fragment {
 
         // remove from history stack
         this.getActivity().finish();
+    }
+
+    /** Create a file Uri for saving an image or video */
+    private static Uri getOutputMediaFileUri(int type){
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    /** Create a File for saving an image or video */
+    private static File getOutputMediaFile(int type){
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "Yellr");
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                Log.d("Yellr", "failed to create directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE){
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_"+ timeStamp + ".jpg");
+        } else if(type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "VID_"+ timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
     }
 }
