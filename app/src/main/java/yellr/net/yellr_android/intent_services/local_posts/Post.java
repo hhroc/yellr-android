@@ -3,7 +3,7 @@ package yellr.net.yellr_android.intent_services.local_posts;
 /**
  * Created by tduffy on 3/11/2015.
  */
-public class LocalPost {
+public class Post {
 
     public int post_id;
 

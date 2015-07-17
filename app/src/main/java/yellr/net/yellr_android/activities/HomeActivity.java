@@ -24,7 +24,9 @@ import android.widget.ListView;
 import com.joanzapata.android.iconify.IconDrawable;
 import com.joanzapata.android.iconify.Iconify;
 
+import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.fragments.AboutMainFragment;
 import yellr.net.yellr_android.fragments.AssignmentsFragment;
 import yellr.net.yellr_android.fragments.LocalPostsFragment;
 import yellr.net.yellr_android.fragments.PostFragment;
@@ -54,10 +56,7 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
 
-    static int CHECK_FOR_NEW_DATA_INTERVAL = 60 * 1000; // - testing, every 10 seconds    //5 * 60 * 1000; // Check every 5 minutes ( 288 times a day  )
 
-    private PendingIntent checkHttpPendingIntent;
-    private AlarmManager checkHttpManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,44 +105,6 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                             .setTabListener(this));
         }
 
-        //ListView postListView = (ListView)this.findViewById(R.id.frag_home_local_posts_list);
-        //LocalPostsFragment.LocalPostsArrayAdapter imageAdapter = new LocalPostsFragment.LocalPostsArrayAdapter(this, R.layout.frag_home_local_post_image, imageURLArray);
-        //listView.setAdapter(imageAdapter);
-
-
-
-        Log.d("HomeActivity.onCreate()","Setting up AlarmManager for CheckHttpReceiver, delay: " + String.valueOf(CHECK_FOR_NEW_DATA_INTERVAL));
-
-        // fire handler to check for new data
-        //checkNewDataHandler.postDelayed(checkNewDatarunable, CHECK_FOR_NEW_DATA_INTERVAL);
-
-
-        // create alarm intent
-        Intent alarmIntent = new Intent(this, CheckHttpReceiver.class);
-        checkHttpPendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-
-        // setup receiver for assignments
-        IntentFilter checkHttpAssignmentsFilter = new IntentFilter(AssignmentsIntentService.ACTION_NEW_ASSIGNMENTS);
-        checkHttpAssignmentsFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        CheckHttpAssignmentsReceiver checkHttpAssignmentsReceiver = new CheckHttpAssignmentsReceiver();
-        getApplicationContext().registerReceiver(checkHttpAssignmentsReceiver, checkHttpAssignmentsFilter);
-
-        // set up receiver for stories
-        IntentFilter checkHttpStoriesFilter = new IntentFilter(StoriesIntentService.ACTION_NEW_STORIES);
-        checkHttpStoriesFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        CheckHttpStoriesReceiver checkHttpStoriesReceiver = new CheckHttpStoriesReceiver();
-        getApplicationContext().registerReceiver(checkHttpStoriesReceiver, checkHttpStoriesFilter);
-
-        // TODO: hook up reciever for messages
-
-        // TODO: hook up reciever for notifications
-
-        // start alarm manager
-        checkHttpManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        checkHttpManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), CHECK_FOR_NEW_DATA_INTERVAL, checkHttpPendingIntent);
-
-
-
     }
 
     @Override
@@ -164,14 +125,14 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                     .colorRes(R.color.black)
                     .actionBarSize()
         );
-
-        *//*Messages Icon*//*
+*/
+/*        //Messages Icon
         menu.findItem(R.id.action_messages).setIcon(
                 new IconDrawable(this, Iconify.IconValue.fa_envelope_o)
                     .colorRes(R.color.black)
                     .actionBarSize()
-        );*/
-
+        );
+*/
         /*Profile Icon*/
         menu.findItem(R.id.action_profile).setIcon(
                 new IconDrawable(this, Iconify.IconValue.fa_user)
@@ -191,9 +152,14 @@ public class HomeActivity extends ActionBarActivity implements ActionBar.TabList
                 startActivity(postIntent);
                 break;
 
-/*            case R.id.action_notification:
+            /*case R.id.action_notification:
                 Intent notificationsIntent = new Intent(this, NotificationsActivity.class);
                 startActivity(notificationsIntent);
+                break;*/
+
+            /*case R.id.action_messages:
+                Intent messagesIntent = new Intent(this, MessagesActivity.class);
+                startActivity(messagesIntent);
                 break;*/
 
             case R.id.action_profile:

@@ -78,6 +78,7 @@ public class VoteIntentService extends IntentService {
 
         Log.d("VoteIntentService.handleActionGetVote()", "Submitting vote ...");
 
+        /*
         String baseUrl = BuildConfig.BASE_URL + "/register_vote.json";
 
         // get the location, but if the user has turned off location services,
@@ -97,78 +98,85 @@ public class VoteIntentService extends IntentService {
                 + "&lat=" + lat
                 + "&lng=" + lng;
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        */
 
-        params.add(new BasicNameValuePair("post_id",String.valueOf(postId)));
-        params.add(new BasicNameValuePair("is_up_vote",YellrUtils.booleanToString(isUpVote)));
+        String baseUrl = BuildConfig.BASE_URL + "/register_vote.json";
+        String url = YellrUtils.buildUrl(getApplicationContext(),baseUrl);
+        if (url != null) {
 
-        //params.add(new BasicNameValuePair("cuid", cuid));
-        //params.add(new BasicNameValuePair("assignment_id", String.valueOf(assignmentId)));
-        //params.add(new BasicNameValuePair("language_code", languageCode));
-        //params.add(new BasicNameValuePair("title", title));
-        //params.add(new BasicNameValuePair("lat", String.valueOf(lat)));
-        //params.add(new BasicNameValuePair("lng", String.valueOf(lng)));
-        //params.add(new BasicNameValuePair("media_objects", "[\"" + mediaId + "\"]"));
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-        //
-        // derived from
-        //  http://stackoverflow.com/a/2937140
-        //
+            params.add(new BasicNameValuePair("post_id", String.valueOf(postId)));
+            params.add(new BasicNameValuePair("is_up_vote", YellrUtils.booleanToString(isUpVote)));
 
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpContext localContext = new BasicHttpContext();
-        HttpPost httpPost = new HttpPost(url);
-
-        String voteJson = "{}";
-
-        try {
-
-            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-            entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-
-            for (int index = 0; index < params.size(); index++) {
-                entityBuilder.addPart(params.get(index).getName(),
-                        new StringBody(params.get(index).getValue(), ContentType.TEXT_PLAIN));
-            }
-
-            HttpEntity entity = entityBuilder.build();
-            httpPost.setEntity(entity);
-
-            HttpResponse response = httpClient.execute(httpPost, localContext);
-            //final String toastMsg;
-            //if(response.getStatusLine().getStatusCode() == 200){
-            //    toastMsg = "Vote submitted!";
-            //} else {
-            //    toastMsg = "Problem submitting vote.";
-            //}
-
-            //handler.post(new Runnable() {
-            //    @Override
-            //    public void run() {
-            //        Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT).show();
-            //    }
-            //});
-
+            //params.add(new BasicNameValuePair("cuid", cuid));
+            //params.add(new BasicNameValuePair("assignment_id", String.valueOf(assignmentId)));
+            //params.add(new BasicNameValuePair("language_code", languageCode));
+            //params.add(new BasicNameValuePair("title", title));
+            //params.add(new BasicNameValuePair("lat", String.valueOf(lat)));
+            //params.add(new BasicNameValuePair("lng", String.valueOf(lng)));
+            //params.add(new BasicNameValuePair("media_objects", "[\"" + mediaId + "\"]"));
 
             //
-            InputStream content = response.getEntity().getContent();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-
+            // derived from
+            //  http://stackoverflow.com/a/2937140
             //
-            StringBuilder builder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpContext localContext = new BasicHttpContext();
+            HttpPost httpPost = new HttpPost(url);
+
+            String voteJson = "{}";
+
+            try {
+
+                MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+                entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+                for (int index = 0; index < params.size(); index++) {
+                    entityBuilder.addPart(params.get(index).getName(),
+                            new StringBody(params.get(index).getValue(), ContentType.TEXT_PLAIN));
+                }
+
+                HttpEntity entity = entityBuilder.build();
+                httpPost.setEntity(entity);
+
+                HttpResponse response = httpClient.execute(httpPost, localContext);
+                //final String toastMsg;
+                //if(response.getStatusLine().getStatusCode() == 200){
+                //    toastMsg = "Vote submitted!";
+                //} else {
+                //    toastMsg = "Problem submitting vote.";
+                //}
+
+                //handler.post(new Runnable() {
+                //    @Override
+                //    public void run() {
+                //        Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT).show();
+                //    }
+                //});
+
+
+                //
+                InputStream content = response.getEntity().getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+
+                //
+                StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line);
+                }
+
+                voteJson = builder.toString();
+
+                //Log.d("VoteIntentService.vote()", "JSON: " + voteJson);
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            voteJson = builder.toString();
-
-            Log.d("VoteIntentService.vote()", "JSON: " + voteJson);
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
 
     }
 
