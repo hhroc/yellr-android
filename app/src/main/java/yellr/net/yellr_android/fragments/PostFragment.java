@@ -72,6 +72,7 @@ public class PostFragment extends Fragment {
     static final int SELECT_FILE = 1235;
     static final int REQUEST_VIDEO_CAPTURE = 1236;
     static final int SELECT_VIDEO_FILE = 1237;
+    static final int SELECT_AUDIO_FILE = 1238;
     static final int MEDIA_TYPE_IMAGE = 101;
     static final int MEDIA_TYPE_VIDEO = 102;
 
@@ -217,13 +218,43 @@ public class PostFragment extends Fragment {
                 //Toast toast = Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT);
                 //toast.show();
 
-                //for audio record
-                audioRecordFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-                audioRecordFileName += "/audiorecordtest.3gp";
+                final CharSequence[] items = { "Record Audio", "Choose from Library", "Cancel" };
 
-                audioContainer.setVisibility(View.VISIBLE);
-                videoPreview.setVisibility(View.INVISIBLE);
-                imagePreview.setVisibility(View.INVISIBLE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Add Audio");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+
+                        if (items[item].equals("Record Audio")) {
+
+                            //TODO: Set video file here for post
+                            //proposedImageFilename = imageFile.getAbsolutePath();
+
+                            //for audio record
+                            audioRecordFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            audioRecordFileName += "/audiorecordtest.3gp";
+
+                            audioContainer.setVisibility(View.VISIBLE);
+                            videoPreview.setVisibility(View.INVISIBLE);
+                            imagePreview.setVisibility(View.INVISIBLE);
+
+                        } else if (items[item].equals("Choose from Library")) {
+
+                            Intent takeMovieIntent = new Intent(Intent.ACTION_PICK,
+                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            takeMovieIntent.setType("audio/*");
+                            if (takeMovieIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                                startActivityForResult(Intent.createChooser(takeMovieIntent, "Select File"), SELECT_AUDIO_FILE);
+                            }
+
+                        } else if (items[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+
 
             }
         });
