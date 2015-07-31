@@ -20,6 +20,7 @@ import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentServ
 import yellr.net.yellr_android.intent_services.stories.StoriesIntentService;
 import yellr.net.yellr_android.receivers.CheckHttpAssignmentsReceiver;
 import yellr.net.yellr_android.receivers.CheckHttpReceiver;
+import yellr.net.yellr_android.services.NewAssignmentNotifyService;
 import yellr.net.yellr_android.receivers.CheckHttpStoriesReceiver;
 import yellr.net.yellr_android.utils.YellrUtils;
 
@@ -48,6 +49,9 @@ public class SplashActivity extends Activity{
         // start alarm manager
         checkHttpManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         checkHttpManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), CHECK_FOR_NEW_DATA_INTERVAL, checkHttpPendingIntent);
+
+        //start the Yellr Assignment Fetch Service
+        startService(new Intent(getBaseContext(), NewAssignmentNotifyService.class));
 
         /*
         // setup receiver for assignments

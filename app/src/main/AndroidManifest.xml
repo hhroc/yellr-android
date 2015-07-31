@@ -11,6 +11,7 @@
     <uses-permission android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!--<meta-data android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />-->
@@ -143,6 +144,14 @@
 
         <receiver android:name=".receivers.CheckHttpReceiver" >
         </receiver>
+
+        <receiver android:name=".receivers.BootStartServiceIntentReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".services.NewAssignmentNotifyService" />
 
         <!-- checks to see if there are new assignments, and displays a notification -->
         <service android:name=".intent_services.assignments.CheckAssignmentsIntentService"

@@ -33,6 +33,7 @@ public class CheckAssignmentsIntentService extends IntentService {
         if (url != null) {
 
             try {
+
                 Log.d("CheckAssignmentsIntentService.onHandleIntent()", "Checking for new assignments ( url = '" + url + "' )");
                 assignmentsJson = YellrUtils.downloadJson(context, url);
                 //Log.d("CheckAssignmentsIntentService.onHandleIntent()", "Assignments JSON: " +assignmentsJson);
