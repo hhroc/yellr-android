@@ -212,104 +212,119 @@ public class PostFragment extends Fragment {
             assignmentDescription.setText(questionDescription);
         }
 
-        audioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast toast = Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT);
-                //toast.show();
-
-                final CharSequence[] items = { "Record Audio", "Choose from Library", "Cancel" };
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Add Audio");
-                builder.setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int item) {
-
-                        if (items[item].equals("Record Audio")) {
-
-                            //TODO: Set video file here for post
-                            //proposedImageFilename = imageFile.getAbsolutePath();
-
-                            //for audio record
-                            audioRecordFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            audioRecordFileName += "/audiorecordtest.3gp";
-
-                            audioContainer.setVisibility(View.VISIBLE);
-                            videoPreview.setVisibility(View.INVISIBLE);
-                            imagePreview.setVisibility(View.INVISIBLE);
-
-                        } else if (items[item].equals("Choose from Library")) {
-
-                            Intent takeMovieIntent = new Intent(Intent.ACTION_PICK,
-                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            takeMovieIntent.setType("audio/*");
-                            if (takeMovieIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                                startActivityForResult(Intent.createChooser(takeMovieIntent, "Select File"), SELECT_AUDIO_FILE);
-                            }
-
-                        } else if (items[item].equals("Cancel")) {
-                            dialog.dismiss();
-                        }
-                    }
-                });
-                builder.show();
-
-
-            }
-        });
-
         videoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                audioContainer.setVisibility(View.INVISIBLE);
-
-            if(getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) == false){
-                Toast.makeText(getActivity(), "This device does not have a camera.", Toast.LENGTH_SHORT)
-                        .show();
-                return;
-            }
-
-            final CharSequence[] items = { "Take Video", "Choose from Library", "Cancel" };
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Add Video");
-            builder.setItems(items, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int item) {
-
-                    if (items[item].equals("Take Video")) {
-
-                        //TODO: Set video file here for post
-                        //proposedImageFilename = imageFile.getAbsolutePath();
-
-                        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                        //if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                            videoFileUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);  // create a file to save the video
-                            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoFileUri);  // set the image file name
-
-                            takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-                            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
-                        //}
-
-                    } else if (items[item].equals("Choose from Library")) {
-
-                        Intent takeMovieIntent = new Intent(Intent.ACTION_PICK,
-                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        takeMovieIntent.setType("video/*");
-                        if (takeMovieIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                            startActivityForResult(Intent.createChooser(takeMovieIntent, "Select File"), SELECT_VIDEO_FILE);
-                        }
-
-                    } else if (items[item].equals("Cancel")) {
-                        dialog.dismiss();
-                    }
-                }
-            });
-            builder.show();
+                Toast toast = Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
+        audioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast toast = Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
+//        audioButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Toast toast = Toast.makeText(getActivity(), "Coming Soon", Toast.LENGTH_SHORT);
+//                //toast.show();
+//
+//                final CharSequence[] items = { "Record Audio", "Choose from Library", "Cancel" };
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                builder.setTitle("Add Audio");
+//                builder.setItems(items, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int item) {
+//
+//                        if (items[item].equals("Record Audio")) {
+//
+//                            //TODO: Set video file here for post
+//                            //proposedImageFilename = imageFile.getAbsolutePath();
+//
+//                            //for audio record
+//                            audioRecordFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                            audioRecordFileName += "/audiorecordtest.3gp";
+//
+//                            audioContainer.setVisibility(View.VISIBLE);
+//                            videoPreview.setVisibility(View.INVISIBLE);
+//                            imagePreview.setVisibility(View.INVISIBLE);
+//
+//                        } else if (items[item].equals("Choose from Library")) {
+//
+//                            Intent takeMovieIntent = new Intent(Intent.ACTION_PICK,
+//                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                            takeMovieIntent.setType("audio/*");
+//                            if (takeMovieIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+//                                startActivityForResult(Intent.createChooser(takeMovieIntent, "Select File"), SELECT_AUDIO_FILE);
+//                            }
+//
+//                        } else if (items[item].equals("Cancel")) {
+//                            dialog.dismiss();
+//                        }
+//                    }
+//                });
+//                builder.show();
+//
+//
+//            }
+//        });
+//
+//        videoButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                audioContainer.setVisibility(View.INVISIBLE);
+//
+//            if(getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) == false){
+//                Toast.makeText(getActivity(), "This device does not have a camera.", Toast.LENGTH_SHORT)
+//                        .show();
+//                return;
+//            }
+//
+//            final CharSequence[] items = { "Take Video", "Choose from Library", "Cancel" };
+//
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//            builder.setTitle("Add Video");
+//            builder.setItems(items, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int item) {
+//
+//                    if (items[item].equals("Take Video")) {
+//
+//                        //TODO: Set video file here for post
+//                        //proposedImageFilename = imageFile.getAbsolutePath();
+//
+//                        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+//                        //if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+//                            videoFileUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);  // create a file to save the video
+//                            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoFileUri);  // set the image file name
+//
+//                            takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+//                            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+//                        //}
+//
+//                    } else if (items[item].equals("Choose from Library")) {
+//
+//                        Intent takeMovieIntent = new Intent(Intent.ACTION_PICK,
+//                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                        takeMovieIntent.setType("video/*");
+//                        if (takeMovieIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+//                            startActivityForResult(Intent.createChooser(takeMovieIntent, "Select File"), SELECT_VIDEO_FILE);
+//                        }
+//
+//                    } else if (items[item].equals("Cancel")) {
+//                        dialog.dismiss();
+//                    }
+//                }
+//            });
+//            builder.show();
+//            }
+//        });
 
         imageButton.setOnClickListener(new View.OnClickListener() {
 
