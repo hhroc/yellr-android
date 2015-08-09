@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import yellr.net.yellr_android.activities.PostActivity;
 import yellr.net.yellr_android.intent_services.assignments.Assignment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
+import yellr.net.yellr_android.receivers.CheckHttpAssignmentsReceiver;
 import yellr.net.yellr_android.utils.YellrUtils;
 
 /**
@@ -37,7 +39,7 @@ public class AssignmentsFragment extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
-    private String cuid;
+    //private String cuid;
     private AssignmentsArrayAdapter assignmentsArrayAdapter;
 
     private Assignment[] assignments;
@@ -76,6 +78,12 @@ public class AssignmentsFragment extends Fragment {
         AssignmentsReceiver assignmentsReceiver = new AssignmentsReceiver();
         context.registerReceiver(assignmentsReceiver, assignmentsFilter);
 
+        // init background service stories reciever
+        //IntentFilter checkHttpAssignmentsFilter = new IntentFilter(AssignmentsIntentService.ACTION_NEW_ASSIGNMENTS);
+        //checkHttpAssignmentsFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        //CheckHttpAssignmentsReceiver checkHttpAssignmentsReceiver = new CheckHttpAssignmentsReceiver();
+        //context.registerReceiver(checkHttpAssignmentsReceiver, checkHttpAssignmentsFilter);
+
         assignmentsArrayAdapter = new AssignmentsArrayAdapter(getActivity(), new ArrayList<Assignment>());
     }
 
@@ -101,6 +109,11 @@ public class AssignmentsFragment extends Fragment {
             }
         });
 
+        // display pin wheel until there is something to show
+        //if ( this.assignments == null || this.assignments.length == 0 ) {
+        //    swipeRefreshLayout.setRefreshing(true);
+        //}
+
         return view;
     }
 
@@ -108,6 +121,13 @@ public class AssignmentsFragment extends Fragment {
     public void onResume() {
         Log.d("AssignmentsFragment.onResume()", "Starting assignments intent service ...");
         refreshAssignmentData();
+
+        // pop-up informing user about yellr
+        if ( YellrUtils.isFirstBoot(getActivity()) ) {
+            AboutMainFragment aboutMainFragment = new AboutMainFragment();
+            aboutMainFragment.show(getFragmentManager(), AboutMainFragment.DIALOG_SHOW_ABOUT_MAIN);
+        }
+
         super.onResume();
     }
 
@@ -133,24 +153,18 @@ public class AssignmentsFragment extends Fragment {
 
             String assignmentsJson = intent.getStringExtra(AssignmentsIntentService.PARAM_ASSIGNMENTS_JSON);
 
-            Gson gson = new Gson();
-            AssignmentsResponse response = new AssignmentsResponse();
-            try{
-                response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
-            } catch(Exception e){
-                Log.d("AssignmentsFragment.onReceive", "GSON puked");
-            }
+            assignments = YellrUtils.decodeAssignmentJson(context, assignmentsJson);
 
-            if (response.success && response.assignments != null) {
-                assignmentsArrayAdapter.clear();
-                assignments = new Assignment[response.assignments.length];
-                for (int i = 0; i < response.assignments.length; i++) {
-                    Assignment assignment = response.assignments[i];
-                    assignmentsArrayAdapter.add(assignment);
-                    assignments[i] = assignment;
+            assignmentsArrayAdapter.clear();
+
+            // make sure that there are actually assignments to populate
+            if ( assignments != null ) {
+                for (int i = 0; i < assignments.length; i++) {
+                    assignmentsArrayAdapter.add(assignments[i]);
                 }
             }
 
+            // remove the refreshing pin wheel.
             swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -185,6 +199,13 @@ public class AssignmentsFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row = super.getView(position, convertView, parent);
+
+            //LinearLayout linearLayoutWrapper = (LinearLayout)row.findViewById(R.id.frag_home_assignment_wrapper);
+            if (this.assignments.get(position).has_responded) {
+                row.setBackgroundColor(getResources().getColor(R.color.assignment_response_grey));
+            } else {
+                row.setBackgroundColor(getResources().getColor(R.color.background));
+            }
 
             TextView textViewQuestionText = (TextView) row.findViewById(R.id.frag_home_assignment_question_text);
             TextView textViewOrganization = (TextView) row.findViewById(R.id.frag_home_assignment_organization);

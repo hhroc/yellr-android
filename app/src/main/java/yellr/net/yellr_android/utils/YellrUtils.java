@@ -1,6 +1,9 @@
 package yellr.net.yellr_android.utils;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
@@ -9,14 +12,22 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.http.AndroidHttpClient;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -25,11 +36,60 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 
 import yellr.net.yellr_android.BuildConfig;
+import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.activities.PostActivity;
+import yellr.net.yellr_android.fragments.PostFragment;
+import yellr.net.yellr_android.intent_services.assignments.Assignment;
+import yellr.net.yellr_android.intent_services.assignments.AssignmentsResponse;
 
 /**
  * Created by TDuffy on 2/7/2015.
  */
 public class YellrUtils {
+
+    public static boolean isFirstBoot(Context context) {
+
+        boolean firstBoot = false;
+
+        SharedPreferences sharedPref = context.getSharedPreferences("isFirstBootAppVersion", Context.MODE_PRIVATE);
+        String isFirstBootAppVersion = sharedPref.getString("isFirstBootAppVersion", "");
+
+        if (!isFirstBootAppVersion.equals(BuildConfig.VERSION_NAME)) {
+
+            // set our return var
+            firstBoot = true;
+
+            // record our app version to the shared pref, so we return
+            // false next time.
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("isFirstBootAppVersion", BuildConfig.VERSION_NAME);
+            editor.commit();
+        }
+
+        return firstBoot;
+    }
+
+    public static boolean isFirstPost(Context context) {
+
+        boolean firstBoot = false;
+
+        SharedPreferences sharedPref = context.getSharedPreferences("isFirstPostAppVersion", Context.MODE_PRIVATE);
+        String isFirstBootAppVersion = sharedPref.getString("isFirstPostAppVersion", "");
+
+        if (!isFirstBootAppVersion.equals(BuildConfig.VERSION_NAME)) {
+
+            // set our return var
+            firstBoot = true;
+
+            // record our app version to the shared pref, so we return
+            // false next time.
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("isFirstPostAppVersion", BuildConfig.VERSION_NAME);
+            editor.commit();
+        }
+
+        return firstBoot;
+    }
 
     public static Date prettifyDateTime(String rawDateTime) {
 
@@ -77,7 +137,7 @@ public class YellrUtils {
             //}
             //return retString;
         } else if (milliSeconds < 15 * MINUTE) {
-            retString = "Moments";
+            retString = "Just now";
         } else {
             //Throw an exception instead?
         }
@@ -118,19 +178,32 @@ public class YellrUtils {
         // to see if it is negative or not.
 
         String retCount = "-1";
-        if (countString.substring(0,1).equals("-")) {
-            int downCountInt = Integer.valueOf(countString.substring(1));
-            retCount = "-" + String.valueOf(downCountInt+1);
+
+        try {
+            if (countString.substring(0, 1).equals("-")) {
+                int downCountInt = Integer.valueOf(countString.substring(1));
+                retCount = "-" + String.valueOf(downCountInt + 1);
+            }
+
+        } catch (Exception e) {
+            retCount = "0";
         }
 
         return retCount;
     }
 
     public static String shortenString(String str) {
+
         String retString = str;
-        if (str.length() > 20) {
-            retString = str.substring(0, 20) + " ...";
+
+        try {
+            if (str.length() > 20) {
+                retString = str.substring(0, 20) + " ...";
+            }
+        } catch (Exception e) {
+            retString = "";
         }
+
         return retString;
     }
 
@@ -145,7 +218,7 @@ public class YellrUtils {
         return version;
     }
 
-    public static String buildUrl(Context context, String baseUrl ) {
+    public static String buildUrl(Context context, String baseUrl) {
 
         String url = null;
 
@@ -155,15 +228,23 @@ public class YellrUtils {
             String languageCode = Locale.getDefault().getLanguage();
 
             url = baseUrl
-                + "?cuid=" + YellrUtils.getCUID(context)
-                + "&language_code=" + languageCode
-                + "&lat=" + latLng[0]
-                + "&lng=" + latLng[1]
-                + "&platform=" + "Android"
-                + "&app_version=" + YellrUtils.getAppVersion(context);
+                    + "?cuid=" + YellrUtils.getCUID(context)
+                    + "&language_code=" + languageCode
+                    + "&lat=" + latLng[0]
+                    + "&lng=" + latLng[1]
+                    + "&platform=" + "Android"
+                    + "&app_version=" + YellrUtils.getAppVersion(context);
         }
 
         return url;
+    }
+
+    // derived from
+    //     http://stackoverflow.com/a/7472559
+    public static double roundLocation(double d) {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        double retVal = Double.valueOf(twoDForm.format(d));
+        return retVal;
     }
 
     public static double[] getLocation(Context context) {
@@ -190,8 +271,8 @@ public class YellrUtils {
                     break;
                 }
             }
-        }catch (Exception ex) {
-            Log.d("YellrUtils.getLocation()","Error: " + ex.toString());
+        } catch (Exception ex) {
+            Log.d("YellrUtils.getLocation()", "Error: " + ex.toString());
         }
 
         // default to invalid lat/lng values
@@ -204,44 +285,67 @@ public class YellrUtils {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
 
-            latLng =  new double[2];
-            latLng[0] = latitude;
-            latLng[1] = longitude;
-        }
-        else if (BuildConfig.SPOOF_LOCATION.equals("1")) {
-            latLng =  new double[2];
+            // round the location for obfuscation.  Rounding
+            // to two decimal places provides approximately
+            // half a km of obfuscation.
+            latLng = new double[2];
+            latLng[0] = roundLocation(latitude);
+            latLng[1] = roundLocation(longitude);
+
+            YellrUtils.saveLocation(context, latLng[0], latLng[1]);
+
+        } else if (BuildConfig.SPOOF_LOCATION.equals("1")) {
+
+            latLng = new double[2];
             latLng[0] = 43.1656;
             latLng[1] = -77.6114;
+
+        } else {
+
+            Log.d("YellrUtils.getLocation()", "Pulling from saved location ...");
+
+            // we may have lost location, let's see if we have one saved.
+            // note: if we don't have a saved location, or that saved
+            //       location is invalid, this will return null.
+            latLng = YellrUtils.getSavedLocation(context);
+
+            if ( latLng == null ) {
+                Log.d("YellrUtils.getLocation()", "WARNING: Pulled location was null.");
+            } else {
+                Log.d("YellrUtils.getLocation()", "Pulled location was valid.");
+            }
         }
 
-        //} else {
-        //    Log.d("YellrUtils.getLocation()", "No location available, defaulting to Home Location");
-        //    Float[] latLng = YellrUtils.getHomeLocation(context);
-        //    latitude = latLng[0];
-        //    longitude = latLng[1];
-        //}
-
-        /*
-        LocationDetector myloc = new LocationDetector(
-                context);
-        //double myLat = 0;
-        //double myLong = 0;
-        double latitude = 43.1656;
-        double longitude = -77.6114;
-        if (myloc.canGetLocation) {
-
-            latitude = myloc.getLatitude();
-            longitude = myloc.getLongitude();
-
-            Log.v("get location values", Double.toString(latitude) + ", " + Double.toString(longitude));
-        }
-        */
-
-
-
+        //Log.d("YellrUtils.getLocation()", "Location: " + String.valueOf(latLng));
 
         return latLng;
     }
+
+    public static void saveLocation(Context context, double lat, double lng) {
+        SharedPreferences sharedPref = context.getSharedPreferences("lastLocation", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("lastLat", String.valueOf(lat));
+        editor.putString("lastLng", String.valueOf(lng));
+        editor.commit();
+    }
+
+    public static double[] getSavedLocation(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("lastLocation", Context.MODE_PRIVATE);
+        String lastLatStr = sharedPref.getString("lastLat", null);
+        String lastLngStr = sharedPref.getString("lastLng", null);
+        double [] latLng = null;
+        if ( lastLatStr != null && !lastLatStr.equals(null) && lastLngStr != null && !lastLngStr.equals(null)) {
+            latLng = new double[2];
+            try {
+                latLng[0] = Double.parseDouble(lastLatStr);
+                latLng[1] = Double.parseDouble(lastLngStr);
+            } catch (NumberFormatException e) {
+                latLng = null;
+            }
+        }
+        return latLng;
+    }
+
 
     public static void resetHomeLocation(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("homeLocationSet", Context.MODE_PRIVATE);
@@ -375,7 +479,96 @@ public class YellrUtils {
         return bitmap;
     }
 
-    public static void setCurrentAssignmentIds(Context context, String[] currentAssignmentIds) {
+    public static String downloadJson(Context context, String url){
+
+        String jsonString = "{}";
+
+        try {
+
+            //
+            HttpClient client = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse response = client.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+
+            //
+            InputStream content = entity.getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+
+            //
+            StringBuilder builder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+            }
+
+            jsonString = builder.toString();
+
+            Log.d("YellrUtils.downloadJson()", "Successfully downloaded JSON from server");
+
+        } catch (Exception e) {
+            Log.d("YellrUtils.downloadJson()", "Error: " + e.toString());
+        }
+
+        return jsonString;
+    }
+
+    public static Assignment[] decodeAssignmentJson(Context context, String assignmentsJson) {
+        Gson gson = new Gson();
+        AssignmentsResponse response = new AssignmentsResponse();
+        try{
+            response = gson.fromJson(assignmentsJson, AssignmentsResponse.class);
+        } catch(Exception e){
+            Log.d("YellrUtils.decodeAssignmentJson()", "ERROR: GSON puked.");
+        }
+
+        Assignment[] assignments = null;
+        if (response.success && response.assignments != null) {
+            //assignmentsArrayAdapter.clear();
+            assignments = new Assignment[response.assignments.length];
+            for (int i = 0; i < response.assignments.length; i++) {
+                Assignment assignment = response.assignments[i];
+                //assignmentsArrayAdapter.add(assignment);
+                assignments[i] = assignment;
+            }
+        }
+
+        return assignments;
+    }
+
+    public static void buildNewAssignmentNotification(Context context, Assignment assignment) {
+        Intent assignmentIntent;
+        assignmentIntent = new Intent(context, PostActivity.class);
+        assignmentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.icon)
+                        .setContentTitle(assignment.question_text)
+                        .setContentText(assignment.description);
+
+        assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_QUESTION, assignment.question_text);
+        assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_DESCRIPTION, assignment.description);
+        assignmentIntent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, assignment.assignment_id);
+
+        PendingIntent pendingAssignmentIntent = PendingIntent.getActivity(context, 0, assignmentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(pendingAssignmentIntent);
+        mBuilder.setAutoCancel(true); // clear notification after click
+        int assignmentNotificationId = 2;
+        NotificationManager mNotificationMgr =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationMgr.notify(assignmentNotificationId, mBuilder.build());
+    }
+
+    public static void setCurrentAssignmentIds(Context context, Assignment[] assignments) { //String[] currentAssignmentIds) {
+
+        String[] currentAssignmentIds = new String[assignments.length];
+        for (int i = 0; i < assignments.length; i++) {
+            currentAssignmentIds[i] = String.valueOf(assignments[i].assignment_id);
+        }
+        //YellrUtils.setCurrentAssignmentIds(context, currentAssignmentIds);
+
         SharedPreferences currentAssignmentIdsCountPref = context.getSharedPreferences("current_assignment_ids_count", Context.MODE_PRIVATE);
         SharedPreferences currentAssignmentIdsPref = context.getSharedPreferences("current_assignment_ids", Context.MODE_PRIVATE);
 

@@ -7,9 +7,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!--<meta-data android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />-->
@@ -45,7 +47,7 @@
             android:name=".activities.PostActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/activity_post_title"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".activities.ViewStoryActivity"
@@ -69,6 +71,23 @@
             android:label="@string/activity_location_title"
             android:parentActivityName=".activities.SplashActivity" >
             android:noHistory="true">
+        </activity>
+        <activity
+            android:name=".activities.ViewPostActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/activity_view_post_title"
+            android:parentActivityName=".activities.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".activities.MessagesActivity"
+            android:label="@string/title_activity_messages"
+            android:parentActivityName=".activities.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.HomeActivity" />
         </activity>
 
         <service
@@ -95,6 +114,8 @@
             android:name=".intent_services.publish_post.PublishPostIntentService"
             android:exported="false" >
         </service>
+
+
 
         <activity
             android:name=".activities.NotificationsActivity"
@@ -123,6 +144,30 @@
 
         <receiver android:name=".receivers.CheckHttpReceiver" >
         </receiver>
+
+        <receiver android:name=".receivers.BootStartServiceIntentReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".services.NewAssignmentNotifyService" />
+
+        <!-- checks to see if there are new assignments, and displays a notification -->
+        <service android:name=".intent_services.assignments.CheckAssignmentsIntentService"
+                 android:exported="false">
+        </service>
+
+        <!--
+        <receiver android:name=".receivers.CheckHttpAssignmentsReceiver" >
+            <intent-filter>
+                <action android:name="yellr.net.yellr_android.action.NEW_ASSIGNMENTS" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receivers.CheckHttpStoriesReceiver" >
+        </receiver>
+        -->
 
         <service
             android:name=".intent_services.data.DataIntentService"

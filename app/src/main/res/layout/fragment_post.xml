@@ -38,11 +38,11 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/frag_post_assignment_description"
+        android:id="@+id/frag_post_anonymous_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/frag_post_assignment_description"
-        android:textSize="16sp"
+        android:text="@string/frag_post_anonymous"
+        android:layout_marginBottom="5dp"
         android:layout_below="@+id/frag_post_top_container"/>
 
     <EditText
@@ -68,18 +68,44 @@
         android:layout_centerInParent="true"
         android:layout_below="@+id/frag_post_edit_text"/>
 
+    <VideoView
+        android:id="@+id/frag_post_video_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:paddingTop="20dp"
+        android:adjustViewBounds="true"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/frag_post_edit_text"/>
+
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:paddingTop="20dp"
+        android:orientation="horizontal"
+        android:adjustViewBounds="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:id="@+id/frag_post_audio_container">
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/frag_post_media_wrapper"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentBottom="true">
 
+        <!--
         <View
+            android:id="@+id/frag_post_media_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/black"
-            android:layout_marginBottom="3dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+        -->
 
+        <!--
         <TextView
             android:id="@+id/frag_post_media_text"
             android:layout_width="fill_parent"
@@ -88,10 +114,15 @@
             android:paddingTop="3dp"
             android:paddingBottom="3dp"/>
 
+        -->
+
         <LinearLayout
             android:id="@+id/frag_post_media_buttons_layout"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            >
 
             <Button
                 android:id="@+id/frag_post_photo_button"
@@ -115,7 +146,7 @@
                 android:textSize="24dp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:background="@drawable/yellr_button_deactivated"
+                android:background="@drawable/yellr_button"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:paddingTop="8dp"
@@ -128,7 +159,7 @@
                 android:textSize="24dp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:background="@drawable/yellr_button_deactivated"
+                android:background="@drawable/yellr_button"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:paddingTop="8dp"
@@ -137,5 +168,39 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/frag_post_assignment_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/frag_post_assignment_description"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:layout_below="@+id/frag_post_media_wrapper"/>
+
+    <EditText
+        android:id="@+id/frag_post_edit_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:lines="4"
+        android:gravity="top"
+        android:textCursorDrawable="@null"
+        android:textSize="20sp"
+        android:hint="@string/frag_post_default_text"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/frag_post_assignment_description"/>
+
+    <ImageView
+        android:id="@+id/frag_post_image_preview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:adjustViewBounds="true"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/frag_post_edit_text"/>
+
+
 
 </RelativeLayout>
