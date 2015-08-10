@@ -100,6 +100,10 @@
     <!-- Messages -->
     <string name="title_activity_messages">Messages</string>
 
+    <!-- Poll -->
+    <string name="activity_poll_title">Poll</string>
+    <string name="frag_poll_title">Poll</string>
+
     <!-- Post -->
     <string name="activity_post_title">New Post</string>
     <string name="frag_post_anonymous">All posts are anonymous.</string>
