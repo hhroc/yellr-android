@@ -196,6 +196,7 @@ public class LocalPostsFragment extends Fragment {
 
             intent.putExtra(ViewPostFragment.ARG_POST_LIST_POSITION, position);
 
+            intent.putExtra(ViewPostFragment.ARG_POST_ID, localPosts[position].post_id);
             intent.putExtra(ViewPostFragment.ARG_POST_DATETIME, localPosts[position].post_datetime);
             intent.putExtra(ViewPostFragment.ARG_POST_QUESTION_TEXT, localPosts[position].question_text);
             intent.putExtra(ViewPostFragment.ARG_POST_UP_VOTE_COUNT, localPosts[position].up_vote_count);

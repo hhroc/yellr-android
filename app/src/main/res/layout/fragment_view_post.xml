@@ -178,20 +178,25 @@
                     />
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="10dp"
-                android:layout_centerHorizontal="true"
-                >
+                android:orientation="horizontal" >
+
                 <Button
                     android:id="@+id/report_this_post"
-                    android:layout_height="60dp"
-                    android:layout_width="120dp"
-                    android:layout_centerHorizontal="true"
-                    android:text="@string/report_post" />
-            </LinearLayout>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:text="@string/report_post"
+                    android:textColor="#0000FF"
+                    android:background="?android:attr/selectableItemBackground"
+                    />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

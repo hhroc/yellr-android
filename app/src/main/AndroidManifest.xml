@@ -115,6 +115,10 @@
             android:exported="false" >
         </service>
 
+        <service
+            android:name=".intent_services.report_post.ReportPostIntentService"
+            android:exported="false" >
+        </service>
 
 
         <activity
