@@ -78,6 +78,9 @@
     <string name="fragment_local_posts_title">Local</string>
     <string name="anonymous_user">User Anonimo</string>
 
+    <!-- View Posts -->
+    <string name="activity_view_post_title">Mensaje</string>
+
     <!-- Assignments -->
     <string name="fragment_assignments_title">Asignaciones</string>
 
@@ -123,5 +126,7 @@
     <!-- <string name="action_settings">Settings</string> -->
 
     <string name="hello_blank_fragment">Hola que tal fragment</string>
+
+    <string name="report_post">Reportar mensaje</string>
 
 </resources>
