@@ -101,6 +101,10 @@
     <!-- Messages -->
     <string name="title_activity_messages">Mensajes</string>
 
+    <!-- Poll -->
+    <string name="activity_poll_title">Múltiples</string>
+    <string name="frag_poll_title">Múltiples</string>
+
     <!-- Post -->
     <string name="activity_post_title">Neuvo Reportaje</string>
     <string name="frag_post_anonymous">All posts are anonymous.</string>
