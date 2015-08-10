@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import yellr.net.yellr_android.R;
+import yellr.net.yellr_android.activities.PollActivity;
 import yellr.net.yellr_android.activities.PostActivity;
 import yellr.net.yellr_android.intent_services.assignments.Assignment;
 import yellr.net.yellr_android.intent_services.assignments.AssignmentsIntentService;
@@ -173,6 +174,15 @@ public class AssignmentsFragment extends Fragment {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+//            Intent intent;
+//            intent = new Intent(getActivity().getApplicationContext(), PollActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//            intent.putExtra(PollFragment.ARG_POLL_TEXT, assignments[position].question_text);
+//            intent.putExtra(PollFragment.ARG_POLL_OPTIONS, assignments[position].description);
+//            intent.putExtra(PollFragment.ARG_ASSIGNMENT_ID, assignments[position].assignment_id);
+
 
             Intent intent;
             intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);

@@ -14,6 +14,7 @@ public class Assignment {
 
     public String question_text;
     public String description;
+    //public String post_type; //post | poll
 
     public String answer0;
     public String answer1;

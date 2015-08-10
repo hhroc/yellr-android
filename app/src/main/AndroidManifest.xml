@@ -49,6 +49,14 @@
             android:label="@string/activity_post_title"
             android:windowSoftInputMode="adjustPan">
         </activity>
+
+        <activity
+            android:name=".activities.PollActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/activity_post_title"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+
         <activity
             android:name=".activities.ViewStoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -115,6 +123,10 @@
             android:exported="false" >
         </service>
 
+        <service
+            android:name=".intent_services.report_post.ReportPostIntentService"
+            android:exported="false" >
+        </service>
 
 
         <activity

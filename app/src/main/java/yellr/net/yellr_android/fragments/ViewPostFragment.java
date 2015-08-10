@@ -3,13 +3,18 @@ package yellr.net.yellr_android.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.intent_services.local_posts.MediaObject;
 import yellr.net.yellr_android.intent_services.local_posts.Post;
+import yellr.net.yellr_android.intent_services.post_vote.VoteIntentService;
+import yellr.net.yellr_android.intent_services.report_post.ReportPostIntentService;
 import yellr.net.yellr_android.utils.LocalPostViewHolder;
 
 /**
@@ -19,6 +24,7 @@ public class ViewPostFragment extends Fragment {
 
     public static final String ARG_POST_LIST_POSITION = "postListPosition";
 
+    public static final String ARG_POST_ID = "postId";
     public static final String ARG_POST_DATETIME = "postDateTime";
     public static final String ARG_POST_QUESTION_TEXT = "postQuestionText";
     public static final String ARG_POST_UP_VOTE_COUNT = "postUpVoteCount";
@@ -30,6 +36,8 @@ public class ViewPostFragment extends Fragment {
     public static final String ARG_POST_MEDIA_OBJECT_FILENAME = "postMediaObjectFilename";
     public static final String ARG_POST_MEDIA_OBJECT_MEDIA_TYPE = "postMediaObjectMediaType";
 
+    Button reportButton;
+
     public ViewPostFragment() {
 
     }
@@ -39,12 +47,15 @@ public class ViewPostFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_post, container, false);
 
-        Post post = new Post();
+        final Post post = new Post();
+
+        this.reportButton = (Button)view.findViewById(R.id.report_this_post);
 
         Intent intent = getActivity().getIntent();
 
         int position = intent.getIntExtra(ViewPostFragment.ARG_POST_LIST_POSITION, 0);
 
+        post.post_id = intent.getIntExtra(ViewPostFragment.ARG_POST_ID, 0);
         post.post_datetime = intent.getStringExtra(ViewPostFragment.ARG_POST_DATETIME);
         post.question_text = intent.getStringExtra(ViewPostFragment.ARG_POST_QUESTION_TEXT);
         post.up_vote_count = intent.getIntExtra(ViewPostFragment.ARG_POST_UP_VOTE_COUNT,0);
@@ -63,6 +74,20 @@ public class ViewPostFragment extends Fragment {
         LocalPostViewHolder localPostViewHolder = new LocalPostViewHolder(getActivity().getApplicationContext(), position, view, true);
 
         localPostViewHolder.build(getActivity().getApplicationContext(), post);
+
+        this.reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast toast = Toast.makeText(getActivity(), "Report Received!", Toast.LENGTH_SHORT);
+                toast.show();
+
+                Intent reportPostIntent = new Intent(getActivity().getApplicationContext(), ReportPostIntentService.class);
+                reportPostIntent.putExtra(ReportPostIntentService.PARAM_POST_ID, post.post_id);
+                getActivity().startService(reportPostIntent);
+
+            }
+
+        });
 
         return view;
     }
