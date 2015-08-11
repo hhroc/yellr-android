@@ -635,7 +635,6 @@ public class PostFragment extends Fragment {
         postIntent.putExtra(PublishPostIntentService.PARAM_VIDEO_FILENAME, this.videoFilename);
 
         Log.d("SubmitPostToYellr()", "Starting PublishPostIntentService intent ...");
-        Log.d("1.SubmitPostToYellr()Post()", this.videoFilename);
 
         Toast.makeText(getActivity(), R.string.frag_post_toast_sending_post, Toast.LENGTH_SHORT).show();
 
