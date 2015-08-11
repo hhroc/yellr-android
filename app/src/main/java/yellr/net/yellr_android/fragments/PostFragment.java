@@ -3,6 +3,7 @@ package yellr.net.yellr_android.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -483,9 +484,9 @@ public class PostFragment extends Fragment {
                 File chosenPhotoFile = new File(photoUri.getPath());
 
                 this.mediaType = "image";
-                this.imageFilename = chosenPhotoFile.getAbsolutePath();
+                this.imageFilename = getRealPathFromURI(photoUri);
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 // todo: display error
             }
 
@@ -525,7 +526,7 @@ public class PostFragment extends Fragment {
                 File chosenVideoFile = new File(videoUri.getPath());
 
                 this.mediaType = "video";
-                this.videoFilename = chosenVideoFile.getAbsolutePath();
+                this.videoFilename = getRealPathFromURI(videoUri);
 
                 Log.d("PostFragment.onActivityResult()", "Attempting to play movie from Gallery ..." + videoUri.getPath());
 
@@ -547,6 +548,17 @@ public class PostFragment extends Fragment {
         String picturePath = cursor.getString(columnIndex);
         cursor.close();
         return BitmapFactory.decodeFile(picturePath);
+    }
+
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        CursorLoader loader = new CursorLoader(getActivity().getApplicationContext(), contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
     }
 
     @Override
@@ -623,6 +635,7 @@ public class PostFragment extends Fragment {
         postIntent.putExtra(PublishPostIntentService.PARAM_VIDEO_FILENAME, this.videoFilename);
 
         Log.d("SubmitPostToYellr()", "Starting PublishPostIntentService intent ...");
+        Log.d("1.SubmitPostToYellr()Post()", this.videoFilename);
 
         Toast.makeText(getActivity(), R.string.frag_post_toast_sending_post, Toast.LENGTH_SHORT).show();
 

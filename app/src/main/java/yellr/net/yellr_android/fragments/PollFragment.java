@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import yellr.net.yellr_android.R;
@@ -78,7 +79,14 @@ public class PollFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_poll, container, false);
 
-        submitButton = (Button)view.findViewById(R.id.frag_post_submit_button);
+        pollOptionContainer = (LinearLayout) view.findViewById(R.id.frag_poll_container);
+        for(int i = 0; i < 4; i++) {
+            CheckBox cb = new CheckBox(getActivity().getApplicationContext());
+            cb.setText("Option " + i + " Some more options");
+            pollOptionContainer.addView(cb);
+        }
+
+        submitButton = (Button) view.findViewById(R.id.frag_post_submit_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

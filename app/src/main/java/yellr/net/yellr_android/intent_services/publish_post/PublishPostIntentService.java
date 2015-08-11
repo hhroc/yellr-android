@@ -78,8 +78,10 @@ public class PublishPostIntentService extends IntentService {
         String text = intent.getStringExtra(PARAM_TEXT);
         String mediaType = intent.getStringExtra(PARAM_MEDIA_TYPE);
         String imageFilename = intent.getStringExtra(PARAM_IMAGE_FILENAME);
-        String audioFilename = intent.getStringExtra(PARAM_VIDEO_FILENAME);
-        String videoFilename = intent.getStringExtra(PARAM_AUDIO_FILENAME);
+        String audioFilename = intent.getStringExtra(PARAM_AUDIO_FILENAME);
+        String videoFilename = intent.getStringExtra(PARAM_VIDEO_FILENAME);
+
+        Log.d("2.SubmitPostToYellr()Post()",videoFilename);
 
         //String mediaObjectDefinitionsJson = intent.getStringExtra(PARAM_MEDIA_OBJECT_DEFINITIONS_JSON);
 
@@ -108,8 +110,8 @@ public class PublishPostIntentService extends IntentService {
                                             String audioFilename,
                                             String videoFilename) {
 
-        Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Uploading media objects ...");
-
+        //Log.d("PublishPostIntentService.handleActionGetPublishPost()", "Uploading media objects ...");
+        Log.d("3.SubmitPostToYellr()Post()", videoFilename);
 
         //String mediaType = "text";
         String mediaFilename = "";
@@ -119,13 +121,29 @@ public class PublishPostIntentService extends IntentService {
         switch (mediaType) {
             case "text":
                 //mediaType = "text";
+                //Log.d("PublishPostIntentService.Case", "Text");
                 mediaFilename = "";
                 mediaText = text;
                 mediaCaption = "";
                 break;
             case "image":
                 //mediaType = "image";
+                //Log.d("PublishPostIntentService.Case", "Image");
                 mediaFilename = imageFilename;
+                mediaText = "";
+                mediaCaption = text;
+                break;
+            case "audio":
+                //mediaType = "image";
+                //Log.d("PublishPostIntentService.Case", "Audio");
+                mediaFilename = audioFilename;
+                mediaText = "";
+                mediaCaption = text;
+                break;
+            case "video":
+                //mediaType = "image";
+                //Log.d("PublishPostIntentService.Case", "Video");
+                mediaFilename = videoFilename;
                 mediaText = "";
                 mediaCaption = text;
                 break;
@@ -135,6 +153,9 @@ public class PublishPostIntentService extends IntentService {
         }
 
         // TODO: switch on media type
+
+        //Log.d("PublishPostIntentService.MediaFileName", mediaFilename);
+        Log.d("4.SubmitPostToYellr()Post()", mediaFilename);
 
         String mediaObjectResponseJson = uploadMedia(
                 mediaType,
@@ -282,7 +303,12 @@ public class PublishPostIntentService extends IntentService {
                                String mediaText,
                                String mediaCaption) {
 
-        Log.d("uploadMedia()", "media type: " + mediaType);
+
+        Log.d("5.SubmitPostToYellr()Post()", mediaFilename);
+        Log.d("uploadMedia()", "hello media type: " + mediaType);
+        Log.d("uploadMedia()", "hello media file name: " + mediaFilename);
+        Log.d("uploadMedia()", "hello media text: " + mediaText);
+        Log.d("uploadMedia()", "hello media caption: " + mediaCaption);
         //Log.d("uploadMedia()", "param name: " + params.get(index).getName());
 
         /*
@@ -313,10 +339,12 @@ public class PublishPostIntentService extends IntentService {
 
             //params.add(new BasicNameValuePair("cuid", cuid));
             params.add(new BasicNameValuePair("media_type", mediaType));
-            params.add(new BasicNameValuePair("media_type", mediaType));
+            //params.add(new BasicNameValuePair("media_type", mediaType));
 
+            Log.d("6.SubmitPostToYellr()Post()", mediaFilename);
             if (!mediaFilename.equals("")) {
                 params.add(new BasicNameValuePair("media_file", mediaFilename));
+                Log.d("7.SubmitPostToYellr()Post()", mediaFilename);
             }
 
             if (!mediaText.equals("")) {
@@ -348,6 +376,7 @@ public class PublishPostIntentService extends IntentService {
                     //if (mediaType != "text") {
                     // If the key equals to "media_file", we use FileBody to transfer the data
 
+                    Log.d("8.SubmitPostToYellr()Post()", params.get(index).getValue());
                     Log.d("uploadMedia()", "adding binary file: " + params.get(index).getValue());
 
                     entityBuilder.addPart(params.get(index).getName(),

@@ -175,22 +175,22 @@ public class AssignmentsFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-//            Intent intent;
-//            intent = new Intent(getActivity().getApplicationContext(), PollActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//            intent.putExtra(PollFragment.ARG_POLL_TEXT, assignments[position].question_text);
-//            intent.putExtra(PollFragment.ARG_POLL_OPTIONS, assignments[position].description);
-//            intent.putExtra(PollFragment.ARG_ASSIGNMENT_ID, assignments[position].assignment_id);
-
-
             Intent intent;
-            intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
+            intent = new Intent(getActivity().getApplicationContext(), PollActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            intent.putExtra(PostFragment.ARG_ASSIGNMENT_QUESTION, assignments[position].question_text);
-            intent.putExtra(PostFragment.ARG_ASSIGNMENT_DESCRIPTION, assignments[position].description);
-            intent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, assignments[position].assignment_id);
+            intent.putExtra(PollFragment.ARG_POLL_TEXT, assignments[position].question_text);
+            intent.putExtra(PollFragment.ARG_POLL_OPTIONS, assignments[position].description);
+            intent.putExtra(PollFragment.ARG_ASSIGNMENT_ID, assignments[position].assignment_id);
+
+
+//            Intent intent;
+//            intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//            intent.putExtra(PostFragment.ARG_ASSIGNMENT_QUESTION, assignments[position].question_text);
+//            intent.putExtra(PostFragment.ARG_ASSIGNMENT_DESCRIPTION, assignments[position].description);
+//            intent.putExtra(PostFragment.ARG_ASSIGNMENT_ID, assignments[position].assignment_id);
 
             startActivity(intent);
         }
