@@ -4,11 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
 
@@ -31,16 +34,20 @@ public class LocalPostViewHolder {
     public final TextView textViewPostDateTime;
     public final TextView textViewPostText;
     public final ImageView imageViewPostImage;
+    public VideoView videoViewPostVideo;
     public final Button buttonPostUpVote;
     public final TextView textViewPostUpVoteCount;
     public final TextView textViewPostDownVoteCount;
     public final Button buttonPostDownVote;
     public final TextView textViewFullDateTime;
 
+    public final boolean isViewPost;
+
 
     public LocalPostViewHolder(Context context, int position, View row, boolean isViewPost) {
 
         this.position = position;
+        this.isViewPost = isViewPost;
 
         Typeface font = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
 
@@ -50,6 +57,7 @@ public class LocalPostViewHolder {
             this.textViewPostDateTime = (TextView) row.findViewById(R.id.frag_view_post_datetime);
             this.textViewPostText = (TextView) row.findViewById(R.id.frag_view_post_text);
             this.imageViewPostImage = (ImageView) row.findViewById(R.id.frag_view_post_image);
+            this.videoViewPostVideo = (VideoView) row.findViewById(R.id.frag_view_post_video);
             this.buttonPostUpVote = (Button) row.findViewById(R.id.frag_view_post_button_up_vote);
             this.textViewPostUpVoteCount = (TextView) row.findViewById(R.id.frag_view_post_up_vote_count);
             this.textViewPostDownVoteCount = (TextView) row.findViewById(R.id.frag_view_post_down_vote_count);
@@ -79,6 +87,11 @@ public class LocalPostViewHolder {
     }
     
     public void build(final Context context, final Post post) {
+
+        //hide video view
+        if (this.isViewPost) {
+            this.videoViewPostVideo.setVisibility(View.GONE);
+        }
 
         //
         // Question Text
@@ -135,6 +148,33 @@ public class LocalPostViewHolder {
             this.textViewPostText.setText(mediaCaption);
         }
 
+        //Video view for videos
+
+        if (this.isViewPost) {
+            if (mediaType.equals("video")) {
+                try {
+
+                    String url = BuildConfig.BASE_URL + "/media/" + YellrUtils.getPreviewImageName(post.media_objects[0].file_name);
+                    url = url.replace("p.mp4",".mp4");
+                    Log.d("Video URL", url);
+
+                    this.imageViewPostImage.setVisibility(View.GONE);
+                    this.videoViewPostVideo.setVisibility(View.VISIBLE);
+
+                    MediaController mc = new MediaController(context);
+                    mc.setAnchorView(this.videoViewPostVideo);
+                    mc.setMediaPlayer(this.videoViewPostVideo);
+                    Uri video = Uri.parse(url);
+                    this.videoViewPostVideo.setMediaController(mc);
+                    this.videoViewPostVideo.setVideoURI(video);
+                    this.videoViewPostVideo.start();
+
+                } catch (Exception e) {
+                    Log.d("LocalPostsArrayAdapter.getView().VideoPlayer", "ERROR: " + e.toString());
+                }
+            }
+        }
+
         //
         // Image View (optional)
         //
@@ -145,6 +185,9 @@ public class LocalPostViewHolder {
                 String url = BuildConfig.BASE_URL + "/media/" + YellrUtils.getPreviewImageName(post.media_objects[0].file_name);
 
                 this.imageViewPostImage.setVisibility(View.VISIBLE);
+                if (this.isViewPost) {
+                    this.videoViewPostVideo.setVisibility(View.GONE);
+                }
                 Picasso.with(context)
                         .load(url)
                         .into(this.imageViewPostImage);

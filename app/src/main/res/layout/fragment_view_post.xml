@@ -97,6 +97,15 @@
                 android:paddingLeft="15dp"
                 />
 
+            <VideoView
+                android:id="@+id/frag_view_post_video"
+                android:layout_width="fill_parent"
+                android:layout_height="275dp"
+                android:layout_marginTop="0dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                />
+
             <TextView
                 android:id="@+id/frag_view_post_full_datetime"
                 android:layout_width="fill_parent"
