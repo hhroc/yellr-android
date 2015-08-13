@@ -558,6 +558,7 @@ public class PostFragment extends Fragment {
         cursor.moveToFirst();
         String result = cursor.getString(column_index);
         cursor.close();
+        Log.d("PostFragment.getRealPathFromURI()", result);
         return result;
     }
 
@@ -748,6 +749,8 @@ public class PostFragment extends Fragment {
         mRecorder = null;
         this.mediaType = "audio";
         this.audioFilename = audioRecordFileName;
+        Log.d("SubmitPostToYellr()AudioFIlePath", audioRecordFileName);
+        //getRealPathFromURI
 
     }
 

@@ -543,7 +543,7 @@ public class YellrUtils {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.icon)
+                        .setSmallIcon(getNotificationIcon())
                         .setContentTitle(assignment.question_text)
                         .setContentText(assignment.description);
 
@@ -559,6 +559,11 @@ public class YellrUtils {
         NotificationManager mNotificationMgr =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationMgr.notify(assignmentNotificationId, mBuilder.build());
+    }
+
+    private static int getNotificationIcon() {
+        boolean whiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        return whiteIcon ? R.drawable.ic_stat_y : R.drawable.icon;
     }
 
     public static void setCurrentAssignmentIds(Context context, Assignment[] assignments) { //String[] currentAssignmentIds) {
