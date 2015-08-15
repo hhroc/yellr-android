@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,8 +64,12 @@ public class ViewPostFragment extends Fragment {
     Button reportButton;
     public String mediatype;
 
-    public static VideoView videoViewPostVideoInner;
-    MediaController mediaCtrl;
+    LinearLayout videoViewPostVideo;
+    public VideoView videoViewPostVideoInner;
+    private SeekBar vseekbar;
+    private ImageButton vmedia_pause, vmedia_play;
+    public TextView vduration;
+    private double vtimeElapsed = 0, vfinalTime = 0;
 
     LinearLayout audioContainer;
     private MediaPlayer mediaPlayer;
@@ -89,8 +92,8 @@ public class ViewPostFragment extends Fragment {
         final Post post = new Post();
 
         this.reportButton = (Button)view.findViewById(R.id.report_this_post);
+        this.videoViewPostVideo = (LinearLayout) view.findViewById(R.id.frag_view_post_video);
         this.videoViewPostVideoInner = (VideoView) view.findViewById(R.id.frag_view_post_video_inner);
-        this.mediaCtrl = new MediaController(getActivity().getApplicationContext());
         this.audioContainer = (LinearLayout) view.findViewById(R.id.audio_container);
 
         Intent intent = getActivity().getIntent();
@@ -117,12 +120,12 @@ public class ViewPostFragment extends Fragment {
         //hide video/audio view
         if (this.mediatype.equals("image")) {
 
-            this.videoViewPostVideoInner.setVisibility(View.GONE);
+            this.videoViewPostVideo.setVisibility(View.GONE);
             this.audioContainer.setVisibility(View.GONE);
 
         } else if (this.mediatype.equals("audio")) {
 
-            this.videoViewPostVideoInner.setVisibility(View.GONE);
+            this.videoViewPostVideo.setVisibility(View.GONE);
             this.audioContainer.setVisibility(View.VISIBLE);
 
             media_pause = (ImageButton) view.findViewById(R.id.media_pause);
@@ -152,8 +155,33 @@ public class ViewPostFragment extends Fragment {
 
         } else if (this.mediatype.equals("video")) {
 
-            this.videoViewPostVideoInner.setVisibility(View.VISIBLE);
+            this.videoViewPostVideo.setVisibility(View.VISIBLE);
             this.audioContainer.setVisibility(View.GONE);
+
+            vmedia_pause = (ImageButton) view.findViewById(R.id.vmedia_pause);
+            vmedia_play = (ImageButton) view.findViewById(R.id.vmedia_play);
+            vduration = (TextView) view.findViewById(R.id.vidDuration);
+            vseekbar = (SeekBar) view.findViewById(R.id.vseekBar);
+            vseekbar.setClickable(false);
+
+            vmedia_pause.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        videoViewPostVideoInner.pause();
+                    }
+                }
+            );
+
+            vmedia_play.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       videoViewPostVideoInner.start();
+                       vtimeElapsed = videoViewPostVideoInner.getCurrentPosition();
+                       vseekbar.setProgress((int) vtimeElapsed);
+                       durationHandler.postDelayed(vUpdateSeekBarTime, 100);
+                   }
+               }
+            );
 
         }
 
@@ -231,9 +259,32 @@ public class ViewPostFragment extends Fragment {
         }
     };
 
+    private Runnable vUpdateSeekBarTime = new Runnable() {
+        public void run() {
+            //get current position
+            timeElapsed = videoViewPostVideoInner.getCurrentPosition();
+            //set seekbar progress
+            vseekbar.setProgress((int) timeElapsed);
+            //set time remaing
+            double vtimeRemaining = vfinalTime - vtimeElapsed;
+            vduration.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes((long) vtimeRemaining), TimeUnit.MILLISECONDS.toSeconds((long) vtimeRemaining) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) vtimeRemaining))));
+
+            //repeat yourself that again in 100 miliseconds
+            durationHandler.postDelayed(this, 100);
+        }
+    };
+
     //Play mp4 video
     public void playMedia(String url) {
         this.videoViewPostVideoInner.setVideoPath(url);
+
+        vfinalTime = videoViewPostVideoInner.getDuration();
+        vseekbar.setMax((int) finalTime);
+
+        vtimeElapsed = videoViewPostVideoInner.getCurrentPosition();
+        vseekbar.setProgress((int) timeElapsed);
+        durationHandler.postDelayed(vUpdateSeekBarTime, 100);
+
         this.videoViewPostVideoInner.start();
 
     }
@@ -336,21 +387,12 @@ public class ViewPostFragment extends Fragment {
             if (result != null)
                 Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
             else {
-
-                String url = this.dUrl;
-//                    MediaController mediaController = new MediaController(context);
-//                    mediaController.setAnchorView(this.videoViewPostVideo);
-//                    Uri video = Uri.parse(url);
-//                    this.videoViewPostVideo.setMediaController(mediaController);
-//                    this.videoViewPostVideo.setVideoURI(video);
-//                    this.videoViewPostVideo.start();
-
                 if (mediatype.equals("video")) {
                     playMedia(this.dUrl);
                 } else if (mediatype.equals("audio")) {
                     playAudio(this.dUrl);
                 }
-                Toast.makeText(context, "File downloaded", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "File downloaded", Toast.LENGTH_SHORT).show();
             }
         }
     }

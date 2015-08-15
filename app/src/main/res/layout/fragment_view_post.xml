@@ -98,20 +98,59 @@
                 />
 
             <LinearLayout
+                android:id="@+id/frag_view_post_video"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="8dp">
+
                 <VideoView
                     android:id="@+id/frag_view_post_video_inner"
                     android:layout_width="wrap_content"
-                    android:layout_height="250dp"
-                    android:paddingTop="20dp"
+                    android:layout_height="220dp"
+                    android:paddingTop="2dp"
                     android:adjustViewBounds="true"
                     android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:id="@+id/vidDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="2dp"
+                    android:text="00:00" />
+
+                <SeekBar
+                    android:id="@+id/vseekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal" >
+
+                    <ImageButton
+                        android:id="@+id/vmedia_pause"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dp"
+                        android:src="@android:drawable/ic_media_pause" />
+
+                    <ImageButton
+                        android:id="@+id/vmedia_play"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dp"
+                        android:src="@android:drawable/ic_media_play" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout android:id="@+id/audio_container"
@@ -128,7 +167,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="songDuration" />
+                    android:text="00:00" />
 
                 <SeekBar
                     android:id="@+id/seekBar"
