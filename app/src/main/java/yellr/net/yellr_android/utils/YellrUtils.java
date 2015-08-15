@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.http.AndroidHttpClient;
@@ -424,6 +423,11 @@ public class YellrUtils {
         String previewFileName = baseFilename + "p." + fileExtention;
 
         return previewFileName;
+    }
+
+    public static String getFileName(String url) {
+        String file = url.substring(url.lastIndexOf('/')+1, url.lastIndexOf('.'));
+        return file;
     }
 
     //

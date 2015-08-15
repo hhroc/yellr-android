@@ -4,8 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,7 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -24,6 +30,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import yellr.net.yellr_android.BuildConfig;
 import yellr.net.yellr_android.R;
@@ -55,9 +62,20 @@ public class ViewPostFragment extends Fragment {
 
     // declare the dialog as a member field of your activity
     static ProgressDialog mProgressDialog;
-    public static LinearLayout videoViewPostVideo;
-    public static VideoView videoViewPostVideoInner;
     Button reportButton;
+    public String mediatype;
+
+    public static VideoView videoViewPostVideoInner;
+    MediaController mediaCtrl;
+
+    LinearLayout audioContainer;
+    private MediaPlayer mediaPlayer;
+    public TextView duration;
+    private double timeElapsed = 0, finalTime = 0;
+    private Handler durationHandler = new Handler();
+    private SeekBar seekbar;
+    private ImageButton media_pause, media_play;
+
 
     public ViewPostFragment() {
 
@@ -71,8 +89,9 @@ public class ViewPostFragment extends Fragment {
         final Post post = new Post();
 
         this.reportButton = (Button)view.findViewById(R.id.report_this_post);
-        this.videoViewPostVideo = (LinearLayout) view.findViewById(R.id.frag_view_post_video);
         this.videoViewPostVideoInner = (VideoView) view.findViewById(R.id.frag_view_post_video_inner);
+        this.mediaCtrl = new MediaController(getActivity().getApplicationContext());
+        this.audioContainer = (LinearLayout) view.findViewById(R.id.audio_container);
 
         Intent intent = getActivity().getIntent();
 
@@ -81,7 +100,7 @@ public class ViewPostFragment extends Fragment {
         post.post_id = intent.getIntExtra(ViewPostFragment.ARG_POST_ID, 0);
         post.post_datetime = intent.getStringExtra(ViewPostFragment.ARG_POST_DATETIME);
         post.question_text = intent.getStringExtra(ViewPostFragment.ARG_POST_QUESTION_TEXT);
-        post.up_vote_count = intent.getIntExtra(ViewPostFragment.ARG_POST_UP_VOTE_COUNT,0);
+        post.up_vote_count = intent.getIntExtra(ViewPostFragment.ARG_POST_UP_VOTE_COUNT, 0);
         post.down_vote_count = intent.getIntExtra(ViewPostFragment.ARG_POST_DOWN_VOTE_COUNT,0);
         post.has_voted = intent.getIntExtra(ViewPostFragment.ARG_POST_HAS_VOTED,0);
         post.is_up_vote = intent.getIntExtra(ViewPostFragment.ARG_POST_IS_UP_VOTE,0);
@@ -94,13 +113,48 @@ public class ViewPostFragment extends Fragment {
         post.media_objects[0].file_name = intent.getStringExtra(ViewPostFragment.ARG_POST_MEDIA_OBJECT_FILENAME);
         post.media_objects[0].media_type_name = intent.getStringExtra(ViewPostFragment.ARG_POST_MEDIA_OBJECT_MEDIA_TYPE);
 
+        this.mediatype = post.media_objects[0].media_type_name;
         //hide video/audio view
-        if (post.media_objects[0].media_type_name.equals("image")) {
-            this.videoViewPostVideo.setVisibility(View.GONE);
-        } else if (post.media_objects[0].media_type_name.equals("audio")) {
-            this.videoViewPostVideo.setVisibility(View.GONE);
-        } else if (post.media_objects[0].media_type_name.equals("video")) {
-            this.videoViewPostVideo.setVisibility(View.VISIBLE);
+        if (this.mediatype.equals("image")) {
+
+            this.videoViewPostVideoInner.setVisibility(View.GONE);
+            this.audioContainer.setVisibility(View.GONE);
+
+        } else if (this.mediatype.equals("audio")) {
+
+            this.videoViewPostVideoInner.setVisibility(View.GONE);
+            this.audioContainer.setVisibility(View.VISIBLE);
+
+            media_pause = (ImageButton) view.findViewById(R.id.media_pause);
+            media_play = (ImageButton) view.findViewById(R.id.media_play);
+            duration = (TextView) view.findViewById(R.id.songDuration);
+            seekbar = (SeekBar) view.findViewById(R.id.seekBar);
+            seekbar.setClickable(false);
+
+            media_pause.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       mediaPlayer.pause();
+                   }
+               }
+            );
+
+            media_play.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       mediaPlayer.start();
+                       timeElapsed = mediaPlayer.getCurrentPosition();
+                       seekbar.setProgress((int) timeElapsed);
+                       durationHandler.postDelayed(updateSeekBarTime, 100);
+                   }
+               }
+            );
+
+        } else if (this.mediatype.equals("video")) {
+
+            this.videoViewPostVideoInner.setVisibility(View.VISIBLE);
+            this.audioContainer.setVisibility(View.GONE);
+
         }
 
         LocalPostViewHolder localPostViewHolder = new LocalPostViewHolder(getActivity().getApplicationContext(), position, view, true);
@@ -121,37 +175,76 @@ public class ViewPostFragment extends Fragment {
 
         });
 
-        //instantiate it within the onCreate method
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setMessage("A message");
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgressDialog.setCancelable(true);
+        if (this.mediatype.equals("audio") || this.mediatype.equals("video") ) {
+            //video / audio url
+            String url = BuildConfig.BASE_URL + "/media/" + post.media_objects[0].file_name;
+            Log.d("ViewPostFragment.OnCreateView.DownloadMedia", url);
 
-        //video / audio url
-        String url = BuildConfig.BASE_URL + "/media/" + post.media_objects[0].file_name;
-        //url = url.replace("p.mp4",".mp4");
+            //instantiate it within the onCreate method
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setMessage("Getting " + this.mediatype);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            mProgressDialog.setCancelable(true);
 
-        // execute this when the downloader must be fired
-        final DownloadTask downloadTask = new DownloadTask(getActivity().getApplicationContext());
-        downloadTask.execute(url);
+            //url = url.replace("p.mp4",".mp4");
 
-        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                downloadTask.cancel(true);
-            }
-        });
+            // execute this when the downloader must be fired
+            final DownloadTask downloadTask = new DownloadTask(getActivity().getApplicationContext());
+            downloadTask.execute(url);
+
+            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    downloadTask.cancel(true);
+                }
+            });
+        }
 
         return view;
     }
 
+    // play mp3 song
+    public void playAudio(String url) {
+        mediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), Uri.parse(url));
+        finalTime = mediaPlayer.getDuration();
+        seekbar.setMax((int) finalTime);
+        mediaPlayer.start();
+        timeElapsed = mediaPlayer.getCurrentPosition();
+        seekbar.setProgress((int) timeElapsed);
+        durationHandler.postDelayed(updateSeekBarTime, 100);
+    }
+
+    //handler to change seekBarTime
+    private Runnable updateSeekBarTime = new Runnable() {
+        public void run() {
+            //get current position
+            timeElapsed = mediaPlayer.getCurrentPosition();
+            //set seekbar progress
+            seekbar.setProgress((int) timeElapsed);
+            //set time remaing
+            double timeRemaining = finalTime - timeElapsed;
+            duration.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes((long) timeRemaining), TimeUnit.MILLISECONDS.toSeconds((long) timeRemaining) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) timeRemaining))));
+
+            //repeat yourself that again in 100 miliseconds
+            durationHandler.postDelayed(this, 100);
+        }
+    };
+
+    //Play mp4 video
+    public void playMedia(String url) {
+        this.videoViewPostVideoInner.setVideoPath(url);
+        this.videoViewPostVideoInner.start();
+
+    }
+
     // usually, subclasses of AsyncTask are declared inside the activity class.
     // that way, you can easily modify the UI thread from here
-    private class DownloadTask extends AsyncTask<String, Integer, String> {
+    public class DownloadTask extends AsyncTask<String, Integer, String> {
 
         private Context context;
         private PowerManager.WakeLock mWakeLock;
+        public String dUrl;
 
         public DownloadTask(Context context) {
             this.context = context;
@@ -171,7 +264,7 @@ public class ViewPostFragment extends Fragment {
                 // instead of the file
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                     return "Server returned HTTP " + connection.getResponseCode()
-                            + " " + connection.getResponseMessage();
+                            + " " + connection.getResponseMessage() + ":" + sUrl[0];
                 }
 
                 // this will be useful to display download percentage
@@ -180,7 +273,8 @@ public class ViewPostFragment extends Fragment {
 
                 // download the file
                 input = connection.getInputStream();
-                output = new FileOutputStream("/sdcard/file_name_1.mp4");
+                this.dUrl = "/sdcard/" + YellrUtils.getFileName(sUrl[0]);
+                output = new FileOutputStream(this.dUrl);
 
                 byte data[] = new byte[4096];
                 long total = 0;
@@ -243,16 +337,19 @@ public class ViewPostFragment extends Fragment {
                 Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
             else {
 
-                String url = "/sdcard/file_name_1.mp4";
+                String url = this.dUrl;
 //                    MediaController mediaController = new MediaController(context);
 //                    mediaController.setAnchorView(this.videoViewPostVideo);
 //                    Uri video = Uri.parse(url);
 //                    this.videoViewPostVideo.setMediaController(mediaController);
 //                    this.videoViewPostVideo.setVideoURI(video);
 //                    this.videoViewPostVideo.start();
-                ViewPostFragment.videoViewPostVideoInner.setVideoPath(url);
-                ViewPostFragment.videoViewPostVideoInner.start();
 
+                if (mediatype.equals("video")) {
+                    playMedia(this.dUrl);
+                } else if (mediatype.equals("audio")) {
+                    playAudio(this.dUrl);
+                }
                 Toast.makeText(context, "File downloaded", Toast.LENGTH_SHORT).show();
             }
         }
