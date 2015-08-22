@@ -40,6 +40,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import yellr.net.yellr_android.R;
 import yellr.net.yellr_android.activities.HomeActivity;
@@ -58,9 +60,16 @@ public class PostFragment extends Fragment {
     // Edit Text
     EditText postText;
 
+    private static final Pattern urlPattern = Pattern.compile(
+            "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                    + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+                    + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
     public static final String ARG_ASSIGNMENT_ID = "assignmentId";
     public static final String ARG_ASSIGNMENT_QUESTION = "assignmentQuestion";
     public static final String ARG_ASSIGNMENT_DESCRIPTION = "assignmentDescription";
+    public static final String ARG_ASSIGNMENT_URL = "assignmentUrl";
 
     private Uri videoFileUri;
 
@@ -108,6 +117,7 @@ public class PostFragment extends Fragment {
     String proposedImageFilename = "";
     String audioFilename = "";
     String videoFilename = "";
+    String url = "EMPTY";
 
     /**
      * Use this factory method to create a new instance of
@@ -142,6 +152,13 @@ public class PostFragment extends Fragment {
             assignmentId = (int)getArguments().getSerializable(ARG_ASSIGNMENT_ID);
             questionText = (String)getArguments().getSerializable(ARG_ASSIGNMENT_QUESTION);
             questionDescription = (String)getArguments().getSerializable(ARG_ASSIGNMENT_DESCRIPTION);
+        }
+
+        Matcher matcher = urlPattern.matcher(questionDescription);
+        while (matcher.find()) {
+            int matchStart = matcher.start(1);
+            int matchEnd = matcher.end();
+            url = questionDescription.substring(matchStart, matchEnd);
         }
 
         setHasOptionsMenu(true);
@@ -205,6 +222,18 @@ public class PostFragment extends Fragment {
         assignmentQuestion = (TextView)view.findViewById(R.id.frag_post_assignment_question);
         assignmentDescription = (TextView)view.findViewById(R.id.frag_post_assignment_description);
 
+        assignmentDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (url.equals("EMPTY")) {
+
+                } else {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(browserIntent);
+                }
+            }
+        });
+
         if(questionText == null){
             assignmentQuestion.setText(R.string.frag_post_assignment_title);
             assignmentDescription.setText(R.string.frag_post_assignment_description);
@@ -229,12 +258,9 @@ public class PostFragment extends Fragment {
 
                         if (items[item].equals("Record Audio")) {
 
-                            //TODO: Set video file here for post
-                            //proposedImageFilename = imageFile.getAbsolutePath();
-
                             //for audio record
                             audioRecordFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            audioRecordFileName += "/audiorecordtest.3gp";
+                            audioRecordFileName += "/audioyellr.3gp";
 
                             audioContainer.setVisibility(View.VISIBLE);
                             videoPreview.setVisibility(View.INVISIBLE);
@@ -284,9 +310,6 @@ public class PostFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int item) {
 
                     if (items[item].equals("Take Video")) {
-
-                        //TODO: Set video file here for post
-                        //proposedImageFilename = imageFile.getAbsolutePath();
 
                         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                         //if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
