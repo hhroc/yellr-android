@@ -154,11 +154,13 @@ public class PostFragment extends Fragment {
             questionDescription = (String)getArguments().getSerializable(ARG_ASSIGNMENT_DESCRIPTION);
         }
 
-        Matcher matcher = urlPattern.matcher(questionDescription);
-        while (matcher.find()) {
-            int matchStart = matcher.start(1);
-            int matchEnd = matcher.end();
-            url = questionDescription.substring(matchStart, matchEnd);
+        if(questionDescription != null && !questionDescription.isEmpty()) {
+            Matcher matcher = urlPattern.matcher(questionDescription);
+            while (matcher.find()) {
+                int matchStart = matcher.start(1);
+                int matchEnd = matcher.end();
+                url = questionDescription.substring(matchStart, matchEnd);
+            }
         }
 
         setHasOptionsMenu(true);
