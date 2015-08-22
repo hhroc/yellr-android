@@ -115,7 +115,7 @@
                     android:adjustViewBounds="true"
                     android:layout_centerInParent="true"/>
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/vidDuration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                 <SeekBar
                     android:id="@+id/vseekBar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content" />-->
 
                 <LinearLayout
                     android:layout_width="match_parent"

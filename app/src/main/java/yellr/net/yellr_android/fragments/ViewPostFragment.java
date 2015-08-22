@@ -160,9 +160,9 @@ public class ViewPostFragment extends Fragment {
 
             vmedia_pause = (ImageButton) view.findViewById(R.id.vmedia_pause);
             vmedia_play = (ImageButton) view.findViewById(R.id.vmedia_play);
-            vduration = (TextView) view.findViewById(R.id.vidDuration);
-            vseekbar = (SeekBar) view.findViewById(R.id.vseekBar);
-            vseekbar.setClickable(false);
+            //vduration = (TextView) view.findViewById(R.id.vidDuration);
+            //vseekbar = (SeekBar) view.findViewById(R.id.vseekBar);
+            //vseekbar.setClickable(false);
 
             vmedia_pause.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -177,7 +177,7 @@ public class ViewPostFragment extends Fragment {
                    public void onClick(View v) {
                        videoViewPostVideoInner.start();
                        vtimeElapsed = videoViewPostVideoInner.getCurrentPosition();
-                       vseekbar.setProgress((int) vtimeElapsed);
+                       //vseekbar.setProgress((int) vtimeElapsed);
                        durationHandler.postDelayed(vUpdateSeekBarTime, 100);
                    }
                }
@@ -264,10 +264,10 @@ public class ViewPostFragment extends Fragment {
             //get current position
             timeElapsed = videoViewPostVideoInner.getCurrentPosition();
             //set seekbar progress
-            vseekbar.setProgress((int) timeElapsed);
+            //vseekbar.setProgress((int) timeElapsed);
             //set time remaing
             double vtimeRemaining = vfinalTime - vtimeElapsed;
-            vduration.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes((long) vtimeRemaining), TimeUnit.MILLISECONDS.toSeconds((long) vtimeRemaining) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) vtimeRemaining))));
+            //vduration.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes((long) vtimeRemaining), TimeUnit.MILLISECONDS.toSeconds((long) vtimeRemaining) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) vtimeRemaining))));
 
             //repeat yourself that again in 100 miliseconds
             durationHandler.postDelayed(this, 100);
@@ -279,10 +279,10 @@ public class ViewPostFragment extends Fragment {
         this.videoViewPostVideoInner.setVideoPath(url);
 
         vfinalTime = videoViewPostVideoInner.getDuration();
-        vseekbar.setMax((int) finalTime);
+        //vseekbar.setMax((int) finalTime);
 
         vtimeElapsed = videoViewPostVideoInner.getCurrentPosition();
-        vseekbar.setProgress((int) timeElapsed);
+        //vseekbar.setProgress((int) timeElapsed);
         durationHandler.postDelayed(vUpdateSeekBarTime, 100);
 
         this.videoViewPostVideoInner.start();
