@@ -84,6 +84,7 @@ public class LocalPostsIntentService extends IntentService {
                 localPostsJson = builder.toString();
 
                 Log.d("LocalPostsIntentService.handleActionGetLocalPosts()", "Successfully got new local posts list from server.");
+                Log.d("LocalPostsIntentService.handleActionGetLocalPosts()All()", localPostsJson);
 
             } catch (Exception e) {
                 Log.d("LocalPostsIntentService.handleActionGetLocalPosts()", "Error: " + e.toString());

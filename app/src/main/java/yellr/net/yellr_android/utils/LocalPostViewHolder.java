@@ -1,17 +1,32 @@
 package yellr.net.yellr_android.utils;
 
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
 
 import yellr.net.yellr_android.BuildConfig;
@@ -37,10 +52,12 @@ public class LocalPostViewHolder {
     public final Button buttonPostDownVote;
     public final TextView textViewFullDateTime;
 
+    public final boolean isViewPost;
 
     public LocalPostViewHolder(Context context, int position, View row, boolean isViewPost) {
 
         this.position = position;
+        this.isViewPost = isViewPost;
 
         Typeface font = Typeface.createFromAsset(context.getAssets(), "fontawesome-webfont.ttf");
 
@@ -135,10 +152,20 @@ public class LocalPostViewHolder {
             this.textViewPostText.setText(mediaCaption);
         }
 
+        //Video view / Audio view for videos & audios
+        if (this.isViewPost) {
+            if (mediaType.equals("video")) {
+
+
+            } else if (mediaType.equals("audio")) {
+
+
+            }
+        }
+
         //
         // Image View (optional)
         //
-
         if (mediaType.equals("image")) {
             try {
 

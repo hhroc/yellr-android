@@ -11,7 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import yellr.net.yellr_android.R;
 
@@ -78,7 +81,23 @@ public class PollFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_poll, container, false);
 
-        submitButton = (Button)view.findViewById(R.id.frag_post_submit_button);
+        pollOptionContainer = (LinearLayout) view.findViewById(R.id.frag_poll_container);
+
+        final RadioButton[] rb = new RadioButton[5];
+        RadioGroup rg = new RadioGroup(getActivity().getApplicationContext()); //create the RadioGroup
+        rg.setOrientation(RadioGroup.VERTICAL);//or RadioGroup.VERTICAL
+        for(int i=0; i<5; i++){
+            rb[i]  = new RadioButton(getActivity().getApplicationContext());
+            rg.addView(rb[i]);
+            rb[i].setText(" AA BB ");
+            rb[i].setTextColor(getResources().getColor(R.color.grey));
+            rb[i].setId(i + 100);
+            rb[i].setWidth(200);
+            //rg.addView(rb[i]);
+        }
+        pollOptionContainer.addView(rg);//you add the whole RadioGroup to the layout
+
+        submitButton = (Button) view.findViewById(R.id.frag_post_submit_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
