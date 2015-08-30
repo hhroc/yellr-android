@@ -166,10 +166,10 @@ public class LocalPostViewHolder {
         //
         // Image View (optional)
         //
-        if (mediaType.equals("image")) {
+        if (mediaType.equals("image") || mediaType.equals("video") || mediaType.equals("audio")) {
             try {
 
-                String url = BuildConfig.BASE_URL + "/media/" + YellrUtils.getPreviewImageName(post.media_objects[0].file_name);
+                String url = BuildConfig.BASE_URL + "/media/" + post.media_objects[0].preview_file_name; //YellrUtils.getPreviewImageName(post.media_objects[0].file_name);
 
                 this.imageViewPostImage.setVisibility(View.VISIBLE);
                 Picasso.with(context)
