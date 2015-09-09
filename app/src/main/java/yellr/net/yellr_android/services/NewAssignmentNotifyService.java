@@ -18,7 +18,7 @@ import yellr.net.yellr_android.utils.YellrUtils;
 public class NewAssignmentNotifyService extends Service {
 
     Handler mHandler;
-    static final int INTERVAL_DURATION_OF_POLLING = 6*60*60*1000;  // 6*60*60*1000 - 6 hours - 1000 milliseconds
+    static final int INTERVAL_DURATION_OF_POLLING = 1*60*60*1000;  // 1*60*60*1000 - 1 hours - 1000 milliseconds
 
     @Override
     public IBinder onBind(Intent arg0) {
