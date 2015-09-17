@@ -17,11 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -64,6 +67,7 @@ public class ViewPostFragment extends Fragment {
     Button reportButton;
     public String mediatype;
 
+    ImageView imageContainer;
     LinearLayout videoViewPostVideo;
     public VideoView videoViewPostVideoInner;
     private SeekBar vseekbar;
@@ -95,6 +99,7 @@ public class ViewPostFragment extends Fragment {
         this.videoViewPostVideo = (LinearLayout) view.findViewById(R.id.frag_view_post_video);
         this.videoViewPostVideoInner = (VideoView) view.findViewById(R.id.frag_view_post_video_inner);
         this.audioContainer = (LinearLayout) view.findViewById(R.id.audio_container);
+        this.imageContainer = (ImageView)view.findViewById(R.id.frag_view_post_image);
 
         Intent intent = getActivity().getIntent();
 
@@ -117,15 +122,41 @@ public class ViewPostFragment extends Fragment {
         post.media_objects[0].media_type_name = intent.getStringExtra(ViewPostFragment.ARG_POST_MEDIA_OBJECT_MEDIA_TYPE);
 
         this.mediatype = post.media_objects[0].media_type_name;
+
+        Log.d("ViewPostFragment.OnCreateView.MediaType", this.mediatype);
+
         //hide video/audio view
+        if (this.mediatype.equals("text")) {
+
+            this.videoViewPostVideo.setVisibility(View.GONE);
+            this.audioContainer.setVisibility(View.GONE);
+            this.imageContainer.setVisibility(View.GONE);
+
+        }
+
         if (this.mediatype.equals("image")) {
 
             this.videoViewPostVideo.setVisibility(View.GONE);
             this.audioContainer.setVisibility(View.GONE);
+            this.imageContainer.setVisibility(View.VISIBLE);
+
+            try {
+
+                String url = BuildConfig.BASE_URL + "/media/" + post.media_objects[0].preview_file_name; //YellrUtils.getPreviewImageName(post.media_objects[0].file_name);
+
+                this.imageContainer.setVisibility(View.VISIBLE);
+                Picasso.with(getActivity().getApplicationContext())
+                        .load(url)
+                        .into(this.imageContainer);
+
+            } catch (Exception e) {
+                Log.d("LocalPostsArrayAdapter.getView()", "ERROR: " + e.toString());
+            }
 
         } else if (this.mediatype.equals("audio")) {
 
             this.videoViewPostVideo.setVisibility(View.GONE);
+            this.imageContainer.setVisibility(View.GONE);
             this.audioContainer.setVisibility(View.VISIBLE);
 
             media_pause = (ImageButton) view.findViewById(R.id.media_pause);
@@ -157,6 +188,7 @@ public class ViewPostFragment extends Fragment {
 
             this.videoViewPostVideo.setVisibility(View.VISIBLE);
             this.audioContainer.setVisibility(View.GONE);
+            this.imageContainer.setVisibility(View.GONE);
 
             vmedia_pause = (ImageButton) view.findViewById(R.id.vmedia_pause);
             vmedia_play = (ImageButton) view.findViewById(R.id.vmedia_play);

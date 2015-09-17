@@ -41,8 +41,8 @@ android {
             buildConfigField "int", "UPDATE_RATE", "300"
         }
         debug {
-            buildConfigField "String", "BASE_URL", "\"http://yellr.mycodespace.net\""
-            // buildConfigField "String", "BASE_URL", "\"https://yellr.net\""
+            //buildConfigField "String", "BASE_URL", "\"http://yellr.mycodespace.net\""
+            buildConfigField "String", "BASE_URL", "\"https://yellr.net\""
             debuggable true
             buildConfigField "String", "SPOOF_LOCATION", "\"1\""
             buildConfigField "int", "UPDATE_RATE", "30"
