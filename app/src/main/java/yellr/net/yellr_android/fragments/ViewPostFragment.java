@@ -142,15 +142,19 @@ public class ViewPostFragment extends Fragment {
 
             try {
 
-                String url = BuildConfig.BASE_URL + "/media/" + post.media_objects[0].preview_file_name; //YellrUtils.getPreviewImageName(post.media_objects[0].file_name);
+                String url = BuildConfig.BASE_URL + "/media/" + post.media_objects[0].file_name; //YellrUtils.getPreviewImageName(post.media_objects[0].file_name);
+                url = "http://gorillavid.in/images1/GorillaVid-logo.png";
+
+                Log.d("ViewPostFragment.OnCreateView - Image URL", url);
 
                 this.imageContainer.setVisibility(View.VISIBLE);
+
                 Picasso.with(getActivity().getApplicationContext())
                         .load(url)
                         .into(this.imageContainer);
 
             } catch (Exception e) {
-                Log.d("LocalPostsArrayAdapter.getView()", "ERROR: " + e.toString());
+                Log.d("ViewPostFragment.OnCreateView", "ERROR: " + e.toString());
             }
 
         } else if (this.mediatype.equals("audio")) {
