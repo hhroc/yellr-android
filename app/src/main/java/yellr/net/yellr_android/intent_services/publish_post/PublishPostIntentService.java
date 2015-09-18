@@ -135,6 +135,41 @@ public class PublishPostIntentService extends IntentService {
                 //Log.d("PublishPostIntentService.Case", "Image");
                 mediaFilename = imageFilename;
                 Log.d("PublishPostIntentService.Case", imageFilename);
+
+                Bitmap fileToUploadBitmap = BitmapFactory.decodeFile(mediaFilename);
+                double scaleToResizeAspectRatio = (double)fileToUploadBitmap.getWidth() / (double)fileToUploadBitmap.getHeight();
+                int desiredHeight = 600;
+                int desiredWidth = (int) (desiredHeight*scaleToResizeAspectRatio);
+
+                Log.d("PublishPostIntentService.Case.AspectRatio - ", String.valueOf(scaleToResizeAspectRatio));
+                Log.d("PublishPostIntentService.Case.AspectRatio - ", String.valueOf(fileToUploadBitmap.getWidth()));
+                Log.d("PublishPostIntentService.Case.AspectRatio - ", String.valueOf(fileToUploadBitmap.getHeight()));
+
+                Bitmap outFile = Bitmap.createScaledBitmap(fileToUploadBitmap, desiredWidth, desiredHeight, false);
+
+                File outputDir = getApplicationContext().getCacheDir(); // context being the Activity pointer
+                try {
+
+                    File outputFile = File.createTempFile("fileToUploadYellr", "jpg", outputDir);
+                    File file = new File(outputFile.getAbsolutePath());
+                    FileOutputStream fOut;
+
+                    try {
+                        fOut = new FileOutputStream(file);
+                        outFile.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        fileToUploadBitmap.recycle();
+                        outFile.recycle();
+
+                        mediaFilename = outputFile.getAbsolutePath();
+
+                    } catch (Exception e) {}
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 mediaText = "";
                 mediaCaption = text;
                 break;
@@ -371,22 +406,6 @@ public class PublishPostIntentService extends IntentService {
                     // If the key equals to "media_file", we use FileBody to transfer the data
 
                     Log.d("uploadMedia()", "adding binary file: " + params.get(index).getValue());
-
-                    Bitmap fileToUploadBitmap = BitmapFactory.decodeFile(params.get(index).getValue());
-                    int scaleToResizeAspectRatio = fileToUploadBitmap.getWidth() / fileToUploadBitmap.getHeight();
-                    int desiredHeight = 600;
-                    Bitmap outFile = Bitmap.createScaledBitmap(fileToUploadBitmap, desiredHeight*scaleToResizeAspectRatio, desiredHeight, false);
-
-                    File file = new File(params.get(index).getValue());
-                    FileOutputStream fOut;
-                    try {
-                        fOut = new FileOutputStream(file);
-                        outFile.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                        fOut.flush();
-                        fOut.close();
-                        fileToUploadBitmap.recycle();
-                        outFile.recycle();
-                    } catch (Exception e) {}
 
                     entityBuilder.addPart(params.get(index).getName(),
                             new FileBody(new File(params.get(index).getValue())));
