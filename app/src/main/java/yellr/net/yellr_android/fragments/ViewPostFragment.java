@@ -143,7 +143,6 @@ public class ViewPostFragment extends Fragment {
             try {
 
                 String url = BuildConfig.BASE_URL + "/media/" + post.media_objects[0].file_name; //YellrUtils.getPreviewImageName(post.media_objects[0].file_name);
-                url = "http://gorillavid.in/images1/GorillaVid-logo.png";
 
                 Log.d("ViewPostFragment.OnCreateView - Image URL", url);
 

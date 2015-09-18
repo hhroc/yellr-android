@@ -3,9 +3,12 @@ package yellr.net.yellr_android.intent_services.publish_post;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -28,7 +31,9 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -129,6 +134,7 @@ public class PublishPostIntentService extends IntentService {
                 //mediaType = "image";
                 //Log.d("PublishPostIntentService.Case", "Image");
                 mediaFilename = imageFilename;
+                Log.d("PublishPostIntentService.Case", imageFilename);
                 mediaText = "";
                 mediaCaption = text;
                 break;
@@ -365,6 +371,22 @@ public class PublishPostIntentService extends IntentService {
                     // If the key equals to "media_file", we use FileBody to transfer the data
 
                     Log.d("uploadMedia()", "adding binary file: " + params.get(index).getValue());
+
+                    Bitmap fileToUploadBitmap = BitmapFactory.decodeFile(params.get(index).getValue());
+                    int scaleToResizeAspectRatio = fileToUploadBitmap.getWidth() / fileToUploadBitmap.getHeight();
+                    int desiredHeight = 600;
+                    Bitmap outFile = Bitmap.createScaledBitmap(fileToUploadBitmap, desiredHeight*scaleToResizeAspectRatio, desiredHeight, false);
+
+                    File file = new File(params.get(index).getValue());
+                    FileOutputStream fOut;
+                    try {
+                        fOut = new FileOutputStream(file);
+                        outFile.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        fileToUploadBitmap.recycle();
+                        outFile.recycle();
+                    } catch (Exception e) {}
 
                     entityBuilder.addPart(params.get(index).getName(),
                             new FileBody(new File(params.get(index).getValue())));
