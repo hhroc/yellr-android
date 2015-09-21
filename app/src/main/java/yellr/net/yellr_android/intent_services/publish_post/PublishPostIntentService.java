@@ -3,9 +3,12 @@ package yellr.net.yellr_android.intent_services.publish_post;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -28,7 +31,9 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -129,6 +134,42 @@ public class PublishPostIntentService extends IntentService {
                 //mediaType = "image";
                 //Log.d("PublishPostIntentService.Case", "Image");
                 mediaFilename = imageFilename;
+                Log.d("PublishPostIntentService.Case", imageFilename);
+
+                Bitmap fileToUploadBitmap = BitmapFactory.decodeFile(mediaFilename);
+                double scaleToResizeAspectRatio = (double)fileToUploadBitmap.getWidth() / (double)fileToUploadBitmap.getHeight();
+                int desiredHeight = 600;
+                int desiredWidth = (int) (desiredHeight*scaleToResizeAspectRatio);
+
+                Log.d("PublishPostIntentService.Case.AspectRatio - ", String.valueOf(scaleToResizeAspectRatio));
+                Log.d("PublishPostIntentService.Case.AspectRatio - ", String.valueOf(fileToUploadBitmap.getWidth()));
+                Log.d("PublishPostIntentService.Case.AspectRatio - ", String.valueOf(fileToUploadBitmap.getHeight()));
+
+                Bitmap outFile = Bitmap.createScaledBitmap(fileToUploadBitmap, desiredWidth, desiredHeight, false);
+
+                File outputDir = getApplicationContext().getCacheDir(); // context being the Activity pointer
+                try {
+
+                    File outputFile = File.createTempFile("fileToUploadYellr", "jpg", outputDir);
+                    File file = new File(outputFile.getAbsolutePath());
+                    FileOutputStream fOut;
+
+                    try {
+                        fOut = new FileOutputStream(file);
+                        outFile.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        fileToUploadBitmap.recycle();
+                        outFile.recycle();
+
+                        mediaFilename = outputFile.getAbsolutePath();
+
+                    } catch (Exception e) {}
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 mediaText = "";
                 mediaCaption = text;
                 break;
